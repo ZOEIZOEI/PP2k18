@@ -1,0 +1,35 @@
+0
+
+10
+
+Graphe3\Images\Arbre.jpg
+121 53 0 60
+
+Graphe3\Images\Buse.jpg
+581 56 1 70
+
+Graphe3\Images\ecureuil.jpg
+317 353 2 30
+
+Graphe3\Images\gland.jpg
+288 207 3 45
+
+Graphe3\Images\herbe.jpg
+74 214 4 55
+
+Graphe3\Images\lapin.jpg
+457 389 5 40
+
+Graphe3\Images\Larve.jpg
+549 224 6 35
+
+Graphe3\Images\Loup.jpg
+624 388 7 65
+
+Graphe3\Images\Pivert.jpg
+171 355 8 65
+
+Graphe3\Images\Renard.jpg
+347 51 9 65
+
+0

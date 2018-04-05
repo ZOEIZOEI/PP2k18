@@ -23,7 +23,7 @@ Graphe::Graphe(std::string nom_fichier)
         std::cout << "Ordre : " << ordre <<std::endl;
         if(ordre > 0)
         {
-            for (int i(0); i<ordre; ++i)
+            for (int i(0); i < ordre; ++i)
             {
                 fichier >> nom_img;
                 fichier >> cd_x >> cd_y >> num >> poids;
@@ -84,8 +84,8 @@ Graphe::Graphe(std::string nom_fichier)
                 }
             }
         }
-
     }
+
     Setaretes(tmp);
 }
 
@@ -96,7 +96,8 @@ Graphe::~Graphe()
 
 void Graphe::affichage(BITMAP* buffer, BITMAP* barre)
 {
-    for (unsigned int i(0); i <Getaretes().size(); ++i)
+
+   for (unsigned int i(0); i <Getaretes().size(); ++i)
     {
 
         line(buffer, Getaretes()[i]->Getdepart()->GetCd_x() + Getaretes()[i]->Getdepart()->GetImg()->w/2, Getaretes()[i]->Getdepart()->GetCd_y() + Getaretes()[i]->Getdepart()->GetImg()->h/2, Getaretes()[i]->Getarrive()->GetCd_x() + Getaretes()[i]->Getarrive()->GetImg()->w/2, Getaretes()[i]->Getarrive()->GetCd_y() + Getaretes()[i]->Getarrive()->GetImg()->h/2, makecol(255,0,0));
@@ -110,7 +111,6 @@ void Graphe::affichage(BITMAP* buffer, BITMAP* barre)
         rectfill(buffer, getSommet(i)->GetCd_x() + getSommet(i)->GetImg()->w - 15, getSommet(i)->GetCd_y() + getSommet(i)->GetImg()->h - 15, getSommet(i)->GetCd_x() + getSommet(i)->GetImg()->w, getSommet(i)->GetCd_y() + getSommet(i)->GetImg()->h, makecol(0,0,0));
         rect(buffer, getSommet(i)->GetCd_x() + getSommet(i)->GetImg()->w - 15, getSommet(i)->GetCd_y() + getSommet(i)->GetImg()->h - 15, getSommet(i)->GetCd_x() + getSommet(i)->GetImg()->w-2, getSommet(i)->GetCd_y() + getSommet(i)->GetImg()->h-2, makecol(255,255,255));
         textprintf_ex(buffer, font, getSommet(i)->GetCd_x() + getSommet(i)->GetImg()->w - 11, getSommet(i)->GetCd_y() + getSommet(i)->GetImg()->h - 11, makecol(255,255,255), -1,"%d", getSommet(i)->GetNum());
-
     }
 
 //    textprintf_ex(buffer, font, 400, 23, makecol(255,255,0), -1,"%d", Getaretes().size());
@@ -176,7 +176,6 @@ void Graphe::outils(BITMAP* buffer, BITMAP* barre)
         if(/*!prev_mouse_b && now_mouse_b*/ mouse_b&1)
         {
             suppArete();
-
         }
     }
 }

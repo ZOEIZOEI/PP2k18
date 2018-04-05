@@ -98,3 +98,34 @@
 1522781579 source:c:\users\batpi\desktop\piscine1\projet_piscine\projet2018\src\sommet.cpp
 	"Sommet.h"
 
+1522925090 source:c:\users\batpi\desktop\proj_piscine\pp2k18\projet2018\main.cpp
+	"Graphe.h"
+
+1522918408 c:\users\batpi\desktop\proj_piscine\pp2k18\projet2018\include\graphe.h
+	"Sommet.h"
+	"Arete.h"
+	<vector>
+	<fstream>
+	<iostream>
+	<allegro.h>
+	<png.h>
+	<loadpng.h>
+	<jpgalleg.h>
+	<ctime>
+
+1522918408 c:\users\batpi\desktop\proj_piscine\pp2k18\projet2018\include\sommet.h
+	<allegro.h>
+	<string>
+
+1522918408 c:\users\batpi\desktop\proj_piscine\pp2k18\projet2018\include\arete.h
+	"Sommet.h"
+
+1522925090 source:c:\users\batpi\desktop\proj_piscine\pp2k18\projet2018\src\arete.cpp
+	"Arete.h"
+
+1522925556 source:c:\users\batpi\desktop\proj_piscine\pp2k18\projet2018\src\graphe.cpp
+	"Graphe.h"
+
+1522924311 source:c:\users\batpi\desktop\proj_piscine\pp2k18\projet2018\src\sommet.cpp
+	"Sommet.h"
+

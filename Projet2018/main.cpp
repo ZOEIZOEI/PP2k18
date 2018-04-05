@@ -4,8 +4,6 @@
 
 int main()
 {
-    std::cout << "Hello world!" << std::endl;
-
     srand(time(NULL));
     set_uformat(U_ASCII);
     allegro_init();
@@ -27,32 +25,28 @@ int main()
     BITMAP* buffer = create_bitmap(SCREEN_W, SCREEN_H);
 
     BITMAP* barre;
-    barre = load_bitmap("Images/tabgraph.png", NULL);
+    barre = load_bitmap("Graphe1/Images/tabgraph.png", NULL);
     if(!barre)
     {
         allegro_message("pas pu trouver barre.png");
         exit(EXIT_FAILURE);
     }
 
-    BITMAP* fleche;
-    fleche = load_bitmap("Images/fleche.png", NULL);
-    if(!fleche)
-    {
-        allegro_message("pas pu trouver fleche.png");
-        exit(EXIT_FAILURE);
-    }
-
-    Graphe g("Sommets.txt");
+    //Graphe g1("Graphe1/Sommets.txt");
+    //Graphe g2("Graphe2/Sommets.txt");
+    Graphe g3("Graphe3/Sommets.txt");
     show_mouse(screen);
 
     while (!key[KEY_ESC])
     {
-        g.update(buffer, barre);
+        g3.update(buffer, barre);
 
-        g.affichage(buffer, barre);
+        g3.affichage(buffer, barre);
     }
 
-    g.save("Sommets.txt");
+   // g1.save("Graphe1/Sommets.txt");
+   // g2.save("Graphe2/Sommets.txt");
+    g3.save("Graphe3/Sommets.txt");
 
     destroy_bitmap(buffer);
 

@@ -20,6 +20,6 @@ Sommet::Sommet(int cd_x, int cd_y, int num, int poids, std::string nom_img)
 
 Sommet::~Sommet()
 {
-    //dtor
+
 }
 

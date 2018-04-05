@@ -1,0 +1,32 @@
+0
+
+9
+
+Graphe1\Images\laminaire.jpg
+98 59 4 50
+
+Graphe1\Images\poisson2.jpg
+599 212 8 70
+
+Graphe1\Images\phoque.jpg
+185 372 0 30
+
+Graphe1\Images\homosapiens.jpg
+431 229 3 45
+
+Graphe1\Images\loutre_de_mer.jpg
+131 213 5 55
+
+Graphe1\Images\orque.jpg
+462 347 2 40
+
+Graphe1\Images\mollusque.jpg
+617 349 1 35
+
+Graphe1\Images\oursins.jpg
+299 80 6 60
+
+Graphe1\Images\poisson1.jpg
+567 47 7 65
+
+0
