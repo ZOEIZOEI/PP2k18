@@ -25,7 +25,7 @@ int main()
     BITMAP* buffer = create_bitmap(SCREEN_W, SCREEN_H);
 
     BITMAP* barre;
-    barre = load_bitmap("Graphe1/Images/tabgraph.png", NULL);
+    barre = load_bitmap("Graphe1/Images/tabgraph.bmp", NULL);
     if(!barre)
     {
         allegro_message("pas pu trouver barre.png");
@@ -39,13 +39,13 @@ int main()
     int now_mouse_b = mouse_b&1;
 
     Graphe* g1;
-    g1 = new Graphe("Graphe1/Sommets.txt");
-
+    g1 = new Graphe("Graphe1/Sommets.txt", "Graphe1/Images/Blue.png");
+std::cout << "LLZ";
     Graphe* g2;
-    g2 = new Graphe("Graphe2/Sommets.txt");
+    g2 = new Graphe("Graphe2/Sommets.txt", "Graphe2/Images/Yellow.png");
 
     Graphe* g3;
-    g3 = new Graphe("Graphe3/Sommets.txt");
+    g3 = new Graphe("Graphe3/Sommets.txt", "Graphe3/Images/Green.png");
 
     show_mouse(screen);
 

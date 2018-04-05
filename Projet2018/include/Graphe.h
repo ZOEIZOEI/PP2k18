@@ -15,7 +15,7 @@
 class Graphe
 {
     public:
-        Graphe(std::string nom_fichier);
+        Graphe(std::string nom_fichier, std::string nom_decor);
         ~Graphe();
 
         std::vector<Sommet*> Getsommets() { return m_sommets; } /// POUR TOUT LE VECTEUR
@@ -23,12 +23,14 @@ class Graphe
         std::vector<Arete*> Getaretes() { return m_aretes; }
         std::vector<Sommet*> Getsall() { return m_sall; }
         std::string GetNomGraphe() { return m_nom_graphe; }
+        BITMAP* Getdecor() {return m_decor; }
 
         void Setaretes(std::vector<Arete*> val) { m_aretes = val; }
         void Setsommets(std::vector<Sommet*> val) { m_sommets = val; }
         void Setsall(std::vector<Sommet*> val) { m_sall = val; }
         void Setordre(int val) { m_ordre = val; }
         void SetNomGraphe(std::string val) { m_nom_graphe = val; }
+        void Setdecor (BITMAP* val) { m_decor = val; }
 
         void init_sommets(std::string nom_fichier);
 
@@ -57,6 +59,7 @@ class Graphe
         int m_ordre;
         std::vector<Arete*> m_aretes;
         std::string m_nom_graphe;
+        BITMAP* m_decor;
 };
 
 #endif // GRAPHE_H

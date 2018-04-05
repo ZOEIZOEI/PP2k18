@@ -1,9 +1,16 @@
 #include "Graphe.h"
 
-Graphe::Graphe(std::string nom_fichier)
+Graphe::Graphe(std::string nom_fichier, std::string nom_decor)
 {
     Setordre(0);
     SetNomGraphe(nom_fichier);
+
+    Setdecor(load_bitmap(nom_decor.c_str(), NULL));
+    if(!Getdecor())
+    {
+        allegro_message("pas pu trouver decor.png");
+        exit(EXIT_FAILURE);
+    }
 }
 
 Graphe::~Graphe()
@@ -102,12 +109,11 @@ void Graphe::Recuperation()
 
 void Graphe::affichage(BITMAP* buffer, BITMAP* barre)
 {
+    blit(Getdecor(), buffer, 0,0,0,0,Getdecor()->w, Getdecor()->h);
+
     for (unsigned int i(0); i <Getaretes().size(); ++i)
     {
-
         line(buffer, Getaretes()[i]->Getdepart()->GetCd_x() + Getaretes()[i]->Getdepart()->GetImg()->w/2, Getaretes()[i]->Getdepart()->GetCd_y() + Getaretes()[i]->Getdepart()->GetImg()->h/2, Getaretes()[i]->Getarrive()->GetCd_x() + Getaretes()[i]->Getarrive()->GetImg()->w/2, Getaretes()[i]->Getarrive()->GetCd_y() + Getaretes()[i]->Getarrive()->GetImg()->h/2, makecol(255,0,0));
-
-        //stretch_sprite(buffer, fleche, Getaretes()[i]->Getdepart()->GetCd_x(), Getaretes()[i]->Getdepart()->GetCd_y(), Getaretes()[i]->Getdepart()->GetImg()->w, Getaretes()[i]->Getdepart()->GetImg()->h/*, Getaretes()[i]->Getarrive()->GetCd_x(), Getaretes()[i]->Getarrive()->GetCd_y(), Getaretes()[i]->Getarrive()->GetImg()->w, Getaretes()[i]->Getarrive()->GetImg()->h*/);
     }
 
     for (unsigned int i(0); i<Getsommets().size(); ++i)
@@ -123,7 +129,7 @@ void Graphe::affichage(BITMAP* buffer, BITMAP* barre)
 //    textprintf_ex(buffer, font, 440, 23, makecol(255,255,0), -1,"%d", mouse_y);
 
     outils(buffer, barre);
-    blit(barre, buffer,0,0,0,600 - barre->h, barre->w, barre->h);
+    draw_sprite(buffer, barre, 0, 600-barre->h);
     blit(buffer, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
     clear_bitmap(buffer);
 }

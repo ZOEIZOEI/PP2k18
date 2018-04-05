@@ -12,7 +12,7 @@ Graphe3\Images\ecureuil.jpg
 317 353 2 30
 
 Graphe3\Images\gland.jpg
-288 207 3 45
+361 203 3 45
 
 Graphe3\Images\herbe.jpg
 74 214 4 55

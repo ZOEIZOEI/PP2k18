@@ -12,13 +12,13 @@ Graphe2\Images\elephant.jpg
 317 353 0 30
 
 Graphe2\Images\feuillage.jpg
-318 183 3 45
+216 224 3 45
 
 Graphe2\Images\fruit.png
 74 214 5 55
 
 Graphe2\Images\homme.jpg
-457 389 2 40
+470 400 2 40
 
 Graphe2\Images\leopard.jpg
 599 213 1 35
