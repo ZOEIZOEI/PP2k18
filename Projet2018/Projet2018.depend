@@ -35,7 +35,7 @@
 	<allegro.h>
 	<string>
 
-1522863665 source:c:\users\elias\desktop\projet_piscine\projet2018\src\graphe.cpp
+1522918205 source:c:\users\elias\desktop\projet_piscine\projet2018\src\graphe.cpp
 	"Graphe.h"
 
 1522861023 c:\users\elias\desktop\projet_piscine\projet2018\include\graphe.h
@@ -96,5 +96,36 @@
 	"Graphe.h"
 
 1522781579 source:c:\users\batpi\desktop\piscine1\projet_piscine\projet2018\src\sommet.cpp
+	"Sommet.h"
+
+1522918337 source:c:\users\nathan\desktop\pp2k18-master\projet2018\main.cpp
+	"Graphe.h"
+
+1522918337 c:\users\nathan\desktop\pp2k18-master\projet2018\include\graphe.h
+	"Sommet.h"
+	"Arete.h"
+	<vector>
+	<fstream>
+	<iostream>
+	<allegro.h>
+	<png.h>
+	<loadpng.h>
+	<jpgalleg.h>
+	<ctime>
+
+1522918337 c:\users\nathan\desktop\pp2k18-master\projet2018\include\sommet.h
+	<allegro.h>
+	<string>
+
+1522918337 c:\users\nathan\desktop\pp2k18-master\projet2018\include\arete.h
+	"Sommet.h"
+
+1522918337 source:c:\users\nathan\desktop\pp2k18-master\projet2018\src\arete.cpp
+	"Arete.h"
+
+1522927225 source:c:\users\nathan\desktop\pp2k18-master\projet2018\src\graphe.cpp
+	"Graphe.h"
+
+1522918337 source:c:\users\nathan\desktop\pp2k18-master\projet2018\src\sommet.cpp
 	"Sommet.h"
 
