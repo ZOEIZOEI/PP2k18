@@ -37,8 +37,8 @@ class Graphe
         void ajouterSommet(Sommet* val) { m_sommets.push_back(val); }
         Sommet* getSommet(int val) { return m_sommets[val]; } /// POUR UN SEUL SOMMET
 
-        void affichage(BITMAP* buffer, BITMAP* barre);
-        void outils(BITMAP* buffer, BITMAP* barre);
+        void affichage(BITMAP* buffer, BITMAP* barre, int a);
+        void outils(BITMAP* buffer, BITMAP* barre, int a);
 
         void update(BITMAP* buffer, BITMAP* barre);
 

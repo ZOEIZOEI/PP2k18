@@ -107,11 +107,11 @@ void Graphe::Recuperation()
     Setaretes(tmp);
 }
 
-void Graphe::affichage(BITMAP* buffer, BITMAP* barre)
+void Graphe::affichage(BITMAP* buffer, BITMAP* barre, int a)
 {
-    blit(Getdecor(), buffer, 0,0,0,0,Getdecor()->w, Getdecor()->h);
     int xsDep = 0, ysDep = 0, xsArr = 0, ysArr = 0;
     int radius = 15;
+
     for (unsigned int i(0); i <Getaretes().size(); ++i)
     {
         xsDep = Getaretes()[i]->Getdepart()->GetCd_x() + Getaretes()[i]->Getdepart()->GetImg()->w/2;
@@ -119,10 +119,8 @@ void Graphe::affichage(BITMAP* buffer, BITMAP* barre)
         xsArr = Getaretes()[i]->Getarrive()->GetCd_x() + Getaretes()[i]->Getarrive()->GetImg()->w/2;
         ysArr = Getaretes()[i]->Getarrive()->GetCd_y() + Getaretes()[i]->Getarrive()->GetImg()->h/2;
 
-//        line(buffer, Getaretes()[i]->Getdepart()->GetCd_x() + Getaretes()[i]->Getdepart()->GetImg()->w/2, Getaretes()[i]->Getdepart()->GetCd_y() + Getaretes()[i]->Getdepart()->GetImg()->h/2, Getaretes()[i]->Getarrive()->GetCd_x() + Getaretes()[i]->Getarrive()->GetImg()->w/2, Getaretes()[i]->Getarrive()->GetCd_y() + Getaretes()[i]->Getarrive()->GetImg()->h/2, makecol(255,0,0));
         line(buffer, xsDep, ysDep, xsArr, ysArr, makecol(255,0,0));
         circlefill(buffer, (xsDep + 3*xsArr)/4, (ysDep + 3*ysArr)/4, radius, makecol(255,0,0));
-        //stretch_sprite(buffer, fleche, Getaretes()[i]->Getdepart()->GetCd_x(), Getaretes()[i]->Getdepart()->GetCd_y(), Getaretes()[i]->Getdepart()->GetImg()->w, Getaretes()[i]->Getdepart()->GetImg()->h/*, Getaretes()[i]->Getarrive()->GetCd_x(), Getaretes()[i]->Getarrive()->GetCd_y(), Getaretes()[i]->Getarrive()->GetImg()->w, Getaretes()[i]->Getarrive()->GetImg()->h*/);
     }
 
     for (unsigned int i(0); i<Getsommets().size(); ++i)
@@ -137,20 +135,15 @@ void Graphe::affichage(BITMAP* buffer, BITMAP* barre)
 //    textprintf_ex(buffer, font, 400, 23, makecol(255,255,0), -1,"%d", Getaretes().size());
 //    textprintf_ex(buffer, font, 440, 23, makecol(255,255,0), -1,"%d", mouse_y);
 
-    outils(buffer, barre);
+    outils(buffer, barre, a);
+
     draw_sprite(buffer, barre, 0, 600-barre->h);
     blit(buffer, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
     clear_bitmap(buffer);
 }
 
-void Graphe::outils(BITMAP* buffer, BITMAP* barre)
+void Graphe::outils(BITMAP* buffer, BITMAP* barre, int a)
 {
-    /*int prev_mouse_b = 0;
-    int now_mouse_b = mouse_b&1;
-
-    prev_mouse_b = now_mouse_b;
-    now_mouse_b = mouse_b&1;*/
-
     ///Pour ajouter Arete
     rectfill(buffer, 745, 5, 795, 55, makecol(0,250,0));
 
@@ -163,43 +156,47 @@ void Graphe::outils(BITMAP* buffer, BITMAP* barre)
     ///Pour supprimer Arete
     rectfill(buffer, 745, 185, 795, 235, makecol(255, 255, 0));
 
-    if (is_mouse(745, 50, 5, 50))
+    if(a != 1)
     {
-        rectfill(buffer, 743, 3, 797, 57, makecol(0,250,0));
-
-        if(/*!prev_mouse_b && now_mouse_b*/ mouse_b&1)
-            ajouterArete(buffer);
-    }
-
-    if (is_mouse(745, 50, 65, 50))
-    {
-        rectfill(buffer, 743, 63, 797, 117, makecol(255,0,0));
-
-        if(/*!prev_mouse_b && now_mouse_b*/ mouse_b&1)
+        if (is_mouse(745, 50, 5, 50))
         {
-            suppSommet();
+            rectfill(buffer, 743, 3, 797, 57, makecol(0,250,0));
+
+            if(mouse_b&1)
+                ajouterArete(buffer);
+        }
+
+        if (is_mouse(745, 50, 65, 50))
+        {
+            rectfill(buffer, 743, 63, 797, 117, makecol(255,0,0));
+
+            if(mouse_b&1)
+            {
+                suppSommet();
+            }
+        }
+
+        if (is_mouse(745, 50, 125, 50))
+        {
+            rectfill(buffer, 743, 123, 797, 177, makecol(255,0,255));
+
+            if(mouse_b&1)
+            {
+                ajouSommet(buffer, barre);
+            }
+        }
+
+        if (is_mouse(745, 50, 185, 50))
+        {
+            rectfill(buffer, 743, 183, 797, 237, makecol(255,255,0));
+            if(mouse_b&1)
+            {
+                suppArete();
+
+            }
         }
     }
 
-    if (is_mouse(745, 50, 125, 50))
-    {
-        rectfill(buffer, 743, 123, 797, 177, makecol(255,0,255));
-
-        if(/*!prev_mouse_b && now_mouse_b*/ mouse_b&1)
-        {
-            ajouSommet(buffer, barre);
-        }
-    }
-
-    if (is_mouse(745, 50, 185, 50))
-    {
-        rectfill(buffer, 743, 183, 797, 237, makecol(255,255,0));
-        if(/*!prev_mouse_b && now_mouse_b*/ mouse_b&1)
-        {
-            suppArete();
-
-        }
-    }
 }
 
 void Graphe::ajouterArete(BITMAP* buffer)
@@ -362,7 +359,6 @@ void Graphe::suppArete()
     std::vector<Arete*> temp = Getaretes();
     int prev_mouse_b = 0;
     int now_mouse_b = mouse_b&1;
-    unsigned int nb_s1 = 0;
     bool stop(false);
 
     if (temp.size() > 0)
@@ -383,7 +379,6 @@ void Graphe::suppArete()
                         if (temp[j]->Getdepart() == Getsommets()[i])
                         {
                             s1 = Getsommets()[i];
-                            nb_s1 = j;
                         }
                     }
                 }
@@ -421,25 +416,45 @@ void Graphe::suppArete()
 
 void Graphe::update(BITMAP* buffer, BITMAP* barre)
 {
+    int prev_mouse_b = 0;
+    int now_mouse_b = mouse_b&1;
+
+    prev_mouse_b = now_mouse_b;
+    now_mouse_b = mouse_b&1;
+
+    blit(Getdecor(), buffer, 0,0,0,0,Getdecor()->w, Getdecor()->h);
+
     for(int i(Getsommets().size()-1); i >= 0 ; --i)
     {
         if(is_sommmet(i))
         {
             if(mouse_b&1)
             {
-                while(mouse_b&1)
+                while(prev_mouse_b && now_mouse_b)
                 {
+                    prev_mouse_b = now_mouse_b;
+                    now_mouse_b = mouse_b&1;
+
+                    blit(Getdecor(), buffer, 0,0,0,0,Getdecor()->w, Getdecor()->h);
+
                     rectfill(buffer, Getsommets()[i]->GetCd_x()-2, Getsommets()[i]->GetCd_y()-2, Getsommets()[i]->GetImg()->w +Getsommets()[i]->GetCd_x()+1,Getsommets()[i]->GetImg()->h + Getsommets()[i]->GetCd_y()+1, makecol(0,255,0));
 
                     Getsommets()[i]->SetCd_x(mouse_x-Getsommets()[i]->GetImg()->w/2);
                     Getsommets()[i]->SetCd_y(mouse_y-Getsommets()[i]->GetImg()->h/2);
 
-                    if (Getsommets()[i]->GetCd_x() + Getsommets()[i]->GetImg()->w > 740) Getsommets()[i]->SetCd_x(740 - Getsommets()[i]->GetImg()->w);
-                    if (Getsommets()[i]->GetCd_y() + Getsommets()[i]->GetImg()->h > SCREEN_H-barre->h) Getsommets()[i]->SetCd_y(SCREEN_H - barre->h - Getsommets()[i]->GetImg()->h);
-                    if (Getsommets()[i]->GetCd_x() < 0) Getsommets()[i]->SetCd_x(0);
-                    if (Getsommets()[i]->GetCd_y() < 0) Getsommets()[i]->SetCd_y(0);
+                    if (Getsommets()[i]->GetCd_x() + Getsommets()[i]->GetImg()->w > 740)
+                        Getsommets()[i]->SetCd_x(740 - Getsommets()[i]->GetImg()->w);
 
-                    affichage(buffer, barre);
+                    if (Getsommets()[i]->GetCd_y() + Getsommets()[i]->GetImg()->h > SCREEN_H-barre->h)
+                        Getsommets()[i]->SetCd_y(SCREEN_H - barre->h - Getsommets()[i]->GetImg()->h);
+
+                    if (Getsommets()[i]->GetCd_x() < 0)
+                        Getsommets()[i]->SetCd_x(0);
+
+                    if (Getsommets()[i]->GetCd_y() < 0)
+                        Getsommets()[i]->SetCd_y(0);
+
+                    affichage(buffer, barre, 1);
                 }
             }
         }

@@ -59,7 +59,8 @@ std::cout << "LLZ";
     while (!key[KEY_ESC])
     {
         g[num]->update(buffer, barre);
-        g[num]->affichage(buffer, barre);
+        g[num]->affichage(buffer, barre, 0);
+
         for(unsigned int i(0); i < 3; ++i)
         {
             if(mouse_x >= i*283 && mouse_x <= i*283 + 234  &&  mouse_y >= 547 && mouse_y <= 547 + 51)
