@@ -4,12 +4,23 @@ Graphe::Graphe(std::string nom_fichier, std::string nom_decor)
 {
     Setordre(0);
     SetNomGraphe(nom_fichier);
+    BITMAP* bouton;
 
     Setdecor(load_bitmap(nom_decor.c_str(), NULL));
     if(!Getdecor())
     {
         allegro_message("pas pu trouver decor.png");
         exit(EXIT_FAILURE);
+    }
+
+    for (int i = 0; i<4; ++i)
+    {
+        if (i == 0) bouton = load_bitmap("Graphe1/Images/addA.png", NULL);
+        if (i == 1) bouton = load_bitmap("Graphe1/Images/suppS.png", NULL);
+        if (i == 2) bouton = load_bitmap("Graphe1/Images/addS.png", NULL);
+        if (i == 3) bouton = load_bitmap("Graphe1/Images/suppA.png", NULL);
+
+        ajouterBouton(bouton);
     }
 }
 
@@ -26,9 +37,12 @@ void Graphe::Recuperation()
     std::string nom_fichier(GetNomGraphe());
     std::cout << nom_fichier << "jijij " << std::endl;
 
+    std::vector<std::vector<int> > adjacence;
+
     int ordre;
     std::string nom_img_d, nom_img_a;
     std::vector<Arete*> tmp;
+
     Arete* a;
     Sommet* s;
 
@@ -71,6 +85,11 @@ void Graphe::Recuperation()
 
         fichier >> ordre;
         std::cout << "Ordre : " << ordre << std::endl;
+
+        ///Matrice temp d'adjacence
+        std::vector<std::vector<int> > tmp_adjacence(Getordre(), std::vector<int> (Getordre(), 0));
+        adjacence = tmp_adjacence;
+
         if(ordre > 0)
         {
             for (int k(0); k<ordre; ++k)
@@ -98,6 +117,9 @@ void Graphe::Recuperation()
                             a->Setpoids(poids);
                         }
                     }
+
+                    adjacence[a->Getdepart()->GetNum()][a->Getarrive()->GetNum()] = poids;
+
                     tmp.push_back(a);
                 }
             }
@@ -105,6 +127,15 @@ void Graphe::Recuperation()
 
     }
     Setaretes(tmp);
+
+    for(int i(0); i < adjacence.size(); ++i)
+    {
+        for(int j(0); j < adjacence[i].size(); ++j)
+        {
+            std::cout << adjacence[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
 }
 
 void Graphe::affichage(BITMAP* buffer, BITMAP* barre, int a)
@@ -144,23 +175,11 @@ void Graphe::affichage(BITMAP* buffer, BITMAP* barre, int a)
 
 void Graphe::outils(BITMAP* buffer, BITMAP* barre, int a)
 {
-    ///Pour ajouter Arete
-    rectfill(buffer, 745, 5, 795, 55, makecol(0,250,0));
-
-    ///Pour supprimer Sommet
-    rectfill(buffer, 745, 65, 795, 115, makecol(255, 0, 0));
-
-    ///Pour ajouter Sommet
-    rectfill(buffer, 745, 125, 795, 175, makecol(255,0,255));
-
-    ///Pour supprimer Arete
-    rectfill(buffer, 745, 185, 795, 235, makecol(255, 255, 0));
-
     if(a != 1)
     {
         if (is_mouse(745, 50, 5, 50))
         {
-            rectfill(buffer, 743, 3, 797, 57, makecol(0,250,0));
+            rectfill(buffer, 743, 3, 797, 57, makecol(76,201,0));
 
             if(mouse_b&1)
                 ajouterArete(buffer);
@@ -178,7 +197,7 @@ void Graphe::outils(BITMAP* buffer, BITMAP* barre, int a)
 
         if (is_mouse(745, 50, 125, 50))
         {
-            rectfill(buffer, 743, 123, 797, 177, makecol(255,0,255));
+            rectfill(buffer, 743, 123, 797, 177, makecol(6,201,0));
 
             if(mouse_b&1)
             {
@@ -188,13 +207,19 @@ void Graphe::outils(BITMAP* buffer, BITMAP* barre, int a)
 
         if (is_mouse(745, 50, 185, 50))
         {
-            rectfill(buffer, 743, 183, 797, 237, makecol(255,255,0));
+            rectfill(buffer, 743, 183, 797, 237, makecol(255,0,0));
             if(mouse_b&1)
             {
                 suppArete();
 
             }
         }
+    }
+
+    ///Pour ajouter, supprimer Arêtes/Sommets
+    for (unsigned int i = 0; i<m_boutons.size(); ++i)
+    {
+        blit(getBouton(i), buffer, 0, 0, 745, 5+(60*i), getBouton(i)->w, getBouton(i)->h);
     }
 
 }
@@ -422,7 +447,7 @@ void Graphe::update(BITMAP* buffer, BITMAP* barre)
     prev_mouse_b = now_mouse_b;
     now_mouse_b = mouse_b&1;
 
-    blit(Getdecor(), buffer, 0,0,0,0,Getdecor()->w, Getdecor()->h);
+    blit(Getdecor(), buffer, 300,200,0,0,Getdecor()->w, Getdecor()->h);
 
     for(int i(Getsommets().size()-1); i >= 0 ; --i)
     {
@@ -435,7 +460,7 @@ void Graphe::update(BITMAP* buffer, BITMAP* barre)
                     prev_mouse_b = now_mouse_b;
                     now_mouse_b = mouse_b&1;
 
-                    blit(Getdecor(), buffer, 0,0,0,0,Getdecor()->w, Getdecor()->h);
+                    blit(Getdecor(), buffer,300,200,0,0,Getdecor()->w, Getdecor()->h);
 
                     rectfill(buffer, Getsommets()[i]->GetCd_x()-2, Getsommets()[i]->GetCd_y()-2, Getsommets()[i]->GetImg()->w +Getsommets()[i]->GetCd_x()+1,Getsommets()[i]->GetImg()->h + Getsommets()[i]->GetCd_y()+1, makecol(0,255,0));
 

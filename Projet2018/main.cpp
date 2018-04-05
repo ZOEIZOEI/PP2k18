@@ -53,7 +53,7 @@ std::cout << "LLZ";
     g.push_back(g2);
     g.push_back(g3);
 
-    for(int i(0); i < g.size(); ++i)
+    for(unsigned int i(0); i < g.size(); ++i)
         g[i]->Recuperation();
 
     while (!key[KEY_ESC])
@@ -61,7 +61,7 @@ std::cout << "LLZ";
         g[num]->update(buffer, barre);
         g[num]->affichage(buffer, barre, 0);
 
-        for(unsigned int i(0); i < 3; ++i)
+        for(int i(0); i < 3; ++i)
         {
             if(mouse_x >= i*283 && mouse_x <= i*283 + 234  &&  mouse_y >= 547 && mouse_y <= 547 + 51)
             {
@@ -76,7 +76,7 @@ std::cout << "LLZ";
         }
     }
 
-    for(int i(0); i < g.size(); ++i)
+    for(unsigned int i(0); i < g.size(); ++i)
         g[i]->save();
 
     destroy_bitmap(buffer);
