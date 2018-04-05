@@ -1,30 +1,4 @@
-0
-
-10
-
-Graphe3\Images\Arbre.jpg
-121 53 0 60
-
-Graphe3\Images\ecureuil.jpg
-300 373 2 30
-
-Graphe3\Images\gland.jpg
-323 191 3 45
-
-Graphe3\Images\herbe.jpg
-103 206 4 55
-
-Graphe3\Images\lapin.jpg
-447 371 5 40
-
-Graphe3\Images\Loup.jpg
-624 388 7 65
-
-Graphe3\Images\Pivert.jpg
-171 355 8 65
-
-Graphe3\Images\Renard.jpg
-340 30 9 65
+8
 
 Graphe3\Images\Buse.jpg
 521 52 1 70
@@ -32,7 +6,30 @@ Graphe3\Images\Buse.jpg
 Graphe3\Images\Larve.jpg
 549 224 6 35
 
-3
-Graphe3\Images\gland.jpg Graphe3\Images\Renard.jpg 0
-Graphe3\Images\gland.jpg Graphe3\Images\herbe.jpg 0
-Graphe3\Images\gland.jpg Graphe3\Images\lapin.jpg 0
+Graphe3\Images\gland.jpg
+346 207 3 45
+
+Graphe3\Images\Renard.jpg
+340 30 9 65
+
+Graphe3\Images\Arbre.jpg
+121 53 0 60
+
+Graphe3\Images\ecureuil.jpg
+300 373 2 30
+
+Graphe3\Images\Pivert.jpg
+171 355 8 65
+
+Graphe3\Images\herbe.jpg
+103 206 4 55
+
+2
+
+Graphe3\Images\Loup.jpg
+27 137 7 65
+
+Graphe3\Images\lapin.jpg
+237 182 5 40
+
+0

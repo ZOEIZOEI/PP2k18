@@ -101,10 +101,12 @@
 1522943363 source:c:\users\elias\desktop\pp2k18\projet2018\main.cpp
 	"Graphe.h"
 
-1522943044 c:\users\elias\desktop\pp2k18\projet2018\include\graphe.h
+1522949997 c:\users\elias\desktop\pp2k18\projet2018\include\graphe.h
 	"Sommet.h"
 	"Arete.h"
 	<vector>
+	<list>
+	<stack>
 	<fstream>
 	<iostream>
 	<allegro.h>
@@ -138,10 +140,10 @@
 1522780848 c:\users\elias\desktop\pp2k18\projet2018\include\arete.h
 	"Sommet.h"
 
-1522780848 source:c:\users\elias\desktop\pp2k18\projet2018\src\arete.cpp
+1522950914 source:c:\users\elias\desktop\pp2k18\projet2018\src\arete.cpp
 	"Arete.h"
 
-1522944449 source:c:\users\elias\desktop\pp2k18\projet2018\src\graphe.cpp
+1522951642 source:c:\users\elias\desktop\pp2k18\projet2018\src\graphe.cpp
 	"Graphe.h"
 
 1522936932 source:c:\users\elias\desktop\pp2k18\projet2018\src\sommet.cpp

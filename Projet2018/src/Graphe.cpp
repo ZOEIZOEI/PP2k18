@@ -83,12 +83,11 @@ void Graphe::Recuperation()
             }
         }
 
+        ///Matrice temp d'adjacence
+        m_adjacence = new std::list<int>[Getordre()+ordre];
+
         fichier >> ordre;
         std::cout << "Ordre : " << ordre << std::endl;
-
-        ///Matrice temp d'adjacence
-        std::vector<std::vector<int> > tmp_adjacence(Getordre(), std::vector<int> (Getordre(), 0));
-        adjacence = tmp_adjacence;
 
         if(ordre > 0)
         {
@@ -118,7 +117,13 @@ void Graphe::Recuperation()
                         }
                     }
 
-                    adjacence[a->Getdepart()->GetNum()][a->Getarrive()->GetNum()] = poids;
+                    if(a->Getdepart() && a->Getarrive())
+                    {
+                        int dep(a->Getdepart()->GetNum());
+                        int arr(a->Getarrive()->GetNum());
+                        ajoutadjacen(dep, arr);
+                        std::cout << "Ordre de la list : " << Getordre() + ordre << std::endl;
+                    }
 
                     tmp.push_back(a);
                 }
@@ -128,14 +133,22 @@ void Graphe::Recuperation()
     }
     Setaretes(tmp);
 
-    for(int i(0); i < adjacence.size(); ++i)
+
+    std::cout << "***" << std::endl;
+    if(!Getadjacence().empty())
     {
-        for(int j(0); j < adjacence[i].size(); ++j)
+        for(std::list<int>::iterator it=Getadjacence().begin(); it!=Getadjacence().end(); ++it)
         {
-            std::cout << adjacence[i][j] << " ";
+            std::cout << *it << " ";
         }
-        std::cout << std::endl;
+
     }
+    else
+    {
+        std::cout << "La liste est vide" << std::endl;
+    }
+    std::cout << "***" << std::endl;
+
 }
 
 void Graphe::affichage(BITMAP* buffer, BITMAP* barre, int a)
@@ -177,6 +190,8 @@ void Graphe::outils(BITMAP* buffer, BITMAP* barre, int a)
 {
     if(a != 1)
     {
+        rectfill(buffer, 745, 245, 795, 295, makecol(123,123,0));
+
         if (is_mouse(745, 50, 5, 50))
         {
             rectfill(buffer, 743, 3, 797, 57, makecol(76,201,0));
@@ -211,6 +226,17 @@ void Graphe::outils(BITMAP* buffer, BITMAP* barre, int a)
             if(mouse_b&1)
             {
                 suppArete();
+
+            }
+        }
+
+        if (is_mouse(745, 50, 245, 50))
+        {
+            rectfill(buffer, 743, 243, 797, 297, makecol(123,123,0));
+
+            if(mouse_b&1)
+            {
+                CFC();
 
             }
         }
@@ -547,4 +573,80 @@ bool Graphe::is_sommmet(int i)
 {
     return     mouse_x >= Getsommets()[i]->GetCd_x() && mouse_x <= Getsommets()[i]->GetCd_x() + Getsommets()[i]->GetImg()->w
                &&  mouse_y >= Getsommets()[i]->GetCd_y() && mouse_y <= Getsommets()[i]->GetCd_y() + Getsommets()[i]->GetImg()->h;
+}
+
+void Graphe::ComposanteRecursif(int u, int disc[], int low[], std::stack<int> *st, bool stackMember[])
+{
+    // A static variable is used for simplicity, we can avoid use of static variable by passing a pointer.
+    static int time = 0;
+
+    // Initialize discovery time and low value
+    disc[u] = low[u] = ++time;
+    st->push(u);
+    stackMember[u] = true;
+
+    // Go through all vertices adjacent to this
+    std::list<int>::iterator i;
+    for (i = m_adjacence[u].begin(); i != m_adjacence[u].end(); ++i)
+    {
+        int v = *i;  // v is current adjacent of 'u'
+
+        // If v is not visited yet, then recur for it
+        if (disc[v] == -1)
+        {
+            ComposanteRecursif(v, disc, low, st, stackMember);
+
+            // Check if the subtree rooted with 'v' has a
+            // connection to one of the ancestors of 'u'
+            // Case 1 (per above discussion on Disc and Low value)
+            low[u]  = std::min(low[u], low[v]);
+        }
+
+        // Update low value of 'u' only of 'v' is still in stack
+        // (i.e. it's a back edge, not cross edge).
+        // Case 2 (per above discussion on Disc and Low value)
+        else if (stackMember[v] == true)
+            low[u]  = std::min(low[u], disc[v]);
+    }
+
+    // head node found, pop the stack and print an CFC
+    int w = 0;  // To store stack extracted vertices
+    if (low[u] == disc[u])
+    {
+        while (st->top() != u)
+        {
+            w = (int) st->top();
+//            std::cout << w << " ";
+            std::cout << Getsommets()[w]->GetNum() << " ";
+            stackMember[w] = false;
+            st->pop();
+        }
+        w = (int) st->top();
+        std::cout << Getsommets()[w]->GetNum() << "\n";
+        stackMember[w] = false;
+        st->pop();
+    }
+
+}
+
+void Graphe::CFC()
+{
+    int *disc = new int[m_ordre];
+    int *low = new int[m_ordre];
+    bool *stackMember = new bool[m_ordre];
+    std::stack<int> *st = new std::stack<int>();
+
+    // Initialize disc and low, and stackMember arrays
+    for (int i = 0; i < m_ordre; i++)
+    {
+        disc[i] = -1;
+        low[i] = -1;
+        stackMember[i] = false;
+    }
+
+    // Call the recursive helper function to find strongly
+    // connected components in DFS tree with vertex 'i'
+    for (int i = 0; i < m_ordre; i++)
+        if (disc[i] == -1)
+            ComposanteRecursif(i, disc, low, st, stackMember);
 }

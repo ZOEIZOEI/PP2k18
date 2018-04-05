@@ -4,6 +4,8 @@
 #include "Sommet.h"
 #include "Arete.h"
 #include <vector>
+#include <list>
+#include <stack>
 #include <fstream>
 #include <iostream>
 #include <allegro.h>
@@ -25,6 +27,8 @@ class Graphe
         std::string GetNomGraphe() { return m_nom_graphe; }
         BITMAP* Getdecor() {return m_decor; }
         BITMAP* getBouton(int val) { return m_boutons[val]; }
+        std::list<int> Getadjacence() { return *m_adjacence; }
+
 
         void Setaretes(std::vector<Arete*> val) { m_aretes = val; }
         void Setsommets(std::vector<Sommet*> val) { m_sommets = val; }
@@ -32,8 +36,10 @@ class Graphe
         void Setordre(int val) { m_ordre = val; }
         void SetNomGraphe(std::string val) { m_nom_graphe = val; }
         void Setdecor (BITMAP* val) { m_decor = val; }
+        void Setadj(std::list<int> *val) { m_adjacence = val; }
 
         void ajouterBouton(BITMAP* val) { m_boutons.push_back(val); }
+        void ajoutadjacen(int i, int j) { m_adjacence[i].push_back(j); }
 
         void init_sommets(std::string nom_fichier);
 
@@ -57,6 +63,9 @@ class Graphe
         void Recuperation();
         void save();
 
+        void CFC();
+        void ComposanteRecursif(int u, int disc[], int low[], std::stack<int> *st, bool stackMember[]);
+
     private:
         std::vector<Sommet*> m_sommets;
         std::vector<Sommet*> m_sall;
@@ -65,6 +74,7 @@ class Graphe
         std::string m_nom_graphe;
         BITMAP* m_decor;
         std::vector<BITMAP*> m_boutons;
+        std::list<int> *m_adjacence;
 };
 
 #endif // GRAPHE_H
