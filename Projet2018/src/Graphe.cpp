@@ -2,8 +2,22 @@
 
 Graphe::Graphe(std::string nom_fichier)
 {
+    Setordre(0);
+    SetNomGraphe(nom_fichier);
+}
+
+Graphe::~Graphe()
+{
+
+}
+
+void Graphe::Recuperation()
+{
     int cd_x, cd_y, num, poids;
     std::string nom_img;
+
+    std::string nom_fichier(GetNomGraphe());
+    std::cout << nom_fichier << "jijij " << std::endl;
 
     int ordre;
     std::string nom_img_d, nom_img_a;
@@ -20,7 +34,6 @@ Graphe::Graphe(std::string nom_fichier)
     else
     {
         fichier >> ordre;
-        std::cout << "Ordre : " << ordre <<std::endl;
         if(ordre > 0)
         {
             for (int i(0); i<ordre; ++i)
@@ -35,10 +48,8 @@ Graphe::Graphe(std::string nom_fichier)
 
             }
         }
-        std::cout << "Sommet A: " << Getsall().size() <<std::endl;
 
         fichier >> m_ordre;
-        std::cout << "Ordre : " << m_ordre <<std::endl;
         if(m_ordre > 0)
         {
             for (int i(0); i<m_ordre; ++i)
@@ -50,9 +61,9 @@ Graphe::Graphe(std::string nom_fichier)
                 ajouterSommet(s);
             }
         }
-        std::cout << "Sommet S: " << Getsommets().size() <<std::endl;
 
         fichier >> ordre;
+        std::cout << "Ordre : " << ordre << std::endl;
         if(ordre > 0)
         {
             for (int k(0); k<ordre; ++k)
@@ -89,11 +100,6 @@ Graphe::Graphe(std::string nom_fichier)
     Setaretes(tmp);
 }
 
-Graphe::~Graphe()
-{
-
-}
-
 void Graphe::affichage(BITMAP* buffer, BITMAP* barre)
 {
     for (unsigned int i(0); i <Getaretes().size(); ++i)
@@ -107,9 +113,9 @@ void Graphe::affichage(BITMAP* buffer, BITMAP* barre)
     for (unsigned int i(0); i<Getsommets().size(); ++i)
     {
         blit(getSommet(i)->GetImg(), buffer, 0, 0, getSommet(i)->GetCd_x(), getSommet(i)->GetCd_y(), getSommet(i)->GetImg()->w, getSommet(i)->GetImg()->h);
-        rectfill(buffer, getSommet(i)->GetCd_x() + getSommet(i)->GetImg()->w - 15, getSommet(i)->GetCd_y() + getSommet(i)->GetImg()->h - 15, getSommet(i)->GetCd_x() + getSommet(i)->GetImg()->w, getSommet(i)->GetCd_y() + getSommet(i)->GetImg()->h, makecol(0,0,0));
-        rect(buffer, getSommet(i)->GetCd_x() + getSommet(i)->GetImg()->w - 15, getSommet(i)->GetCd_y() + getSommet(i)->GetImg()->h - 15, getSommet(i)->GetCd_x() + getSommet(i)->GetImg()->w-2, getSommet(i)->GetCd_y() + getSommet(i)->GetImg()->h-2, makecol(255,255,255));
-        textprintf_ex(buffer, font, getSommet(i)->GetCd_x() + getSommet(i)->GetImg()->w - 11, getSommet(i)->GetCd_y() + getSommet(i)->GetImg()->h - 11, makecol(255,255,255), -1,"%d", getSommet(i)->GetNum());
+        rectfill(buffer, getSommet(i)->GetCd_x() + getSommet(i)->GetImg()->w - 20, getSommet(i)->GetCd_y() + getSommet(i)->GetImg()->h - 15, getSommet(i)->GetCd_x() + getSommet(i)->GetImg()->w, getSommet(i)->GetCd_y() + getSommet(i)->GetImg()->h, makecol(0,0,0));
+        rect(buffer, getSommet(i)->GetCd_x() + getSommet(i)->GetImg()->w - 20, getSommet(i)->GetCd_y() + getSommet(i)->GetImg()->h - 15, getSommet(i)->GetCd_x() + getSommet(i)->GetImg()->w-2, getSommet(i)->GetCd_y() + getSommet(i)->GetImg()->h-2, makecol(255,255,255));
+        textprintf_ex(buffer, font, getSommet(i)->GetCd_x() + getSommet(i)->GetImg()->w - 16, getSommet(i)->GetCd_y() + getSommet(i)->GetImg()->h - 11, makecol(255,255,255), -1,"%d", getSommet(i)->GetNum());
 
     }
 
@@ -423,11 +429,13 @@ void Graphe::update(BITMAP* buffer, BITMAP* barre)
             }
         }
     }
+
 }
 
-void Graphe::save(std::string nom_fichier)
+void Graphe::save()
 {
     int ordre = Getsall().size();
+    std::string nom_fichier(GetNomGraphe());
 
     std::ofstream fichier(nom_fichier, std::ios::out);
     if (!fichier)

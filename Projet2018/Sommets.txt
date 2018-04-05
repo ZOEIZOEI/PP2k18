@@ -1,33 +1,5 @@
 0
 
-9
+0
 
-Images\laminaire.jpg
-109 106 4 50
-
-Images\oursins.jpg
-277 77 6 60
-
-Images\poisson2.jpg
-341 357 8 70
-
-Images\phoque.jpg
-168 346 0 30
-
-Images\orque.jpg
-417 191 2 40
-
-Images\homosapiens.jpg
-242 183 3 45
-
-Images\loutre_de_mer.jpg
-48 234 5 55
-
-Images\mollusque.jpg
-515 344 1 35
-
-Images\poisson1.jpg
-539 46 7 65
-
-1
-Images\orque.jpg Images\poisson2.jpg 0
+0

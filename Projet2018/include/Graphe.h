@@ -22,11 +22,13 @@ class Graphe
         int Getordre() { return m_ordre; }
         std::vector<Arete*> Getaretes() { return m_aretes; }
         std::vector<Sommet*> Getsall() { return m_sall; }
+        std::string GetNomGraphe() { return m_nom_graphe; }
 
         void Setaretes(std::vector<Arete*> val) { m_aretes = val; }
         void Setsommets(std::vector<Sommet*> val) { m_sommets = val; }
         void Setsall(std::vector<Sommet*> val) { m_sall = val; }
         void Setordre(int val) { m_ordre = val; }
+        void SetNomGraphe(std::string val) { m_nom_graphe = val; }
 
         void init_sommets(std::string nom_fichier);
 
@@ -37,6 +39,7 @@ class Graphe
         void outils(BITMAP* buffer, BITMAP* barre);
 
         void update(BITMAP* buffer, BITMAP* barre);
+
         bool is_mouse(int x, int weight, int Y, int height);
         bool is_sommmet(int i);
 
@@ -45,13 +48,15 @@ class Graphe
         void suppSommet();
         void suppArete();
 
-        void save(std::string nom_fichier);
+        void Recuperation();
+        void save();
 
     private:
         std::vector<Sommet*> m_sommets;
         std::vector<Sommet*> m_sall;
         int m_ordre;
         std::vector<Arete*> m_aretes;
+        std::string m_nom_graphe;
 };
 
 #endif // GRAPHE_H
