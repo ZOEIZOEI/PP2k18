@@ -2,70 +2,42 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Debug" />
-<<<<<<< HEAD
-	<File name="include\Arete.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="include\Arete.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="57" topLine="0" />
+			<Cursor1 position="528" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="include\Graphe.h" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1411" topLine="11" />
-=======
-	<File name="include\Arete.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="-2" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="57" topLine="1" />
-		</Cursor>
-	</File>
-	<File name="main.cpp" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="-3" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1008" topLine="9" />
->>>>>>> 00adb86bcf04341f4f0b51eb5d3a31a8e714ff90
-		</Cursor>
-	</File>
-	<File name="src\Graphe.cpp" open="1" top="1" tabpos="6" split="0" active="1" splitpos="0" zoom_1="-3" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="4422" topLine="142" />
-		</Cursor>
-	</File>
-<<<<<<< HEAD
 	<File name="include\Sommet.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-=======
-	<File name="src\Sommet.cpp" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="-2" zoom_2="0">
->>>>>>> 00adb86bcf04341f4f0b51eb5d3a31a8e714ff90
 		<Cursor>
-			<Cursor1 position="147" topLine="0" />
-		</Cursor>
-	</File>
-<<<<<<< HEAD
-	<File name="src\Graphe.cpp" open="1" top="1" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="4238" topLine="44" />
-		</Cursor>
-	</File>
-	<File name="src\Arete.cpp" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="0" topLine="0" />
+			<Cursor1 position="960" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="main.cpp" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1084" topLine="18" />
-=======
-	<File name="include\Graphe.h" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="-2" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1293" topLine="23" />
+			<Cursor1 position="1132" topLine="25" />
 		</Cursor>
 	</File>
-	<File name="include\Sommet.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="-2" zoom_2="0">
+	<File name="src\Sommet.cpp" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="126" topLine="0" />
+			<Cursor1 position="195" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\Arete.cpp" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="-1" zoom_2="0">
+	<File name="src\Graphe.cpp" open="1" top="1" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="4528" topLine="7" />
+		</Cursor>
+		<Folding>
+			<Collapse line="3" />
+		</Folding>
+	</File>
+	<File name="src\Arete.cpp" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="0" topLine="0" />
->>>>>>> 00adb86bcf04341f4f0b51eb5d3a31a8e714ff90
+		</Cursor>
+	</File>
+	<File name="include\Graphe.h" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1485" topLine="20" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>
