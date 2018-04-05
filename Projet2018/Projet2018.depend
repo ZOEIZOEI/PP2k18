@@ -9,7 +9,7 @@
 	<allegro.h>
 	<string>
 
-1522770889 D
+1522918337 D
 
 1522772313 source:c:\users\nathan\documents\github\projet_piscine\projet2018\src\arete.cpp
 	"Arete.h"
@@ -98,17 +98,17 @@
 1522781579 source:c:\users\batpi\desktop\piscine1\projet_piscine\projet2018\src\sommet.cpp
 	"Sommet.h"
 
-<<<<<<< HEAD
 1522928448 source:c:\users\elias\desktop\pp2k18\projet2018\main.cpp
 	"Graphe.h"
 
 1522927504 c:\users\elias\desktop\pp2k18\projet2018\include\graphe.h
-=======
+
 1522918337 source:c:\users\nathan\desktop\pp2k18-master\projet2018\main.cpp
 	"Graphe.h"
 
 1522918337 c:\users\nathan\desktop\pp2k18-master\projet2018\include\graphe.h
->>>>>>> origin/Nathan
+
+1522918337 gin/Nathan
 	"Sommet.h"
 	"Arete.h"
 	<vector>
@@ -119,8 +119,8 @@
 	<loadpng.h>
 	<jpgalleg.h>
 	<ctime>
+	"Sommet.h"
 
-<<<<<<< HEAD
 1522840521 c:\users\elias\desktop\pp2k18\projet2018\include\sommet.h
 	<allegro.h>
 	<string>
@@ -135,7 +135,7 @@
 	"Graphe.h"
 
 1522922158 source:c:\users\elias\desktop\pp2k18\projet2018\src\sommet.cpp
-=======
+
 1522918337 c:\users\nathan\desktop\pp2k18-master\projet2018\include\sommet.h
 	<allegro.h>
 	<string>
@@ -150,6 +150,35 @@
 	"Graphe.h"
 
 1522918337 source:c:\users\nathan\desktop\pp2k18-master\projet2018\src\sommet.cpp
->>>>>>> origin/Nathan
+
+1522929812 source:c:\users\batpi\desktop\proj_piscine\pp2k18\projet2018\main.cpp
+	"Graphe.h"
+
+1522929812 c:\users\batpi\desktop\proj_piscine\pp2k18\projet2018\include\graphe.h
+	"Sommet.h"
+	"Arete.h"
+	<vector>
+	<fstream>
+	<iostream>
+	<allegro.h>
+	<png.h>
+	<loadpng.h>
+	<jpgalleg.h>
+	<ctime>
+
+1522918408 c:\users\batpi\desktop\proj_piscine\pp2k18\projet2018\include\sommet.h
+	<allegro.h>
+	<string>
+
+1522918408 c:\users\batpi\desktop\proj_piscine\pp2k18\projet2018\include\arete.h
+	"Sommet.h"
+
+1522929751 source:c:\users\batpi\desktop\proj_piscine\pp2k18\projet2018\src\arete.cpp
+	"Arete.h"
+
+1522929812 source:c:\users\batpi\desktop\proj_piscine\pp2k18\projet2018\src\graphe.cpp
+	"Graphe.h"
+
+1522929812 source:c:\users\batpi\desktop\proj_piscine\pp2k18\projet2018\src\sommet.cpp
 	"Sommet.h"
 

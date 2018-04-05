@@ -15,7 +15,7 @@ Graphe3\Images\gland.jpg
 405 208 3 45
 
 Graphe3\Images\herbe.jpg
-74 214 4 55
+78 211 4 55
 
 Graphe3\Images\lapin.jpg
 457 389 5 40

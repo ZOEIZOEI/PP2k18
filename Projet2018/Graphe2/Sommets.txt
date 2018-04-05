@@ -9,13 +9,13 @@ Graphe2\Images\cricquet.jpg
 376 190 8 70
 
 Graphe2\Images\elephant.jpg
-317 353 0 30
+298 391 0 30
 
 Graphe2\Images\feuillage.jpg
-216 224 3 45
+164 316 3 45
 
 Graphe2\Images\fruit.png
-74 214 5 55
+38 200 5 55
 
 Graphe2\Images\homme.jpg
 470 400 2 40
@@ -27,13 +27,13 @@ Graphe2\Images\lion.jpg
 624 388 9 65
 
 Graphe2\Images\mante.jpg
-171 355 10 65
+36 329 10 65
 
 Graphe2\Images\papillon.jpg
 316 55 11 65
 
 Graphe2\Images\plante.jpg
-403 276 12 65
+355 408 12 65
 
 Graphe2\Images\singe.jpg
 591 68 13 65

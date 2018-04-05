@@ -9,25 +9,25 @@ Graphe1\Images\poisson2.jpg
 599 212 8 70
 
 Graphe1\Images\phoque.jpg
-185 372 0 30
+232 409 0 30
 
 Graphe1\Images\homosapiens.jpg
-278 242 3 45
+235 76 3 45
 
 Graphe1\Images\loutre_de_mer.jpg
-181 224 5 55
+79 240 5 55
 
 Graphe1\Images\orque.jpg
-463 324 2 40
+420 440 2 40
 
 Graphe1\Images\mollusque.jpg
 617 349 1 35
 
 Graphe1\Images\oursins.jpg
-307 114 6 60
+361 79 6 60
 
 Graphe1\Images\poisson1.jpg
-567 47 7 65
+521 56 7 65
 
 3
 Graphe1\Images\poisson1.jpg Graphe1\Images\oursins.jpg 0
