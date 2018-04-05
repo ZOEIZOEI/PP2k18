@@ -447,7 +447,7 @@ void Graphe::update(BITMAP* buffer, BITMAP* barre)
     prev_mouse_b = now_mouse_b;
     now_mouse_b = mouse_b&1;
 
-    blit(Getdecor(), buffer, 300,200,0,0,Getdecor()->w, Getdecor()->h);
+    blit(Getdecor(), buffer, 0,0,0,0,Getdecor()->w, Getdecor()->h);
 
     for(int i(Getsommets().size()-1); i >= 0 ; --i)
     {
@@ -460,7 +460,7 @@ void Graphe::update(BITMAP* buffer, BITMAP* barre)
                     prev_mouse_b = now_mouse_b;
                     now_mouse_b = mouse_b&1;
 
-                    blit(Getdecor(), buffer,300,200,0,0,Getdecor()->w, Getdecor()->h);
+                    blit(Getdecor(), buffer,0,0,0,0,Getdecor()->w, Getdecor()->h);
 
                     rectfill(buffer, Getsommets()[i]->GetCd_x()-2, Getsommets()[i]->GetCd_y()-2, Getsommets()[i]->GetImg()->w +Getsommets()[i]->GetCd_x()+1,Getsommets()[i]->GetImg()->h + Getsommets()[i]->GetCd_y()+1, makecol(0,255,0));
 
