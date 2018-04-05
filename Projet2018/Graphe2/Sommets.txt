@@ -6,7 +6,7 @@ Graphe2\Images\antilope.jpg
 121 53 6 60
 
 Graphe2\Images\cricquet.jpg
-441 159 8 70
+376 190 8 70
 
 Graphe2\Images\elephant.jpg
 317 353 0 30
@@ -33,7 +33,7 @@ Graphe2\Images\papillon.jpg
 316 55 11 65
 
 Graphe2\Images\plante.jpg
-457 273 12 65
+403 276 12 65
 
 Graphe2\Images\singe.jpg
 591 68 13 65

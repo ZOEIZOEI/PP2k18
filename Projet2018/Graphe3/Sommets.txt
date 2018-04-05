@@ -9,10 +9,10 @@ Graphe3\Images\Buse.jpg
 581 56 1 70
 
 Graphe3\Images\ecureuil.jpg
-317 353 2 30
+300 373 2 30
 
 Graphe3\Images\gland.jpg
-361 203 3 45
+405 208 3 45
 
 Graphe3\Images\herbe.jpg
 74 214 4 55
