@@ -152,6 +152,7 @@ void Graphe::affichage(BITMAP* buffer, BITMAP* barre, int a)
 
         line(buffer, xsDep, ysDep, xsArr, ysArr, makecol(255,0,0));
         circlefill(buffer, (xsDep + 3*xsArr)/4, (ysDep + 3*ysArr)/4, radius, makecol(255,0,0));
+        //textprintf_ex(buffer, font, (xsDep + 3*xsArr)/4, (ysDep + 3*ysArr)/4, makecol(255,255,255), -1,"%d", getSommet(i)->GetPoids());
     }
 
     for (unsigned int i(0); i<Getsommets().size(); ++i)
@@ -160,6 +161,7 @@ void Graphe::affichage(BITMAP* buffer, BITMAP* barre, int a)
         rectfill(buffer, getSommet(i)->GetCd_x() + getSommet(i)->GetImg()->w - 20, getSommet(i)->GetCd_y() + getSommet(i)->GetImg()->h - 15, getSommet(i)->GetCd_x() + getSommet(i)->GetImg()->w, getSommet(i)->GetCd_y() + getSommet(i)->GetImg()->h, makecol(0,0,0));
         rect(buffer, getSommet(i)->GetCd_x() + getSommet(i)->GetImg()->w - 20, getSommet(i)->GetCd_y() + getSommet(i)->GetImg()->h - 15, getSommet(i)->GetCd_x() + getSommet(i)->GetImg()->w-2, getSommet(i)->GetCd_y() + getSommet(i)->GetImg()->h-2, makecol(255,255,255));
         textprintf_ex(buffer, font, getSommet(i)->GetCd_x() + getSommet(i)->GetImg()->w - 16, getSommet(i)->GetCd_y() + getSommet(i)->GetImg()->h - 11, makecol(255,255,255), -1,"%d", getSommet(i)->GetNum());
+
 
     }
 
