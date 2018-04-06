@@ -129,7 +129,7 @@ void Graphe::affichage(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, i
     int radius = 15;
 
     sliderArete();
-    for (unsigned int i(0); i <getAretes().size(); ++i)
+    for (unsigned int i(0); i < getAretes().size(); ++i)
     {
         xsDep = getAretes()[i]->getDepart()->getCd_x() + getAretes()[i]->getDepart()->getImg()->w/2;
         ysDep = getAretes()[i]->getDepart()->getCd_y() + getAretes()[i]->getDepart()->getImg()->h/2;
@@ -819,7 +819,7 @@ float Graphe::Plat(Sommet* s)
     }
     return K;
 }
-
+/*
 void Graphe::calc_pop()
 {
     float valeur[getSommets().size()];
@@ -876,5 +876,22 @@ void Graphe::calc_pop()
             getSommets()[i]->setPoids(valeur[i]);
         }
     }
+}
+*/
+void Graphe::calc_pop()
+{
+    int poids(0);
 
+    for(int i(0); i < getSommets().size(); ++i)
+    {
+        for(int j(0); j < getAretes().size(); ++j)
+        {
+            poids = getArete(i)->getPoids();
+
+            if(is_areteD(getSommets()[i]) == true)
+            {
+                getArete(i)->getArrive()->setPoids(poids);
+            }
+        }
+    }
 }

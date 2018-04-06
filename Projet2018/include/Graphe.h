@@ -76,6 +76,9 @@ class Graphe
         float Plat(Sommet* s);
         void calc_pop();
 
+        bool is_areteA(Sommet* s);
+        bool is_areteD(Sommet* s);
+
     private:
         std::vector<Sommet*> m_sommets;
         std::vector<Sommet*> m_s_sup;
