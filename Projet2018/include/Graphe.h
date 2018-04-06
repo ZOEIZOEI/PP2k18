@@ -53,6 +53,8 @@ class Graphe
 
         bool is_mouse(int x, int weight, int Y, int height);
         bool is_sommmet(int i);
+        bool is_areteD(Sommet* s);
+        bool is_areteA(Sommet* s);
 
         void ajouterSommet(BITMAP* buffer, BITMAP* barre);
         void ajouterArete(BITMAP* buffer);
@@ -86,7 +88,6 @@ class Graphe
         std::vector<BITMAP*> m_boutons;
         std::list<int> *m_adjacences;
         bool m_play;
-        int m_temps_fast, m_temps_modulo;
 };
 
 #endif // GRAPHE_H

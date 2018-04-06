@@ -730,53 +730,6 @@ void Graphe::sliderArete()
     }
 }
 
-int Graphe::calcul_K(Sommet* sDep)
-{
-	int calcul_k = 0;
-	for (unsigned int i = 0 ; i<getSommets().size(); ++i)
-	{
-//	    std::cout << "sommet" << i << std::endl;
-		calcul_k += calcul_sommet(sDep, getSommet(i));
-	}
-	return calcul_k;
-}
-
-int Graphe::calcul_sommet(Sommet* sDep, Sommet* sArr)
-{
-	for (unsigned int i = 0; i<getAretes().size(); ++i)
-	{
-	    // Si le sommet de d�part mange le sommet d'arrive
-        if (getAretes()[i]->getDepart() == sDep &&  getAretes()[i]->getArrive() == sArr)
-        {
-            return (getArete(i)->getPoids() * getArete(i)->getArrive()->getPoids());
-        }
-        else if (i == getAretes().size()-1) return 0;
-	}
-}
-
-void Graphe::choix_sommet_calc_k()
-{
-    int coefK = 0;
-    Sommet* s = new Sommet;
-    int prev_mouse_b, now_mouse_b;
-
-    while (s->getNomImg() == "")
-    {
-        prev_mouse_b = now_mouse_b;
-        now_mouse_b = mouse_b&1;
-        for (unsigned int i = 0; i<getSommets().size(); ++i)
-        {
-            if (is_sommmet(i) && !prev_mouse_b && now_mouse_b)
-            {
-                s = getSommets()[i];
-                coefK = calcul_K(getSommets()[i]);
-                std::cout << "K[" << i << "] = " << coefK << std::endl;
-            }
-        }
-    }
-
-}
-
 void Graphe::inverserPlay()
 {
     bool deja_inv = false;
@@ -800,7 +753,7 @@ float Graphe::Mange(Sommet* s)
     {
         if(s == getAretes()[i]->getDepart())
         {
-            K = K + getAretes()[i]->getPoids() * getAretes()[i]->getArrive()->getPoids();
+            K = getAretes()[i]->getPoids() * getAretes()[i]->getArrive()->getPoids();
         }
     }
     return K;
@@ -814,7 +767,7 @@ float Graphe::Plat(Sommet* s)
     {
         if(s == getAretes()[i]->getArrive() && getAretes()[i]->getDepart()->getPoids() > 0)
         {
-            K = K - (getAretes()[i]->getPoids() * getAretes()[i]->getDepart()->getPoids());
+            K = - getAretes()[i]->getPoids() * getAretes()[i]->getDepart()->getPoids();
         }
     }
     return K;
@@ -832,9 +785,7 @@ void Graphe::calc_pop()
         std::cout << "==================================" << std::endl;
         for(int i = 0; i < getSommets().size(); i++)
         {
-            valeur[i] = getSommets()[i]->getPoids();
-
-
+            valeur[i] = 0;
 
             if( getSommets()[i]->getPoids() > 0)
             {
@@ -849,20 +800,15 @@ void Graphe::calc_pop()
 
                 if(faim > 0 )
                 {
-                    valeur[i] += 0.01 * (faim + repas);
+                    valeur[i] += (getSommets()[i]->getPoids() + 0.01 * (faim + repas));
                 }
-                else{
-                    valeur[i] += getSommets()[i]->getPoids() - 0.1;
+
+                if(repas <= 0 && faim <= 0)
+                {
+                    valeur[i] += (getSommets()[i]->getPoids() - 0.1);
+                        std::cout << "Valeur : " << valeur[i] << std::endl;
                 }
-                std::cout << "Valeur : " << valeur[i] << std::endl;
             }
-
-            if(getSommets()[i]->getNum() == 4 || getSommets()[i]->getNum() == 6)
-            {
-                valeur[i] += 0.0001;
-            }
-
-
         }
 
         for(int i = 0; i < getSommets().size(); i++)
