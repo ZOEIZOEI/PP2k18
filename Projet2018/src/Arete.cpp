@@ -1,8 +1,8 @@
 #include "Arete.h"
 
-Arete::Arete() : m_poids(0)
+Arete::Arete()
 {
-    //ctor
+     m_poids = rand()%10 + 1;
 }
 
 Arete::~Arete()

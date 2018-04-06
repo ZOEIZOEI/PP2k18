@@ -53,30 +53,32 @@ std::cout << "LLZ";
     g.push_back(g2);
     g.push_back(g3);
 
-    for(int i(0); i < g.size(); ++i)
-        g[i]->Recuperation();
+    for(unsigned int i(0); i < g.size(); ++i)
+        g[i]->recuperation();
+
+
+
 
     while (!key[KEY_ESC])
     {
-        g[num]->update(buffer, barre);
-        g[num]->affichage(buffer, barre);
-        for(unsigned int i(0); i < 3; ++i)
+        prev_mouse_b = now_mouse_b;
+        now_mouse_b = mouse_b&1;
+
+        //thick_line(buffer, 1, 15, 2, 12, 1, makecol(0,0,255));
+        g[num]->slider();
+        g[num]->update(buffer, barre, prev_mouse_b, now_mouse_b);
+        g[num]->affichage(buffer, barre, 0, prev_mouse_b, now_mouse_b);
+
+        for(int i(0); i < 3; ++i)
         {
             if(mouse_x >= i*283 && mouse_x <= i*283 + 234  &&  mouse_y >= 547 && mouse_y <= 547 + 51)
             {
-                prev_mouse_b = now_mouse_b;
-                now_mouse_b = mouse_b&1;
-
-                if(!prev_mouse_b && now_mouse_b)
-                {
-                    num = i;
-                }
+                if(!prev_mouse_b && now_mouse_b) num = i;
             }
         }
     }
 
-    for(int i(0); i < g.size(); ++i)
-        g[i]->save();
+    for(unsigned int i(0); i < g.size(); ++i) g[i]->save();
 
     destroy_bitmap(buffer);
 
