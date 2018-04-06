@@ -56,11 +56,15 @@ std::cout << "LLZ";
     for(unsigned int i(0); i < g.size(); ++i)
         g[i]->recuperation();
 
+
+
+
     while (!key[KEY_ESC])
     {
         prev_mouse_b = now_mouse_b;
         now_mouse_b = mouse_b&1;
 
+        //thick_line(buffer, 1, 15, 2, 12, 1, makecol(0,0,255));
         g[num]->slider();
         g[num]->update(buffer, barre, prev_mouse_b, now_mouse_b);
         g[num]->affichage(buffer, barre, 0, prev_mouse_b, now_mouse_b);

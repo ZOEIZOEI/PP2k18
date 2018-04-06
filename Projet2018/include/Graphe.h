@@ -77,9 +77,7 @@ class Graphe
         float Mange(Sommet* s);
         float Plat(Sommet* s);
         void calc_pop();
-
-        bool is_areteA(Sommet* s);
-        bool is_areteD(Sommet* s);
+        void thick_line(BITMAP *buffer, int xDep, int yDep, int xArr, int yArr, int epaisseur, int col);
 
     private:
         std::vector<Sommet*> m_sommets;

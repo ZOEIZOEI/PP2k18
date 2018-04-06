@@ -268,10 +268,10 @@
 1522952377 source:c:\users\nathan\desktop\projet sans github au cas ou\projet2018\src\sommet.cpp
 	"Sommet.h"
 
-1523028060 source:c:\users\batpi\desktop\proj_piscine\pp2k18\projet2018\main.cpp
+1523040315 source:c:\users\batpi\desktop\proj_piscine\pp2k18\projet2018\main.cpp
 	"Graphe.h"
 
-1523036863 c:\users\batpi\desktop\proj_piscine\pp2k18\projet2018\include\graphe.h
+1523042407 c:\users\batpi\desktop\proj_piscine\pp2k18\projet2018\include\graphe.h
 	"Sommet.h"
 	"Arete.h"
 	<vector>
@@ -300,6 +300,7 @@
 1522937371 source:c:\users\batpi\desktop\proj_piscine\pp2k18\projet2018\src\sommet.cpp
 	"Sommet.h"
 
-1523036863 source:c:\users\batpi\desktop\proj_piscine\pp2k18\projet2018\src\graphe.cpp
+1523042713 source:c:\users\batpi\desktop\proj_piscine\pp2k18\projet2018\src\graphe.cpp
 	"Graphe.h"
+	"allegro.h"
 

@@ -1,4 +1,5 @@
 #include "Graphe.h"
+#include "allegro.h"
 
 Graphe::Graphe(std::string nom_fichier, std::string nom_decor)
 {
@@ -123,6 +124,32 @@ void Graphe::recuperation()
     setAretes(tmp);
 }
 
+void Graphe::thick_line(BITMAP *buffer, int xDep, int yDep, int xArr, int yArr, int epaisseur, int col)
+{
+    int dx = xArr - xDep;
+    int dy = yArr - yDep;
+
+    if(epaisseur < 1)
+    {
+        epaisseur = 1;
+    }
+
+    if (abs(dx) > abs(dy))
+    {
+        for (int i = 1 - epaisseur; i < epaisseur; ++i)
+        {
+            line(buffer, xDep, yDep + i, xArr, yArr + i, col);
+        }
+    }
+    else
+    {
+        for (int i = 1 - epaisseur; i < epaisseur; ++i)
+        {
+            line(buffer, xDep + i, yDep, xArr + i, yArr, col);
+        }
+    }
+}
+
 void Graphe::affichage(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, int now_mouse_b)
 {
     int xsDep = 0, ysDep = 0, xsArr = 0, ysArr = 0;
@@ -136,8 +163,9 @@ void Graphe::affichage(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, i
         xsArr = getAretes()[i]->getArrive()->getCd_x() + getAretes()[i]->getArrive()->getImg()->w/2;
         ysArr = getAretes()[i]->getArrive()->getCd_y() + getAretes()[i]->getArrive()->getImg()->h/2;
 
-        line(buffer, xsDep, ysDep, xsArr, ysArr ,makecol(255,0,0));
-        circlefill(buffer, (xsDep + 3*xsArr)/4, (ysDep + 3*ysArr)/4, radius, makecol(255,0,0));
+        thick_line(buffer, xsDep, ysDep, xsArr, ysArr, getAretes()[i]->getPoids()/2, makecol(getAretes()[i]->getPoids()*10,255,0));
+        //al_draw_line(buffer, xsDep, ysDep, xsArr, ysArr ,makecol(255,0,0), getAretes()[i]->getPoids());
+        circlefill(buffer, (xsDep + 3*xsArr)/4, (ysDep + 3*ysArr)/4, radius, makecol(255,getAretes()[i]->getPoids()*10,0));
         textprintf_ex(buffer, font, (xsDep + 3*xsArr)/4 - 6, (ysDep + 3*ysArr)/4 - 6, makecol(0,0,0), -1, "%d", getAretes()[i]->getPoids());
     }
 
@@ -221,7 +249,7 @@ void Graphe::outils(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, int 
             if (!prev_mouse_b && now_mouse_b)
             {
                 std::cout << "hello calcK" << std::endl;
-                choix_sommet_calc_k();
+//                choix_sommet_calc_k();
             }
         }
 
@@ -233,7 +261,7 @@ void Graphe::outils(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, int 
                 inverserPlay();
                 if (getPlay() == true)
                 {
-                    calc_pop();
+//                    calc_pop();
                 }
                 if (getPlay() == false) std::cout << "hello play" << std::endl;
             }
@@ -501,6 +529,12 @@ void Graphe::update(BITMAP* buffer, BITMAP* barre, int prev, int now)
                     now_mouse_b = mouse_b&1;
 
                     blit(getDecor(), buffer,0,0,0,0,getDecor()->w, getDecor()->h);
+
+                    ///Affichage forte connexité
+                    /*if(getSommet(i)->getConnexe())
+                    {
+                        rectfill(buffer, getSommets()[i]->getCd_x()-2, getSommets()[i]->getCd_y()-2, getSommets()[i]->getImg()->w + getSommets()[i]->getCd_x()+1, getSommets()[i]->getImg()->h + getSommets()[i]->getCd_y()+1, makecol(182,108,255));
+                    }*/
 
                     rectfill(buffer, getSommets()[i]->getCd_x()-2, getSommets()[i]->getCd_y()-2, getSommets()[i]->getImg()->w + getSommets()[i]->getCd_x()+1, getSommets()[i]->getImg()->h + getSommets()[i]->getCd_y()+1, makecol(0,255,0));
 
@@ -824,7 +858,7 @@ void Graphe::calc_pop()
     }
 }
 */
-void Graphe::calc_pop()
+/*void Graphe::calc_pop()
 {
     int poids(0);
 
@@ -840,4 +874,6 @@ void Graphe::calc_pop()
             }
         }
     }
-}
+}*/
+
+
