@@ -13,13 +13,16 @@ Graphe::Graphe(std::string nom_fichier, std::string nom_decor)
         exit(EXIT_FAILURE);
     }
 
-    for (int i = 0; i<5; ++i)
+    for (int i = 0; i<8; ++i)
     {
         if (i == 0) bouton = load_bitmap("Graphe1/Images/addA.png", NULL);
         if (i == 1) bouton = load_bitmap("Graphe1/Images/suppS.png", NULL);
         if (i == 2) bouton = load_bitmap("Graphe1/Images/addS.png", NULL);
         if (i == 3) bouton = load_bitmap("Graphe1/Images/suppA.png", NULL);
         if (i == 4) bouton = load_bitmap("Graphe1/Images/CFC.png", NULL);
+        if (i == 5) bouton = load_bitmap("Graphe1/Images/calcK.png", NULL);
+        if (i == 6) bouton = load_bitmap("Graphe1/Images/play.png", NULL);
+        if (i == 7) bouton = load_bitmap("Graphe1/Images/pause.png", NULL);
         ajouterBouton(bouton);
     }
 }
@@ -110,7 +113,8 @@ void Graphe::recuperation()
                         }
                     }
                     tmp.push_back(a);
-                    std::cout << "NUM SDEP : " << a->getDepart()->getNum() << " NUM SARR : " << a->getArrive()->getNum() << std::endl;
+                    std::cout << "[" << a->getDepart()->getNum() << "] -> [" << a->getArrive()->getNum();
+                    std::cout << "] POIDS : " << a->getPoids() << std::endl;
                     m_adjacences[a->getDepart()->getNum()].push_back(a->getArrive()->getNum());
                 }
             }
@@ -119,7 +123,7 @@ void Graphe::recuperation()
     setAretes(tmp);
 }
 
-void Graphe::affichage(BITMAP* buffer, BITMAP* barre, int a)
+void Graphe::affichage(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, int now_mouse_b)
 {
     int xsDep = 0, ysDep = 0, xsArr = 0, ysArr = 0;
     int radius = 15;
@@ -134,7 +138,7 @@ void Graphe::affichage(BITMAP* buffer, BITMAP* barre, int a)
 
         line(buffer, xsDep, ysDep, xsArr, ysArr ,makecol(255,0,0));
         circlefill(buffer, (xsDep + 3*xsArr)/4, (ysDep + 3*ysArr)/4, radius, makecol(255,0,0));
-        textprintf_ex(buffer, font, (xsDep + 3*xsArr)/4 - 8, (ysDep + 3*ysArr)/4 - 6, makecol(0,0,0), -1, "%d", getAretes()[i]->getPoids());
+        textprintf_ex(buffer, font, (xsDep + 3*xsArr)/4 - 6, (ysDep + 3*ysArr)/4 - 6, makecol(0,0,0), -1, "%d", getAretes()[i]->getPoids());
     }
 
     for (unsigned int i(0); i<getSommets().size(); ++i)
@@ -154,22 +158,21 @@ void Graphe::affichage(BITMAP* buffer, BITMAP* barre, int a)
 //    textprintf_ex(buffer, font, 400, 23, makecol(255,255,0), -1,"%d", getAretes().size());
 //    textprintf_ex(buffer, font, 440, 23, makecol(255,255,0), -1,"%d", mouse_y);
 
-    outils(buffer, barre, a);
+    outils(buffer, barre, a, prev_mouse_b, now_mouse_b);
 
     draw_sprite(buffer, barre, 0, 600-barre->h);
     blit(buffer, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
     clear_bitmap(buffer);
 }
 
-void Graphe::outils(BITMAP* buffer, BITMAP* barre, int a)
+void Graphe::outils(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, int now_mouse_b)
 {
     if (a != 1)
     {
         if (is_mouse(745, 50, 5, 50))
         {
             rectfill(buffer, 743, 3, 796, 56, makecol(76,201,0));
-
-            if (mouse_b&1)
+            if (!prev_mouse_b && now_mouse_b)
             {
                 ajouterArete(buffer);
             }
@@ -178,8 +181,7 @@ void Graphe::outils(BITMAP* buffer, BITMAP* barre, int a)
         if (is_mouse(745, 50, 65, 50))
         {
             rectfill(buffer, 743, 63, 796, 116, makecol(255,0,0));
-
-            if (mouse_b&1)
+            if (!prev_mouse_b && now_mouse_b)
             {
                 supprimerSommet();
             }
@@ -188,7 +190,7 @@ void Graphe::outils(BITMAP* buffer, BITMAP* barre, int a)
         if (is_mouse(745, 50, 125, 50))
         {
             rectfill(buffer, 743, 123, 796, 176, makecol(6,201,0));
-            if (mouse_b&1)
+            if (!prev_mouse_b && now_mouse_b)
             {
                 ajouterSommet(buffer, barre);
             }
@@ -197,7 +199,7 @@ void Graphe::outils(BITMAP* buffer, BITMAP* barre, int a)
         if (is_mouse(745, 50, 185, 50))
         {
             rectfill(buffer, 743, 183, 796, 236, makecol(255,0,0));
-            if (mouse_b&1)
+            if (!prev_mouse_b && now_mouse_b)
             {
                 supprimerArete();
             }
@@ -206,18 +208,48 @@ void Graphe::outils(BITMAP* buffer, BITMAP* barre, int a)
         if (is_mouse(745, 50, 245, 50))
         {
             rectfill(buffer, 743, 243, 796, 296, makecol(127,0,0));
-            if (mouse_b&1)
+            if (!prev_mouse_b && now_mouse_b)
             {
-                std::cout << "hello cFC" << std::endl;
+                std::cout << "hello CFC" << std::endl;
                 CFC();
+            }
+        }
+
+        if (is_mouse(745, 50, 305, 50))
+        {
+            rectfill(buffer, 743, 303, 796, 356, makecol(18,0,124));
+            if (!prev_mouse_b && now_mouse_b)
+            {
+                std::cout << "hello calcK" << std::endl;
+                choix_sommet_calc_k();
+            }
+        }
+
+        if (is_mouse(745, 50, 365, 50))
+        {
+//            rectfill(buffer, 743, 363, 796, 416, makecol(225,0,0));
+            if (!prev_mouse_b && now_mouse_b)
+            {
+                inverserPlay();
+                if (getPlay() == true) std::cout << "hello pause" << std::endl;
+                if (getPlay() == false) std::cout << "hello play" << std::endl;
             }
         }
     }
 
-    ///Pour ajouter/supprimer arêtes/sommets
-    for (unsigned int i = 0; i<m_boutons.size(); ++i)
+    /// Affichage des boutons
+    for (unsigned int i = 0; i<m_boutons.size()-1; ++i)
     {
-        blit(getBouton(i), buffer, 0, 0, 745, 5+(60*i), getBouton(i)->w, getBouton(i)->h);
+        if (i != m_boutons.size()-2)
+        {
+            blit(getBouton(i), buffer, 0, 0, 745, 5+(60*i), getBouton(i)->w, getBouton(i)->h);
+        }
+        else
+        {
+            if (getPlay() == true)
+                blit(getBouton(i), buffer, 0, 0, 745, 5+(60*i), getBouton(i)->w, getBouton(i)->h);
+            else blit(getBouton(i+1), buffer, 0, 0, 745, 5+(60*i), getBouton(i+1)->w, getBouton(i+1)->h);
+        }
     }
 
 }
@@ -263,6 +295,7 @@ void Graphe::ajouterArete(BITMAP* buffer)
                 {
                     if (a->getDepart() != getSommets()[i])
                     {
+                        std::cout << "test";
                         s = getSommets()[i];
                         a->setArrive(s);
                     }
@@ -287,7 +320,6 @@ void Graphe::ajouterArete(BITMAP* buffer)
         std::cout << "ajou reussi" << std::endl;
     }
     setAretes(tmp);
-
 }
 
 void Graphe::ajouterSommet(BITMAP* buffer, BITMAP* barre)
@@ -444,7 +476,7 @@ void Graphe::supprimerArete()
     setAretes(temp);
 }
 
-void Graphe::update(BITMAP* buffer, BITMAP* barre)
+void Graphe::update(BITMAP* buffer, BITMAP* barre, int prev, int now)
 {
     int prev_mouse_b = 0;
     int now_mouse_b = mouse_b&1;
@@ -484,7 +516,7 @@ void Graphe::update(BITMAP* buffer, BITMAP* barre)
                     if (getSommets()[i]->getCd_y() < 0)
                         getSommets()[i]->setCd_y(0);
 
-                    affichage(buffer, barre, 1);
+                    affichage(buffer, barre, 1, prev_mouse_b, now_mouse_b);
                 }
             }
         }
@@ -555,12 +587,12 @@ bool Graphe::is_sommmet(int i)
 
 void Graphe::CFC()
 {
-    int *disc = new int[m_ordre];
-    int *low = new int[m_ordre];
+    int *disc = new int[m_ordre]; /// DISCOVERY TIME
+    int *low = new int[m_ordre]; /// TRUC MINIMUM
     bool *stackMember = new bool[m_ordre];
     std::stack<int> *st = new std::stack<int>();
 
-    // Initialize disc and low, and stackMember arrays
+    /// Initialize disc and low, and stackMember arrays
     for (int i = 0; i < m_ordre; i++)
     {
         disc[i] = -1;
@@ -688,5 +720,67 @@ void Graphe::sliderArete()
                 getAretes()[i]->setPoids(poids);
             }
         }
+    }
+}
+
+int Graphe::calcul_K(Sommet* sDep)
+{
+	int calcul_k = 0;
+	for (unsigned int i = 0 ; i<getSommets().size(); ++i)
+	{
+//	    std::cout << "sommet" << i << std::endl;
+		calcul_k += calcul_sommet(sDep, getSommet(i));
+	}
+	return calcul_k;
+}
+
+int Graphe::calcul_sommet(Sommet* sDep, Sommet* sArr)
+{
+	for (unsigned int i = 0; i<getAretes().size(); ++i)
+	{
+	    // Si le sommet de départ mange le sommet d'arrive
+        if (getAretes()[i]->getDepart() == sDep &&  getAretes()[i]->getArrive() == sArr)
+        {
+            return (getArete(i)->getPoids() * getArete(i)->getArrive()->getPoids());
+        }
+        else if (i == getAretes().size()-1) return 0;
+	}
+}
+
+void Graphe::choix_sommet_calc_k()
+{
+    int coefK = 0;
+    Sommet* s = new Sommet;
+    int prev_mouse_b, now_mouse_b;
+
+    while (s->getNomImg() == "")
+    {
+        prev_mouse_b = now_mouse_b;
+        now_mouse_b = mouse_b&1;
+        for (unsigned int i = 0; i<getSommets().size(); ++i)
+        {
+            if (is_sommmet(i) && !prev_mouse_b && now_mouse_b)
+            {
+                s = getSommets()[i];
+                coefK = calcul_K(getSommets()[i]);
+                std::cout << "K[" << i << "] = " << coefK << std::endl;
+            }
+        }
+    }
+
+}
+
+void Graphe::inverserPlay()
+{
+    bool deja_inv = false;
+    if (m_play == true)
+    {
+        m_play = false;
+        deja_inv = true;
+    }
+    if (m_play == false && deja_inv == false)
+    {
+        m_play = true;
+        deja_inv = true;
     }
 }

@@ -58,21 +58,17 @@ std::cout << "LLZ";
 
     while (!key[KEY_ESC])
     {
+        prev_mouse_b = now_mouse_b;
+        now_mouse_b = mouse_b&1;
         g[num]->slider();
-        g[num]->update(buffer, barre);
-        g[num]->affichage(buffer, barre, 0);
+        g[num]->update(buffer, barre, prev_mouse_b, now_mouse_b);
+        g[num]->affichage(buffer, barre, 0, prev_mouse_b, now_mouse_b);
 
         for(int i(0); i < 3; ++i)
         {
             if(mouse_x >= i*283 && mouse_x <= i*283 + 234  &&  mouse_y >= 547 && mouse_y <= 547 + 51)
             {
-                prev_mouse_b = now_mouse_b;
-                now_mouse_b = mouse_b&1;
-
-                if(!prev_mouse_b && now_mouse_b)
-                {
-                    num = i;
-                }
+                if(!prev_mouse_b && now_mouse_b) num = i;
             }
         }
     }
