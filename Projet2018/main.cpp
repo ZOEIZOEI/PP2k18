@@ -1,5 +1,3 @@
-
-
 #include "Graphe.h"
 
 int main()
@@ -27,36 +25,58 @@ int main()
     BITMAP* buffer = create_bitmap(SCREEN_W, SCREEN_H);
 
     BITMAP* barre;
-    barre = load_bitmap("Images/tabgraph.png", NULL);
+    barre = load_bitmap("Graphe1/Images/tabgraph.bmp", NULL);
     if(!barre)
     {
         allegro_message("pas pu trouver barre.png");
         exit(EXIT_FAILURE);
     }
 
-    BITMAP* fleche;
-    fleche = load_bitmap("Images/fleche.png", NULL);
-    if(!fleche)
-    {
-        allegro_message("pas pu trouver fleche.png");
-        exit(EXIT_FAILURE);
-    }
+    std::vector<Graphe*> g;
+    int num(0);
 
-    Graphe g("Sommets.txt");
+    int prev_mouse_b = 0;
+    int now_mouse_b = mouse_b&1;
+
+    Graphe* g1;
+    g1 = new Graphe("Graphe1/Sommets.txt", "Graphe1/Images/Blue.png");
+std::cout << "LLZ";
+    Graphe* g2;
+    g2 = new Graphe("Graphe2/Sommets.txt", "Graphe2/Images/Yellow.png");
+
+    Graphe* g3;
+    g3 = new Graphe("Graphe3/Sommets.txt", "Graphe3/Images/Green.png");
+
     show_mouse(screen);
+
+    g.push_back(g1);
+    g.push_back(g2);
+    g.push_back(g3);
+
+    for(unsigned int i(0); i < g.size(); ++i)
+        g[i]->recuperation();
 
     while (!key[KEY_ESC])
     {
-        g.update(buffer, barre);
+        prev_mouse_b = now_mouse_b;
+        now_mouse_b = mouse_b&1;
+        g[num]->slider();
+        g[num]->update(buffer, barre, prev_mouse_b, now_mouse_b);
+        g[num]->affichage(buffer, barre, 0, prev_mouse_b, now_mouse_b);
 
-        g.affichage(buffer, barre);
+        for(int i(0); i < 3; ++i)
+        {
+            if(mouse_x >= i*283 && mouse_x <= i*283 + 234  &&  mouse_y >= 547 && mouse_y <= 547 + 51)
+            {
+                if(!prev_mouse_b && now_mouse_b) num = i;
+            }
+        }
     }
 
-    g.save("Sommets.txt");
+    for(unsigned int i(0); i < g.size(); ++i) g[i]->save();
 
     destroy_bitmap(buffer);
 
     return 0;
 }
 END_OF_MAIN();
-

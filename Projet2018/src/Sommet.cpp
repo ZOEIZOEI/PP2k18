@@ -16,6 +16,11 @@ Sommet::Sommet(int cd_x, int cd_y, int num, int poids, std::string nom_img)
     m_poids = poids;
     m_nom_img = nom_img;
     m_img = load_bitmap(m_nom_img.c_str(), NULL);
+    if(!m_img)
+    {
+        allegro_message("pas pu trouver m_nom_img.png");
+        exit(EXIT_FAILURE);
+    }
 }
 
 Sommet::~Sommet()
