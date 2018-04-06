@@ -134,7 +134,7 @@ void Graphe::affichage(BITMAP* buffer, BITMAP* barre, int a)
 
         line(buffer, xsDep, ysDep, xsArr, ysArr ,makecol(255,0,0));
         circlefill(buffer, (xsDep + 3*xsArr)/4, (ysDep + 3*ysArr)/4, radius, makecol(255,0,0));
-        textprintf_ex(buffer, font, (xsDep + 3*xsArr)/4 - 6, (ysDep + 3*ysArr)/4 - 6, makecol(0,0,0), -1, "%d", getAretes()[i]->getPoids());
+        textprintf_ex(buffer, font, (xsDep + 3*xsArr)/4 - 8, (ysDep + 3*ysArr)/4 - 6, makecol(0,0,0), -1, "%d", getAretes()[i]->getPoids());
     }
 
     for (unsigned int i(0); i<getSommets().size(); ++i)
@@ -228,6 +228,7 @@ void Graphe::ajouterArete(BITMAP* buffer)
     Sommet* s = new Sommet;
     int prev_mouse_b, now_mouse_b;
     std::vector<Arete*> tmp = getAretes();
+    bool deja_ar = false;
 
     while (s->getNomImg() == "")
     {
@@ -262,7 +263,6 @@ void Graphe::ajouterArete(BITMAP* buffer)
                 {
                     if (a->getDepart() != getSommets()[i])
                     {
-                        std::cout << "test";
                         s = getSommets()[i];
                         a->setArrive(s);
                     }
@@ -271,9 +271,23 @@ void Graphe::ajouterArete(BITMAP* buffer)
         }
     }
 
-    tmp.push_back(a);
+    /// Pour chaque arête déjà existante, on vérifie si elle est équivalente à celle que l'on veut ajouter
+    for (unsigned int i = 0; i < getAretes().size(); ++i)
+    {
+        if (a->getArrive() == getAretes()[i]->getArrive() && a->getDepart() == getAretes()[i]->getDepart())
+        {
+            std::cout << "Cette arete existe deja!" << std::endl;
+            deja_ar = true;
+        }
+    }
+    /// Si celle-ci est équivalente, on ne l'ajoute pas
+    if (deja_ar == false)
+    {
+        tmp.push_back(a);
+        std::cout << "ajou reussi" << std::endl;
+    }
     setAretes(tmp);
-    std::cout << "ajou reussi" << std::endl;
+
 }
 
 void Graphe::ajouterSommet(BITMAP* buffer, BITMAP* barre)
@@ -657,7 +671,7 @@ void Graphe::sliderArete()
         xsArr = getAretes()[i]->getArrive()->getCd_x() + getAretes()[i]->getArrive()->getImg()->w/2;
         ysArr = getAretes()[i]->getArrive()->getCd_y() + getAretes()[i]->getArrive()->getImg()->h/2;
 
-        if (is_mouse((xsDep + 3*xsArr)/4- 15, 30, (ysDep + 3*ysArr)/4 - 15, 30))
+        if (is_mouse((xsDep + 3*xsArr)/4 - 15, 30, (ysDep + 3*ysArr)/4 - 15, 30))
         {
            poids = getAretes()[i]->getPoids();
 
