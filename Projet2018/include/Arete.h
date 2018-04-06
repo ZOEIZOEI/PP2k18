@@ -9,13 +9,13 @@ class Arete
         Arete();
         ~Arete();
 
-        int Getpoids() { return m_poids; }
-        Sommet* Getdepart() { return m_depart; }
-        Sommet* Getarrive() { return m_arrive; }
+        int getPoids() { return m_poids; }
+        Sommet* getDepart() { return m_depart; }
+        Sommet* getArrive() { return m_arrive; }
 
-        void Setdepart(Sommet* val) { m_depart = val; }
-        void Setpoids(int val) { m_poids = val; }
-        void Setarrive(Sommet* val) { m_arrive = val; }
+        void setPoids(int val) { m_poids = val; }
+        void setDepart(Sommet* val) { m_depart = val; }
+        void setArrive(Sommet* val) { m_arrive = val; }
 
     private:
         int m_poids;

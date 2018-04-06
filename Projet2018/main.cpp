@@ -54,10 +54,11 @@ std::cout << "LLZ";
     g.push_back(g3);
 
     for(unsigned int i(0); i < g.size(); ++i)
-        g[i]->Recuperation();
+        g[i]->recuperation();
 
     while (!key[KEY_ESC])
     {
+        g[num]->slider();
         g[num]->update(buffer, barre);
         g[num]->affichage(buffer, barre, 0);
 
@@ -76,8 +77,7 @@ std::cout << "LLZ";
         }
     }
 
-    for(unsigned int i(0); i < g.size(); ++i)
-        g[i]->save();
+    for(unsigned int i(0); i < g.size(); ++i) g[i]->save();
 
     destroy_bitmap(buffer);
 
