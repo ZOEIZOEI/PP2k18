@@ -30,6 +30,6 @@ Graphe1\Images\mollusque.jpg
 424 216 1 35
 
 3
-Graphe1\Images\mollusque.jpg Graphe1\Images\homosapiens.jpg 0
-Graphe1\Images\phoque.jpg Graphe1\Images\homosapiens.jpg 0
+Graphe1\Images\mollusque.jpg Graphe1\Images\homosapiens.jpg 15
+Graphe1\Images\phoque.jpg Graphe1\Images\homosapiens.jpg 12
 Graphe1\Images\oursins.jpg Graphe1\Images\laminaire.jpg 0
