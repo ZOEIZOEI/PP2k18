@@ -72,6 +72,8 @@ std::cout << "LLZ";
                 if(!prev_mouse_b && now_mouse_b) num = i;
             }
         }
+
+        g[num]->augmentationTime();
     }
 
     for(unsigned int i(0); i < g.size(); ++i) g[i]->save();
