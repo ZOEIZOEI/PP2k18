@@ -98,10 +98,10 @@
 1522781579 source:c:\users\batpi\desktop\piscine1\projet_piscine\projet2018\src\sommet.cpp
 	"Sommet.h"
 
-1522943363 source:c:\users\elias\desktop\pp2k18\projet2018\main.cpp
+1523030025 source:c:\users\elias\desktop\pp2k18\projet2018\main.cpp
 	"Graphe.h"
 
-1522949997 c:\users\elias\desktop\pp2k18\projet2018\include\graphe.h
+1523033521 c:\users\elias\desktop\pp2k18\projet2018\include\graphe.h
 	"Sommet.h"
 	"Arete.h"
 	<vector>
@@ -114,6 +114,8 @@
 	<loadpng.h>
 	<jpgalleg.h>
 	<ctime>
+	<stack>
+	<list>
 
 1522918337 source:c:\users\nathan\desktop\pp2k18-master\projet2018\main.cpp
 	"Graphe.h"
@@ -133,20 +135,20 @@
 	<ctime>
 	"Sommet.h"
 
-1522840521 c:\users\elias\desktop\pp2k18\projet2018\include\sommet.h
+1523034587 c:\users\elias\desktop\pp2k18\projet2018\include\sommet.h
 	<allegro.h>
 	<string>
 
-1522780848 c:\users\elias\desktop\pp2k18\projet2018\include\arete.h
+1523030025 c:\users\elias\desktop\pp2k18\projet2018\include\arete.h
 	"Sommet.h"
 
-1522950914 source:c:\users\elias\desktop\pp2k18\projet2018\src\arete.cpp
+1523030025 source:c:\users\elias\desktop\pp2k18\projet2018\src\arete.cpp
 	"Arete.h"
 
-1522951642 source:c:\users\elias\desktop\pp2k18\projet2018\src\graphe.cpp
+1523036025 source:c:\users\elias\desktop\pp2k18\projet2018\src\graphe.cpp
 	"Graphe.h"
 
-1522936932 source:c:\users\elias\desktop\pp2k18\projet2018\src\sommet.cpp
+1523029463 source:c:\users\elias\desktop\pp2k18\projet2018\src\sommet.cpp
 	"Sommet.h"
 
 1522918337 c:\users\nathan\desktop\pp2k18-master\projet2018\include\sommet.h
@@ -269,7 +271,7 @@
 1523028060 source:c:\users\batpi\desktop\proj_piscine\pp2k18\projet2018\main.cpp
 	"Graphe.h"
 
-1523033082 c:\users\batpi\desktop\proj_piscine\pp2k18\projet2018\include\graphe.h
+1523036863 c:\users\batpi\desktop\proj_piscine\pp2k18\projet2018\include\graphe.h
 	"Sommet.h"
 	"Arete.h"
 	<vector>
@@ -285,7 +287,7 @@
 	<stack>
 	<list>
 
-1523022531 c:\users\batpi\desktop\proj_piscine\pp2k18\projet2018\include\sommet.h
+1523036863 c:\users\batpi\desktop\proj_piscine\pp2k18\projet2018\include\sommet.h
 	<allegro.h>
 	<string>
 
@@ -298,6 +300,6 @@
 1522937371 source:c:\users\batpi\desktop\proj_piscine\pp2k18\projet2018\src\sommet.cpp
 	"Sommet.h"
 
-1523034032 source:c:\users\batpi\desktop\proj_piscine\pp2k18\projet2018\src\graphe.cpp
+1523036863 source:c:\users\batpi\desktop\proj_piscine\pp2k18\projet2018\src\graphe.cpp
 	"Graphe.h"
 

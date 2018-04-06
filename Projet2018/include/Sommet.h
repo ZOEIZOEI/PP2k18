@@ -24,6 +24,8 @@ class Sommet
         void setNomImg(std::string val) { m_nom_img = val; }
         void setImg(BITMAP* val) { m_img = val; }
 
+        void ajouterpoids(int val) { m_poids += val; }
+
     private:
         int m_cd_x;
         int m_cd_y;
