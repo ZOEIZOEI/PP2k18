@@ -30,7 +30,11 @@ var menudata={children:[
 {text:"All",url:"functions.html"},
 {text:"Functions",url:"functions_func.html"}]}]},
 {text:"Files",url:"files.html",children:[
+<<<<<<< HEAD
 {text:"File List",url:"files.html"},
 {text:"File Members",url:"globals.html",children:[
 {text:"All",url:"globals.html"},
 {text:"Functions",url:"globals_func.html"}]}]}]}
+=======
+{text:"File List",url:"files.html"}]}]}
+>>>>>>> e2de8c462caf63eba2a69ed754e62ee67bf900c6

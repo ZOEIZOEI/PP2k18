@@ -33,11 +33,15 @@ var NAVTREE =
       ] ]
     ] ],
     [ "Files", "files.html", [
+<<<<<<< HEAD
       [ "File List", "files.html", "files_dup" ],
       [ "File Members", "globals.html", [
         [ "All", "globals.html", null ],
         [ "Functions", "globals_func.html", null ]
       ] ]
+=======
+      [ "File List", "files.html", "files_dup" ]
+>>>>>>> e2de8c462caf63eba2a69ed754e62ee67bf900c6
     ] ]
   ] ]
 ];

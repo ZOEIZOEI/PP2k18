@@ -1,8 +1,11 @@
 var NAVTREEINDEX0 =
 {
 "_arete_8h_source.html":[1,0,0],
+<<<<<<< HEAD
 "_graphe_8h.html":[1,0,1],
 "_graphe_8h.html#a07c7aa9746288b2d07715ac63a547efe":[1,0,1,1],
+=======
+>>>>>>> e2de8c462caf63eba2a69ed754e62ee67bf900c6
 "_graphe_8h_source.html":[1,0,1],
 "_sommet_8h_source.html":[1,0,2],
 "annotated.html":[0,0],
@@ -86,8 +89,11 @@ var NAVTREEINDEX0 =
 "files.html":[1,0],
 "functions.html":[0,2,0],
 "functions_func.html":[0,2,1],
+<<<<<<< HEAD
 "globals.html":[1,1,0],
 "globals_func.html":[1,1,1],
+=======
+>>>>>>> e2de8c462caf63eba2a69ed754e62ee67bf900c6
 "index.html":[],
 "pages.html":[]
 };
