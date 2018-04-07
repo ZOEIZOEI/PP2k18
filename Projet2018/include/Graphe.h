@@ -33,6 +33,7 @@ class Graphe
         BITMAP* getDecor() {return m_decor; }
         BITMAP* getBouton(int val) { return m_boutons[val]; }
         bool getPlay() { return m_play; }
+        int getTime() { return m_time; }
 
         void setSommets(std::vector<Sommet*> val) { m_sommets = val; }
         void setAretes(std::vector<Arete*> val) { m_aretes = val; }
@@ -41,6 +42,9 @@ class Graphe
         void setOrdre(int val) { m_ordre = val; }
         void setNomGraphe(std::string val) { m_nom_graphe = val; }
         void setDecor(BITMAP* val) { m_decor = val; }
+        void setTime(int val) { m_time = val; }
+
+        void augmentationTime() { m_time++; }
 
         void ajouterBouton(BITMAP* val) { m_boutons.push_back(val); }
         void inverserPlay();
@@ -50,6 +54,7 @@ class Graphe
         void affichage(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, int now_mouse_b);
         void outils(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, int now_mouse_b);
         void update(BITMAP* buffer, BITMAP* barre, int prev, int now);
+        void thick_line(BITMAP *buffer, int xDep, int yDep, int xArr, int yArr, int epaisseur, int col);
 
         bool is_mouse(int x, int weight, int Y, int height);
         bool is_sommmet(int i);
@@ -67,17 +72,14 @@ class Graphe
         void CFC();
         void composanteRecursif(int u, int disc[], int low[], std::stack<int> *st, bool stackMember[]);
 
+        void affichagedesComposantesFortementConnexes(std::vector<std::vector<int> > connexe);
+
         void slider();
         void sliderArete();
-
-        int calcul_sommet(Sommet* sDep, Sommet* sArr);
-        int calcul_K(Sommet* sDep);
-        void choix_sommet_calc_k();
 
         float Mange(Sommet* s);
         float Plat(Sommet* s);
         void calc_pop();
-        void thick_line(BITMAP *buffer, int xDep, int yDep, int xArr, int yArr, int epaisseur, int col);
 
     private:
         std::vector<Sommet*> m_sommets;
@@ -89,6 +91,7 @@ class Graphe
         std::vector<BITMAP*> m_boutons;
         std::list<int> *m_adjacences;
         bool m_play;
+        int m_time;
 };
 
 #endif // GRAPHE_H
