@@ -98,6 +98,7 @@ void Graphe::recuperation()
 
                     for (unsigned int i(0); i < getSommets().size(); ++i)
                     {
+
                         if (getSommets()[i]->getNomImg() == nom_img_d)
                         {
                             s = new Sommet;
@@ -117,22 +118,12 @@ void Graphe::recuperation()
                     std::cout << "[" << a->getDepart()->getNum() << "] -> [" << a->getArrive()->getNum();
                     std::cout << "] POIDS : " << a->getPoids() << std::endl;
                     m_adjacences[a->getDepart()->getNum()].push_back(a->getArrive()->getNum());
-
-                    /// Ajout des sommets dans les vecteurs d'adjacences des sommets respectifs (simple connexité)
-                    m_adj_adj[a->getDepart()->getNum()].push_back(a->getArrive()->getNum());
-                    m_adj_adj[a->getArrive()->getNum()].push_back(a->getDepart()->getNum());
-//                    pair_temp.first = a->getDepart()->getNum();
-//                    pair_temp.second = a->getArrive()->getNum();
-//                    getSommet(a->getDepart()->getNum())->ajouterAdjS(pair_temp);
-//
-//                    pair_temp.first = a->getArrive()->getNum();
-//                    pair_tem.second = a->getDepart()->getNum();
-//                    getSommet(a->getArrive()->getNum())->ajouterAdjS(pair_temp);
                 }
             }
         }
     }
     setAretes(tmp);
+    initAdjAdj();
 }
 
 void Graphe::affichage(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, int now_mouse_b)
@@ -798,40 +789,64 @@ void Graphe::ordreRemplissage(int v, bool visited[], std::list<int> &Stack)
 void Graphe::K_connexites()
 {
     resetMarques();
-    int* compteur = new int;
-    compteur = 0;
-    std::cout << &compteur << std::endl;
+    int compteur = 0;
     std::cout << "true ordre (vivant) = " << m_ordre << std::endl;
-//    for (std::map<int, std::vector<int>>::const_iterator it = m_adj_adj.begin(); it != m_adj_adj.end(); ++it)
-    for (const auto& sommet_ex : m_adj_adj)
+    for (int i = 0; i < m_ordre; ++i)
     {
-        if(!getSommet(sommet_ex.first)->getMarque())
+        if(!getSommet(i)->getMarque())
         {
-            std::cout << "test " << std::endl;
-//            if (i != 0) ++compteur;
-            getSommet(sommet_ex.first)->setMarque(true);
-            for (const auto& s_adj : sommet_ex.second)
+            if (i != 0) ++compteur;
+            getSommet(i)->setMarque(true);
+            for (unsigned int j = 0; j < m_adj_adj[i].size(); ++j)
             {
-                if (!getSommet(s_adj)->getMarque())
+                if (!getSommet(m_adj_adj[i][j])->getMarque())
                 {
-                    getSommet(s_adj)->setMarque(true);
-                    recursKConnexite(s_adj, compteur);
+                    getSommet(m_adj_adj[i][j])->setMarque(true);
+                    recursKConnexite(m_adj_adj[i][j], compteur);
                 }
             }
         }
     }
-    if (compteur == 0) std::cout << "le truc est connexe simplement au moins" << std::endl;
-    else std::cout << " pas connexe" << std::endl;
+    if (compteur == 0) std::cout << "le graphe est (simplement) connexe  au moins" << std::endl;
+    else std::cout << " pas connexe -- composantes (simplement) connexes = "  << compteur+1 << std::endl;
 }
 
-void Graphe::recursKConnexite(int indice, int* compteur)
+void Graphe::recursKConnexite(int indice, int& compteur)
 {
-    for (unsigned int i = 0; i < getSommet(i)->getAdjS().size(); ++i)
+    for (unsigned int k = 0; k < m_adj_adj[indice].size(); ++k)
     {
-        if (!getSommet(getSommet(indice)->getAdjS()[i])->getMarque())
+        if (!getSommet(m_adj_adj[indice][k])->getMarque())
         {
-            getSommet(getSommet(indice)->getAdjS()[i])->setMarque(true);
-            recursKConnexite(getSommet(indice)->getAdjS()[i], compteur);
+            getSommet(m_adj_adj[indice][k])->setMarque(true);
+            recursKConnexite(m_adj_adj[indice][k], compteur);
         }
+    }
+}
+
+void Graphe::initAdjAdj()
+{
+    std::vector<int> v_test;
+    int a, b;
+    bool pb = false;
+    for (int i = 0; i < m_ordre; ++i) m_adj_adj.push_back(v_test);
+
+    for (unsigned int i = 0; i < getAretes().size(); ++i)
+    {
+        pb = false;
+        for (int j = 0; j < m_ordre; ++j)
+        {
+            /// On retrouve l'indice du sommet de départ dans le vecteur m_sommets à partir de son numéro
+            if (getArete(i)->getDepart()->getNum() == getSommet(j)->getNum())
+            {
+                a = j; std::cout << " a = " << a << std::endl;
+            }
+            /// On retrouve l'indice du sommet d'arrivée dans le vecteur m_sommets à partir de son numéro
+            if (getArete(i)->getArrive()->getNum() == getSommet(j)->getNum())
+            {
+                b = j; std::cout << " b = " << b << std::endl;
+            }
+        }
+        m_adj_adj[a].push_back(b);
+        m_adj_adj[b].push_back(a);
     }
 }
