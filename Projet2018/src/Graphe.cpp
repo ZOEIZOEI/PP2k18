@@ -1,5 +1,14 @@
 #include "Graphe.h"
 
+/**
+ * \date 8 Avril 2018
+ * \version 3.1
+ * \file Graphe.h
+ * \author Elias Aras, Baptiste Pillet, Nathan Lancman
+ * \brief La classe Graphe permet de gerer et d'afficher tous les graphes (et leurs parametres)
+ *
+ */
+
 Graphe::Graphe(std::string nom_fichier, std::string nom_decor)
 {
     setOrdre(0);
@@ -73,7 +82,7 @@ void Graphe::recuperation()
         fichier >> m_nb_s_sup;
         if (m_nb_s_sup > 0)
         {
-            for (int i(0); i<m_nb_s_sup; ++i)
+            for (int i(0); i<m_nb_s_sup; ++i)   /**< bonjour */
             {
                 fichier >> nom_img;
                 fichier >> cd_x >> cd_y >> num >> poids;
@@ -81,7 +90,8 @@ void Graphe::recuperation()
                 {
                     s = new Sommet(cd_x, cd_y, num, poids, nom_img);
                     m_s_sup.push_back(s);
-       key[KEY_UP] = 0;         }
+                    key[KEY_UP] = 0;
+                }
             }
         }
 
@@ -93,7 +103,6 @@ void Graphe::recuperation()
             {
                 fichier >> nom_img;
                 fichier >> cd_x >> cd_y >> num >> poids;
-//                std::cout << "Nom : " << nom_img << " x " << cd_x << " poids " << poids << std::endl;
                 s = new Sommet(cd_x, cd_y, num, poids, nom_img);
                 m_sommets.push_back(s);
             }
@@ -174,9 +183,6 @@ void Graphe::affichage(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, i
         rectfill(buffer, getSommet(i)->getCd_x(), getSommet(i)->getCd_y() + getSommet(i)->getImg()->h - 14, getSommet(i)->getCd_x() + 26, getSommet(i)->getCd_y() + getSommet(i)->getImg()->h-1, makecol(200,200,200));
         rect(buffer, getSommet(i)->getCd_x(), getSommet(i)->getCd_y() + getSommet(i)->getImg()->h - 14, getSommet(i)->getCd_x() + 26, getSommet(i)->getCd_y() + getSommet(i)->getImg()->h-1, makecol(255,255,255));
         textprintf_ex(buffer, font, getSommet(i)->getCd_x() +2, getSommet(i)->getCd_y() + getSommet(i)->getImg()->h - 10, makecol(0,0,0), -1, "%d", getSommet(i)->getPoids());
-
-
-
     }
 
 //    textprintf_ex(buffer, font, 400, 23, makecol(255,255,0), -1,"%d", getAretes().size());
