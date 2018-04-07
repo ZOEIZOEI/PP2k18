@@ -1,38 +1,42 @@
-4
+0
 
-Graphe1\Images\phoque.jpg
-466 118 0 31
-
-Graphe1\Images\mollusque.jpg
-237 314 1 35
-
-Graphe1\Images\laminaire.jpg
-66 88 4 100
-
-Graphe1\Images\homosapiens.jpg
-399 46 3 100
-
-5
+9
 
 Graphe1\Images\poisson2.jpg
-533 89 8 0
+562 52 8 0
 
 Graphe1\Images\oursins.jpg
-279 364 6 65
+305 413 6 100
 
 Graphe1\Images\poisson1.jpg
-270 32 7 0
+312 22 7 0
 
 Graphe1\Images\orque.jpg
-0 192 2 200
+27 40 2 200
 
 Graphe1\Images\loutre_de_mer.jpg
-563 379 5 500
+620 429 5 500
 
-6
+Graphe1\Images\laminaire.jpg
+33 204 4 100
+
+Graphe1\Images\homosapiens.jpg
+483 336 3 100
+
+Graphe1\Images\mollusque.jpg
+67 420 1 35
+
+Graphe1\Images\phoque.jpg
+274 193 0 31
+
+10
 Graphe1\Images\oursins.jpg Graphe1\Images\poisson2.jpg 1
 Graphe1\Images\oursins.jpg Graphe1\Images\orque.jpg 1
 Graphe1\Images\orque.jpg Graphe1\Images\poisson1.jpg 1
 Graphe1\Images\poisson1.jpg Graphe1\Images\poisson2.jpg 1
 Graphe1\Images\poisson2.jpg Graphe1\Images\loutre_de_mer.jpg 2
 Graphe1\Images\loutre_de_mer.jpg Graphe1\Images\oursins.jpg 4
+Graphe1\Images\phoque.jpg Graphe1\Images\homosapiens.jpg 9
+Graphe1\Images\poisson2.jpg Graphe1\Images\phoque.jpg 10
+Graphe1\Images\laminaire.jpg Graphe1\Images\mollusque.jpg 10
+Graphe1\Images\mollusque.jpg Graphe1\Images\oursins.jpg 10

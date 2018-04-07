@@ -1,5 +1,7 @@
 #include "Graphe.h"
 
+bool is_mouse(int x, int weight, int y, int height);
+
 Graphe::Graphe(std::string nom_fichier, std::string nom_decor)
 {
     setOrdre(0);
@@ -635,7 +637,7 @@ void Graphe::save()
     }
 }
 
-bool Graphe::is_mouse(int x, int weight, int y, int height)
+bool is_mouse(int x, int weight, int y, int height)
 {
     return     mouse_x >= x && mouse_x <= x + weight  &&  mouse_y >= y && mouse_y <= y + height;
 }
@@ -712,7 +714,7 @@ void Graphe::sliderArete()
             if (key[KEY_DOWN])
             {
                 poids--;
-                if( poids < 1) poids = 1;
+                if( poids < 1 ) poids = 1;
                 getAretes()[i]->setPoids(poids);
                 key[KEY_DOWN] = 0;
             }
@@ -921,7 +923,7 @@ void Graphe::affichagedesComposantesFortementConnexes(std::vector<std::vector<in
             {
                 for(unsigned int j(0); j < connexe[i].size(); ++j)
                 {
-                    for(int k(0); k < getSommets().size(); ++k)
+                    for(unsigned int k(0); k < getSommets().size(); ++k)
                     {
                         if(getSommet(k)->getNum() ==  connexe[i][j])
                         {
