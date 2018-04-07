@@ -18,18 +18,20 @@ Graphe1\Images\poisson2.jpg
 581 66 8 70
 
 Graphe1\Images\oursins.jpg
-498 363 6 100
+497 343 6 100
 
 Graphe1\Images\homosapiens.jpg
-250 88 3 100
+163 78 3 100
 
 Graphe1\Images\poisson1.jpg
-62 45 7 65
+350 372 7 65
 
 Graphe1\Images\orque.jpg
-123 348 2 61
+144 348 2 61
 
-3
+5
 Graphe1\Images\poisson2.jpg Graphe1\Images\homosapiens.jpg 9
 Graphe1\Images\homosapiens.jpg Graphe1\Images\oursins.jpg 1
 Graphe1\Images\oursins.jpg Graphe1\Images\poisson2.jpg 4
+Graphe1\Images\homosapiens.jpg Graphe1\Images\orque.jpg 6
+Graphe1\Images\orque.jpg Graphe1\Images\homosapiens.jpg 9
