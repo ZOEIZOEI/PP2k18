@@ -18,7 +18,7 @@ Graphe1\Images\poisson2.jpg
 581 66 8 70
 
 Graphe1\Images\oursins.jpg
-497 343 6 100
+552 373 6 100
 
 Graphe1\Images\homosapiens.jpg
 163 78 3 100

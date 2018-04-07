@@ -92,6 +92,7 @@ class Graphe
         bool m_play;
         int m_nb_s_sup;
         std::map<int, std::vector<int>> m_adj_adj;
+        std::map<int, std::vector<int>> m_adj_adj;
 };
 
 #endif // GRAPHE_H
