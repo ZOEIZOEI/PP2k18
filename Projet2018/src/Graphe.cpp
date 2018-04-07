@@ -1,7 +1,5 @@
 #include "Graphe.h"
 
-bool is_mouse(int x, int weight, int y, int height);
-
 Graphe::Graphe(std::string nom_fichier, std::string nom_decor)
 {
     setOrdre(0);
@@ -83,7 +81,7 @@ void Graphe::recuperation()
                 {
                     s = new Sommet(cd_x, cd_y, num, poids, nom_img);
                     m_s_sup.push_back(s);
-       key[KEY_UP] = 0;         }
+                }
             }
         }
 
@@ -560,17 +558,18 @@ void Graphe::update(BITMAP* buffer, BITMAP* barre, int prev, int now)
     }
 }
 
+///Permet de modifier l'épaisseur des aretes en fonction du poids
 void Graphe::thick_line(BITMAP *buffer, int xDep, int yDep, int xArr, int yArr, int epaisseur, int col)
 {
     int dx = xArr - xDep;
     int dy = yArr - yDep;
 
-    if(epaisseur < 1)
+    if(epaisseur < 1)   /**< Blindage */
     {
         epaisseur = 1;
     }
 
-    if (abs(dx) > abs(dy))
+    if (abs(dx) > abs(dy))  /**< Valeur absolue des differences des coordonnes et trace autant de ligne que d'epaisseur */
     {
         for (int i = 1 - epaisseur; i < epaisseur; ++i)
         {
@@ -586,12 +585,13 @@ void Graphe::thick_line(BITMAP *buffer, int xDep, int yDep, int xArr, int yArr, 
     }
 }
 
+///Methode de sauvegarde
 void Graphe::save()
 {
     int ordre = getS_Sup().size();
     std::string nom_fichier(getNomGraphe());
 
-    std::ofstream fichier(nom_fichier, std::ios::out);
+    std::ofstream fichier(nom_fichier, std::ios::out);  /**< Ouverture du fichier */
     if (!fichier)
     {
         std::cout << nom_fichier << " ne peut pas etre ouvert!" << std::endl;
@@ -599,93 +599,100 @@ void Graphe::save()
     }
     else
     {
-        fichier << ordre << std::endl << std::endl;
-        if (ordre > 0)
+        fichier << ordre << std::endl << std::endl; /**< Ecrit l'odre des images pouvant être ajoute au graphe */
+        if (ordre > 0)  /**< Blindage */
         {
-           for (int i = 0; i < ordre; i++)
+            for (int i = 0; i < ordre; i++)     /**< Ajout des informations des images */
             {
-                fichier << getS_Sup()[i]->getNomImg() << std::endl;
+                fichier << getS_Sup()[i]->getNomImg() << std::endl; /**< Son nom  (chemin d'acces) */
                 fichier << getS_Sup()[i]->getCd_x() << " " << getS_Sup()[i]->getCd_y() << " " << getS_Sup()[i]->getNum() << " " << getS_Sup()[i]->getPoids() << std::endl;
+                /**< Ses coordonnees, son index, son poids */
+
                 fichier << std::endl;
             }
         }
 
 
         ordre = getSommets().size();
-        fichier << ordre << std::endl << std::endl;
-        if (ordre > 0)
+        fichier << ordre << std::endl << std::endl;     /**< Ecrit l'odre des images du graphe */
+        if (ordre > 0)  /**< Blindage */
         {
-            for (int i = 0; i < ordre; i++)
+            for (int i = 0; i < ordre; i++)     /**< Ajout des informations des images */
             {
-                fichier << getSommet(i)->getNomImg() << std::endl;
+                fichier << getSommet(i)->getNomImg() << std::endl;  /**< Son nom (chemin d'acces) */
                 fichier << getSommet(i)->getCd_x() << " " << getSommet(i)->getCd_y() << " " << getSommet(i)->getNum() << " " <<getSommet(i)->getPoids() << std::endl;
+                /**< Ses coordonnees, son index, son poids */
+
                 fichier << std::endl;
             }
         }
 
         ordre = getAretes().size();
 
-        fichier << ordre << std::endl;
+        fichier << ordre << std::endl;  /**< Ecrit l'odre des aretes du graphe */
 
-        if (ordre > 0)
+        if (ordre > 0)  /**< Blindage */
         {
-            for (int i = 0; i < ordre; i++)
+            for (int i = 0; i < ordre; i++)     /**< Ajout des informations des aretes */
             {
                 fichier << getAretes()[i]->getDepart()->getNomImg() << " "<< getAretes()[i]->getArrive()->getNomImg() << " " << getAretes()[i]->getPoids() << std::endl;
+                /**< Nom de l'image de depart (chemin d'acces) et nom de l'image d'arrive (chemin d'acces) et poids de l'arete */
             }
         }
     }
 }
 
+///Booleen qui retourne si on est sur une zone
 bool is_mouse(int x, int weight, int y, int height)
 {
     return     mouse_x >= x && mouse_x <= x + weight  &&  mouse_y >= y && mouse_y <= y + height;
 }
 
+///Booleen qui retourne true si l'on est sur l'image du sommet i
 bool Graphe::is_sommmet(int i)
 {
     return     mouse_x >= getSommets()[i]->getCd_x() && mouse_x <= getSommets()[i]->getCd_x() + getSommets()[i]->getImg()->w
                &&  mouse_y >= getSommets()[i]->getCd_y() && mouse_y <= getSommets()[i]->getCd_y() + getSommets()[i]->getImg()->h;
 }
 
+///Modifie le poids des Sommets
 void Graphe::slider()
 {
     float poids = 0;
 
     for (unsigned int i = 0; i < getSommets().size(); i++)
     {
-        if(is_sommmet(i))
+        if(is_sommmet(i)) /**< Test si la souris est sur le Sommet i */
         {
             poids = getSommets()[i]->getPoids();
 
-            if (key[KEY_UP])
+            if (key[KEY_UP])    /**< Augmentation du poids du Sommet */
             {
-                std::cout << "On AUGMENTE la population " << getSommets()[i]->getNomImg() << std::endl;
+                if(poids < 100) poids +=1;  /**< Augmente de 1 à 100 en incrementant de 1 */
 
-                if(poids < 100) poids +=1;
+                else if(poids >= 100) poids += 100;  /**< Augmente de 100 à 500 en incrementant de 100 */
 
-                else if(poids >= 100) poids += 100;
+                if(poids > 500.0) poids = 500.0;    /**< Blindage */
 
-                if(poids > 500.0) poids = 500.0;
-                getSommets()[i]->setPoids(poids);
-                key[KEY_UP] = 0;
+                getSommets()[i]->setPoids(poids);   /**< affectation du nouveau poids */
+                key[KEY_UP] = 0;    /**< Blindage */
             }
-            if (key[KEY_DOWN])
+            if (key[KEY_DOWN])  /**< Reduction du poids du Sommet */
             {
-                std::cout << "On DIMINUE la population " << getSommets()[i]->getNomImg() << std::endl;
+                if(poids <= 100) poids -= 1;    /**< Dimunution de 100 à 1 en decrementant de 1 */
 
-                if(poids <= 100) poids -= 1;
+                if(poids > 100) poids -=100;    /**< Dimunution de 500 à 100 en decrementant de 100 */
 
-                if(poids > 100) poids -=100;
+                if (poids < 0.0) poids = 0.0;   /**< Blindage */
 
-                if (poids < 0.0) poids = 0.0;
-                getSommets()[i]->setPoids(poids);
-                key[KEY_DOWN] = 0;
+                getSommets()[i]->setPoids(poids);   /**< affectation du nouveau poids */
+                key[KEY_DOWN] = 0;  /**< Blindage */
             }
         }
     }
 }
 
+///Modifie le poids des Arete
 void Graphe::sliderArete()
 {
 
@@ -695,79 +702,70 @@ void Graphe::sliderArete()
     for (unsigned int i = 0; i < getAretes().size(); i++)
     {
 
-        xsDep = getAretes()[i]->getDepart()->getCd_x() + getAretes()[i]->getDepart()->getImg()->w/2;
+        xsDep = getAretes()[i]->getDepart()->getCd_x() + getAretes()[i]->getDepart()->getImg()->w/2;    /**< Coordonnees de l'image de départ */
         ysDep = getAretes()[i]->getDepart()->getCd_y() + getAretes()[i]->getDepart()->getImg()->h/2;
-        xsArr = getAretes()[i]->getArrive()->getCd_x() + getAretes()[i]->getArrive()->getImg()->w/2;
+        xsArr = getAretes()[i]->getArrive()->getCd_x() + getAretes()[i]->getArrive()->getImg()->w/2;    /**< Coordonnees de l'image de arrive */
         ysArr = getAretes()[i]->getArrive()->getCd_y() + getAretes()[i]->getArrive()->getImg()->h/2;
 
-        if (is_mouse((xsDep + 3*xsArr)/4 - 15, 30, (ysDep + 3*ysArr)/4 - 15, 30))
+        if (is_mouse((xsDep + 3*xsArr)/4 - 15, 30, (ysDep + 3*ysArr)/4 - 15, 30))   /**< Coordonnees du cercle situe sur l'arete */
         {
            poids = getAretes()[i]->getPoids();
 
-           if (key[KEY_UP])
+           if (key[KEY_UP]) /**< Augmentation du Poids */
             {
                 poids ++;
-                if(poids > 20) poids = 20;
-                getAretes()[i]->setPoids(poids);
+                if(poids > 20) poids = 20; /**< Blindage */
+                getAretes()[i]->setPoids(poids);    /**< affectation du nouveau poids */
                 key[KEY_UP] = 0;
             }
-            if (key[KEY_DOWN])
+            if (key[KEY_DOWN]) /**< Reduction du Poids */
             {
                 poids--;
-                if( poids < 1 ) poids = 1;
-                getAretes()[i]->setPoids(poids);
+                if( poids < 1 ) poids = 1; /**< Blindage */
+                getAretes()[i]->setPoids(poids);    /**< affectation du nouveau poids */
                 key[KEY_DOWN] = 0;
             }
         }
     }
 }
 
+///Play/Pause pour la dynamique des populations
 void Graphe::inverserPlay()
 {
-    bool deja_inv = false;
-    if (m_play == true)
-    {
-        m_play = false;
-        deja_inv = true;
-    }
-    if (m_play == false && deja_inv == false)
-    {
-        m_play = true;
-        deja_inv = true;
-    }
+    m_play = !m_play;
 }
 
+///calcul du nombre de perte chez la population
 float Graphe::Mange(Sommet* s)
 {
     int K(0);
 
     for(unsigned int i(0); i < getAretes().size(); ++i)
     {
-        if(s == getAretes()[i]->getDepart() && getAretes()[i]->getDepart()->getPoids() > 0 && getAretes()[i]->getArrive
-           ()->getPoids() > 0 )
+        if(s == getAretes()[i]->getDepart() && getAretes()[i]->getDepart()->getPoids() > 0 && getAretes()[i]->getArrive()->getPoids() > 0 ) /**< Cherche le repas et verifie qu'il est en vie */
         {
             K += getAretes()[i]->getPoids()*getAretes()[i]->getDepart()->getPoids();
         }
     }
-    std::cout << "Faim K ===>: " << K << std::endl;
     return K;
 }
 
+///calcul du nombre de naissance pour le sommet
 float Graphe::Plat(Sommet* s)
 {
     int K(0);
 
     for(unsigned int i(0); i < getAretes().size(); ++i)
     {
-        if(s == getAretes()[i]->getArrive() && getAretes()[i]->getArrive()->getPoids() > 0)
+        if(s == getAretes()[i]->getArrive() && getAretes()[i]->getArrive()->getPoids() > 0) /**< Cherche le mangeur et verifie qu'il est en vie */
         {
             K += getAretes()[i]->getPoids()*getAretes()[i]->getDepart()->getPoids();
         }
     }
-    std::cout << "Repas K ===>: " << K << std::endl;
     return K;
 }
 
+///Calcule la prochaine population
 void Graphe::calc_pop()
 {
     float valeur[getSommets().size()];
@@ -776,50 +774,38 @@ void Graphe::calc_pop()
     float repas;
     float diff(0);
 
-    if(getSommets().size() > 0)
+    if(getSommets().size() > 0) /**< Blindage */
     {
-        std::cout << "==================================" << std::endl;
         for(unsigned int i = 0; i < getSommets().size(); i++)
         {
-            //if( getSommets()[i]->getPoids() > 0)
-            //{
-                std::cout << "Sommet " << getSommets()[i]->getNum() << std::endl;
+            faim = Mange(getSommets()[i]); /**< Récupere le calcul du nombre de naissance pour le sommet */
+            repas = Plat(getSommets()[i]); /**< Récupere le calcul du nombre de perte chez la population */
 
-                faim = Mange(getSommets()[i]);
-                repas = Plat(getSommets()[i]);
+            if(getSommets()[i]->getNum() == 4 || getSommets()[i]->getNum() == 6) /**< Gain pour les plantes */
+            {
+                faim = 2;
+            }
 
+            diff = faim - repas; /**< Calcul des pertes et gain */
 
+            valeur[i] = getSommets()[i]->getPoids() + diff; /**< Ajoute le nouveau poids dans une variable*/
 
-                if(getSommets()[i]->getNum() == 4 || getSommets()[i]->getNum() == 6)
-                {
-                    faim = 2;
-                }
+            if(faim == 0 && repas == 0) /**< Si il ne mange pas alors et on ne les manges pas alors l'espèces commence à disparaitre */
+                valeur[i] = getSommets()[i]->getPoids() - 1;
 
-                std::cout << "Faim : " << faim << std::endl;
-                std::cout << "Repas : " << repas << std::endl;
-
-                diff = faim - repas;
-                std::cout << "Diff : " << diff << std::endl;
-
-                valeur[i] = getSommets()[i]->getPoids() + diff;
-
-                if(faim == 0 && repas == 0)
-                    valeur[i] = getSommets()[i]->getPoids() - 1;
-
-                if(faim == 0)
-                    valeur[i] -= 1;
-
+            if(faim == 0) /**< Si l'espece ne peut pas ce nourir elle commence à disparaitre */
+                valeur[i] -= 1;
         }
 
-        for(unsigned int i = 0; i < getSommets().size(); i++)
+        for(unsigned int i = 0; i < getSommets().size(); i++) /**< affectation des nouveaux poids */
         {
-            if(valeur[i] < 0)
+            if(valeur[i] < 0) /**< Blindage */
                 valeur[i] = 0;
 
-            if(valeur[i] > 500)
+            if(valeur[i] > 500) /**< Blindage */
                 valeur[i] = 500;
 
-            getSommets()[i]->setPoids(valeur[i]);
+            getSommets()[i]->setPoids(valeur[i]); /**< Affectation */
         }
     }
 
@@ -913,21 +899,25 @@ void Graphe::ordreRemplissage(int v, bool visited[], std::list<int> &Stack)
     Stack.push_back(v);
 }
 
+///Modifie le booleen qui affiche la connexite
 void Graphe::affichagedesComposantesFortementConnexes(std::vector<std::vector<int> > connexe)
 {
-    if(connexe.size() > 0)
+    if(connexe.size() > 0) /**< Blindage */
     {
         for(unsigned int i(0); i < connexe.size(); ++i)
         {
-            if(connexe[i].size() >= 2)
+            if(connexe[i].size() >= 2) /**< Permet de savoir si le sommet est fortement connexe */
             {
                 for(unsigned int j(0); j < connexe[i].size(); ++j)
                 {
-                    for(unsigned int k(0); k < getSommets().size(); ++k)
+                    if(getSommets().size() > 0) /**< Blindage */
                     {
-                        if(getSommet(k)->getNum() ==  connexe[i][j])
+                        for(unsigned int k(0); k < getSommets().size(); ++k)
                         {
-                            getSommet(k)->setConnexe(true);
+                            if(getSommet(k)->getNum() ==  connexe[i][j]) /**< Cherche un sommet qui possede le index meme numero que celui du vector de connexite */
+                            {
+                                getSommet(k)->setConnexe(true);
+                            }
                         }
                     }
                 }
