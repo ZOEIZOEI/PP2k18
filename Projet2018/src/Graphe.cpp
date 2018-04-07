@@ -34,7 +34,7 @@ Graphe::~Graphe()
 
 void Graphe::recuperation()
 {
-    int cd_x, cd_y, num, poids, nb_s_sup, nb_aretes;
+    int cd_x, cd_y, num, poids, nb_aretes;
     std::string nom_img, nom_img_d, nom_img_a;
 
     std::string nom_fichier(getNomGraphe());
@@ -53,10 +53,10 @@ void Graphe::recuperation()
     }
     else
     {
-        fichier >> nb_s_sup;
-        if (nb_s_sup > 0)
+        fichier >> m_nb_s_sup;
+        if (m_nb_s_sup > 0)
         {
-            for (int i(0); i<nb_s_sup; ++i)
+            for (int i(0); i<m_nb_s_sup; ++i)
             {
                 fichier >> nom_img;
                 fichier >> cd_x >> cd_y >> num >> poids;
@@ -69,7 +69,7 @@ void Graphe::recuperation()
         }
 
         fichier >> m_ordre;
-        m_adjacences = new std::list<int>[m_ordre + nb_s_sup];
+        m_adjacences = new std::list<int>[m_ordre + m_nb_s_sup];
         if (m_ordre > 0)
         {
             for (int i(0); i<m_ordre; ++i)
@@ -121,6 +121,10 @@ void Graphe::recuperation()
         }
     }
     setAretes(tmp);
+//    for (int i = 0; i< m_ordre + m_nb_s_sup; ++i)
+//    {
+//        m_adjCFC.push_back(std::vector<int>());
+//    }
 }
 
 void Graphe::affichage(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, int now_mouse_b)
@@ -211,7 +215,7 @@ void Graphe::outils(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, int 
             if (!prev_mouse_b && now_mouse_b)
             {
                 std::cout << "hello CFC" << std::endl;
-                CFC();
+                afficherCFC();
             }
         }
 
@@ -585,79 +589,79 @@ bool Graphe::is_sommmet(int i)
                &&  mouse_y >= getSommets()[i]->getCd_y() && mouse_y <= getSommets()[i]->getCd_y() + getSommets()[i]->getImg()->h;
 }
 
-void Graphe::CFC()
-{
-    int *disc = new int[m_ordre]; /// DISCOVERY TIME
-    int *low = new int[m_ordre]; /// TRUC MINIMUM
-    bool *stackMember = new bool[m_ordre];
-    std::stack<int> *st = new std::stack<int>();
+//void Graphe::CFC()
+//{
+//    int *disc = new int[m_ordre]; /// DISCOVERY TIME
+//    int *low = new int[m_ordre]; /// TRUC MINIMUM
+//    bool *stackMember = new bool[m_ordre];
+//    std::stack<int> *st = new std::stack<int>();
+//
+//    /// Initialize disc and low, and stackMember arrays
+//    for (int i = 0; i < m_ordre; i++)
+//    {
+//        disc[i] = -1;
+//        low[i] = -1;
+//        stackMember[i] = false;
+//    }
+//
+//    // Call the recursive helper function to find strongly
+//    // connected components in DFS tree with vertex 'i'
+//    for (int i = 0; i < m_ordre; i++)
+//        if (disc[i] == -1)
+//            composanteRecursif(i, disc, low, st, stackMember);
+//}
 
-    /// Initialize disc and low, and stackMember arrays
-    for (int i = 0; i < m_ordre; i++)
-    {
-        disc[i] = -1;
-        low[i] = -1;
-        stackMember[i] = false;
-    }
-
-    // Call the recursive helper function to find strongly
-    // connected components in DFS tree with vertex 'i'
-    for (int i = 0; i < m_ordre; i++)
-        if (disc[i] == -1)
-            composanteRecursif(i, disc, low, st, stackMember);
-}
-
-void Graphe::composanteRecursif(int u, int disc[], int low[], std::stack<int> *st, bool stackMember[])
-{
-    // A static variable is used for simplicity, we can avoid use of static variable by passing a pointer.
-    static int time = 0;
-
-    // Initialize discovery time and low value
-    disc[u] = low[u] = ++time;
-    st->push(u);
-    stackMember[u] = true;
-
-    // Go through all vertices adjacent to this
-    std::list<int>::iterator i;
-    for (i = m_adjacences[u].begin(); i != m_adjacences[u].end(); ++i)
-    {
-        int v = *i;  // v is current adjacent of 'u'
-
-        // If v is not visited yet, then recur for it
-        if (disc[v] == -1)
-        {
-            composanteRecursif(v, disc, low, st, stackMember);
-
-            // Check if the subtree rooted with 'v' has a
-            // connection to one of the ancestors of 'u'
-            // Case 1 (per above discussion on Disc and Low value)
-            low[u] = std::min(low[u], low[v]);
-        }
-
-        // Update low value of 'u' only of 'v' is still in stack
-        // (i.e. it's a back edge, not cross edge).
-        // Case 2 (per above discussion on Disc and Low value)
-        else if (stackMember[v] == true)
-            low[u] = std::min(low[u], disc[v]);
-    }
-
-    // head node found, pop the stack and print an CFC
-    int w = 0;  // To store stack extracted vertices
-    if (low[u] == disc[u])
-    {
-        while (st->top() != u)
-        {
-            w = (int) st->top();
-            std::cout << getSommets()[w]->getNum() << " ";
-            stackMember[w] = false;
-            st->pop();
-        }
-        w = (int) st->top();
-        std::cout << getSommets()[w]->getNum() << "\n";
-        stackMember[w] = false;
-        st->pop();
-    }
-}
+//void Graphe::composanteRecursif(int u, int disc[], int low[], std::stack<int> *st, bool stackMember[])
+//{
+//    // A static variable is used for simplicity, we can avoid use of static variable by passing a pointer.
+//    static int time = 0;
+//
+//    // Initialize discovery time and low value
+//    disc[u] = low[u] = ++time;
+//    st->push(u);
+//    stackMember[u] = true;
+//
+//    // Go through all vertices adjacent to this
+//    std::list<int>::iterator i;
+//    for (i = m_adjacences[u].begin(); i != m_adjacences[u].end(); ++i)
+//    {
+//        int v = *i;  // v is current adjacent of 'u'
+//
+//        // If v is not visited yet, then recur for it
+//        if (disc[v] == -1)
+//        {
+//            composanteRecursif(v, disc, low, st, stackMember);
+//
+//            // Check if the subtree rooted with 'v' has a
+//            // connection to one of the ancestors of 'u'
+//            // Case 1 (per above discussion on Disc and Low value)
+//            low[u] = std::min(low[u], low[v]);
+//        }
+//
+//        // Update low value of 'u' only of 'v' is still in stack
+//        // (i.e. it's a back edge, not cross edge).
+//        // Case 2 (per above discussion on Disc and Low value)
+//        else if (stackMember[v] == true)
+//            low[u] = std::min(low[u], disc[v]);
+//    }
+//
+//    // head node found, pop the stack and print an CFC
+//    int w = 0;  // To store stack extracted vertices
+//    if (low[u] == disc[u])
+//    {
+//        while (st->top() != u)
+//        {
+//            w = (int) st->top();
+//            std::cout << getSommets()[w]->getNum() << " ";
+//            stackMember[w] = false;
+//            st->pop();
+//        }
+//        w = (int) st->top();
+//        std::cout << getSommets()[w]->getNum() << "\n";
+//        stackMember[w] = false;
+//        st->pop();
+//    }
+//}
 
 void Graphe::slider()
 {
@@ -769,3 +773,132 @@ void Graphe::choix_sommet_calc_k()
     }
 
 }
+
+/*int* CFC(int s)
+//{
+//    int* c1 = new int[m_ordre];
+//    int* c2 = new int[m_ordre];
+//    int* c;
+//
+//    int* marques;
+//    int x, y;
+//    int ajoute = 1;
+//    for (int i = 0; i < m_ordre; ++i)
+//    {
+//        c1[i] = 0;
+//        c2[i] = 0;
+//    }
+//
+//    c1[s] = 1; c2[s] = 1;
+//
+//    while(ajoute)
+//    {
+//        ajoute = 0;
+//        {
+//            for (x = 0; x < m_ordre; ++x)
+//            {
+//                if (!maques[x] && c1[x])
+//                {
+//                    marques[x] = 1;
+//                    for (y = 0; y < m_ordre; ++y)
+//                    {
+//                        if (m_adjacences[x][y] && !marques[y])
+//                        {
+//                            c1[y] = 1;
+//                            ajoute = 1;
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}*/
+
+void Graphe::afficherCFC()
+{
+    int nb_recur = 0;
+    std::vector<int> lig;
+    std::list<int> Stack;
+    std::vector<std::vector<int>> m_adjCFC;
+    bool* visited = new bool[m_ordre + m_nb_s_sup];
+
+    for (int i = 0; i < m_ordre + m_nb_s_sup; ++i) visited[i] = false;
+    for (int i = 0; i < m_ordre + m_nb_s_sup; ++i)
+    {
+        m_adjCFC.push_back(lig);
+        if (visited[i] == false) ordreRemplissage(i, visited, Stack);
+    }
+    Graphe gr = getTranspose();
+
+    for (int i = 0; i < m_ordre + m_nb_s_sup; ++i) visited[i] = false;
+    while (!Stack.empty())
+    {
+
+        int v = Stack.front();
+        Stack.pop_front();
+        if (visited[v] == false)
+        {
+            gr.composanteRecursif(v, visited, nb_recur, m_adjCFC);
+            std::cout << std::endl;
+            ++nb_recur;
+        }
+    }
+    std::cout << "Affichage du double vecteur de composantes connexes" << std::endl;
+    for (unsigned int i = 0; i< m_adjCFC.size(); ++i)
+    {
+        std::cout << "Size m_adjCFC[ " << i << "] : " << m_adjCFC.at(i).size() << " --- Sommets connexes : ";
+        for (unsigned int j =  0; j < m_adjCFC.at(i).size(); ++j)
+        {
+            std::cout << m_adjCFC[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
+}
+
+
+void Graphe::composanteRecursif(int v, bool visited[], int nb_recur, std::vector<std::vector<int>>& m_adjCFC)
+{
+    visited[v] = true;
+    std::cout << v << " ";
+    m_adjCFC[nb_recur].push_back(v);
+
+    std::list<int>::iterator i;
+    for (i = m_adjacences[v].begin(); i != m_adjacences[v].end(); ++i)
+    {
+        if (!visited[*i]) composanteRecursif(*i, visited, nb_recur, m_adjCFC);
+    }
+}
+
+Graphe Graphe::getTranspose()
+{
+    Graphe g(m_ordre + m_nb_s_sup);
+    std::cout << "true ordre : " << m_ordre + m_nb_s_sup << std::endl;
+    for (int v = 0; v < m_ordre + m_nb_s_sup; ++v)
+    {
+        std::cout << "SOMMET : " << v;
+
+        std::list<int>::iterator i;
+        std::cout << " [g base]        [g transpo]" << std::endl;
+        for (i = m_adjacences[v].begin(); i != m_adjacences[v].end(); ++i)
+        {
+
+            std::cout << "            " << v << " -> " << *i << "          " << *i << " -> " << v;
+            g.m_adjacences[*i].push_back(v);
+            std::cout << " reussi" << std::endl;
+        }
+    }
+    return g;
+}
+
+void Graphe::ordreRemplissage(int v, bool visited[], std::list<int> &Stack)
+{
+    visited[v] = true;
+    std::list<int>::iterator i;
+    for (i = m_adjacences[v].begin(); i != m_adjacences[v].end(); ++i)
+    {
+        if (!visited[*i]) ordreRemplissage(*i, visited, Stack);
+    }
+    Stack.push_back(v);
+}
+
+

@@ -20,6 +20,7 @@ class Graphe
 {
     public:
         Graphe(std::string nom_fichier, std::string nom_decor);
+        Graphe(int ordre) { m_ordre = ordre; m_adjacences = new std::list<int>[m_ordre + m_nb_s_sup]; }
         ~Graphe();
 
         std::vector<Sommet*> getSommets() { return m_sommets; } /// POUR TOUT LE VECTEUR
@@ -62,8 +63,10 @@ class Graphe
         void recuperation();
         void save();
 
-        void CFC();
-        void composanteRecursif(int u, int disc[], int low[], std::stack<int> *st, bool stackMember[]);
+        void composanteRecursif(int v, bool visited[], int nb_recur, std::vector<std::vector<int>>& m_adjCFC);
+        Graphe getTranspose();
+        void ordreRemplissage(int v, bool visited[], std::list<int> &Stack);
+        void afficherCFC();
 
         void slider();
         void sliderArete();
@@ -80,9 +83,9 @@ class Graphe
         std::string m_nom_graphe;
         BITMAP* m_decor;
         std::vector<BITMAP*> m_boutons;
-        std::list<int> *m_adjacences;
+        std::list<int>* m_adjacences;
         bool m_play;
-        int m_temps_fast, m_temps_modulo;
+        int m_nb_s_sup;
 };
 
 #endif // GRAPHE_H
