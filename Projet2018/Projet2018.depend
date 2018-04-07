@@ -98,17 +98,10 @@
 1522781579 source:c:\users\batpi\desktop\piscine1\projet_piscine\projet2018\src\sommet.cpp
 	"Sommet.h"
 
-<<<<<<< HEAD
 1523037676 source:c:\users\elias\desktop\pp2k18\projet2018\main.cpp
 	"Graphe.h"
 
-1523043570 c:\users\elias\desktop\pp2k18\projet2018\include\graphe.h
-=======
-1522943363 source:c:\users\elias\desktop\pp2k18\projet2018\main.cpp
-	"Graphe.h"
-
-1522949997 c:\users\elias\desktop\pp2k18\projet2018\include\graphe.h
->>>>>>> origin/Nathan
+1523098372 c:\users\elias\desktop\pp2k18\projet2018\include\graphe.h
 	"Sommet.h"
 	"Arete.h"
 	<vector>
@@ -121,11 +114,8 @@
 	<loadpng.h>
 	<jpgalleg.h>
 	<ctime>
-<<<<<<< HEAD
 	<stack>
 	<list>
-=======
->>>>>>> origin/Nathan
 
 1522918337 source:c:\users\nathan\desktop\pp2k18-master\projet2018\main.cpp
 	"Graphe.h"
@@ -145,7 +135,6 @@
 	<ctime>
 	"Sommet.h"
 
-<<<<<<< HEAD
 1523043071 c:\users\elias\desktop\pp2k18\projet2018\include\sommet.h
 	<allegro.h>
 	<string>
@@ -156,26 +145,10 @@
 1523030025 source:c:\users\elias\desktop\pp2k18\projet2018\src\arete.cpp
 	"Arete.h"
 
-1523094573 source:c:\users\elias\desktop\pp2k18\projet2018\src\graphe.cpp
+1523098747 source:c:\users\elias\desktop\pp2k18\projet2018\src\graphe.cpp
 	"Graphe.h"
 
 1523043071 source:c:\users\elias\desktop\pp2k18\projet2018\src\sommet.cpp
-=======
-1522840521 c:\users\elias\desktop\pp2k18\projet2018\include\sommet.h
-	<allegro.h>
-	<string>
-
-1522780848 c:\users\elias\desktop\pp2k18\projet2018\include\arete.h
-	"Sommet.h"
-
-1522950914 source:c:\users\elias\desktop\pp2k18\projet2018\src\arete.cpp
-	"Arete.h"
-
-1522951642 source:c:\users\elias\desktop\pp2k18\projet2018\src\graphe.cpp
-	"Graphe.h"
-
-1522936932 source:c:\users\elias\desktop\pp2k18\projet2018\src\sommet.cpp
->>>>>>> origin/Nathan
 	"Sommet.h"
 
 1522918337 c:\users\nathan\desktop\pp2k18-master\projet2018\include\sommet.h
@@ -196,11 +169,7 @@
 1523021704 source:c:\users\nathan\documents\github\pp2k18\projet2018\main.cpp
 	"Graphe.h"
 
-<<<<<<< HEAD
 1523022353 c:\users\nathan\documents\github\pp2k18\projet2018\include\graphe.h
-=======
-1523028177 c:\users\nathan\documents\github\pp2k18\projet2018\include\graphe.h
->>>>>>> origin/Nathan
 	"Sommet.h"
 	"Arete.h"
 	<vector>
@@ -233,73 +202,6 @@
 	"Graphe.h"
 
 1523008785 c:\users\nathan\desktop\projet sans github au cas ou\libre service - a modifier\projet2018\include\graphe.h
-<<<<<<< HEAD
-=======
-	"Sommet.h"
-	"Arete.h"
-	<vector>
-	<list>
-	<stack>
-	<fstream>
-	<iostream>
-	<allegro.h>
-	<png.h>
-	<loadpng.h>
-	<jpgalleg.h>
-	<ctime>
-	<stack>
-	<list>
-
-1522958154 c:\users\nathan\desktop\projet sans github au cas ou\libre service - a modifier\projet2018\include\sommet.h
-	<allegro.h>
-	<string>
-
-1522958154 c:\users\nathan\desktop\projet sans github au cas ou\libre service - a modifier\projet2018\include\arete.h
-	"Sommet.h"
-
-1522952430 source:c:\users\nathan\desktop\projet sans github au cas ou\libre service - a modifier\projet2018\src\arete.cpp
-	"Arete.h"
-
-1523009739 source:c:\users\nathan\desktop\projet sans github au cas ou\libre service - a modifier\projet2018\src\graphe.cpp
-	"Graphe.h"
-
-1522952377 source:c:\users\nathan\desktop\projet sans github au cas ou\libre service - a modifier\projet2018\src\sommet.cpp
-	"Sommet.h"
-
-1523028177 source:c:\users\nathan\documents\github\pp2k18\projet2018\src\graphe.cpp
-	"Graphe.h"
-
-1523009220 source:c:\users\nathan\desktop\projet sans github au cas ou\projet2018\main.cpp
-	"Graphe.h"
-
-1523010241 c:\users\nathan\desktop\projet sans github au cas ou\projet2018\include\graphe.h
-	"Sommet.h"
-	"Arete.h"
-	<vector>
-	<list>
-	<stack>
-	<fstream>
-	<iostream>
-	<allegro.h>
-	<png.h>
-	<loadpng.h>
-	<jpgalleg.h>
-	<ctime>
-	<stack>
-	<list>
-
-1522958154 c:\users\nathan\desktop\projet sans github au cas ou\projet2018\include\sommet.h
-	<allegro.h>
-	<string>
-
-1522958154 c:\users\nathan\desktop\projet sans github au cas ou\projet2018\include\arete.h
-	"Sommet.h"
-
-1522952430 source:c:\users\nathan\desktop\projet sans github au cas ou\projet2018\src\arete.cpp
-	"Arete.h"
-
-1522952377 source:c:\users\nathan\desktop\projet sans github au cas ou\projet2018\src\sommet.cpp
->>>>>>> origin/Nathan
 	"Sommet.h"
 	"Arete.h"
 	<vector>
@@ -400,4 +302,36 @@
 
 1523028174 source:c:\users\batpi\desktop\proj_piscine\pp2k18\projet2018\src\graphe.cpp
 	"Graphe.h"
+
+1523037676 source:c:\users\elias\desktop\version population\projet2018\main.cpp
+	"Graphe.h"
+
+1523095509 c:\users\elias\desktop\version population\projet2018\include\graphe.h
+	"Sommet.h"
+	"Arete.h"
+	<vector>
+	<list>
+	<stack>
+	<fstream>
+	<iostream>
+	<allegro.h>
+	<png.h>
+	<loadpng.h>
+	<jpgalleg.h>
+	<ctime>
+	<stack>
+	<list>
+
+1523043071 c:\users\elias\desktop\version population\projet2018\include\sommet.h
+	<allegro.h>
+	<string>
+
+1523030025 c:\users\elias\desktop\version population\projet2018\include\arete.h
+	"Sommet.h"
+
+1523030025 source:c:\users\elias\desktop\version population\projet2018\src\arete.cpp
+	"Arete.h"
+
+1523043071 source:c:\users\elias\desktop\version population\projet2018\src\sommet.cpp
+	"Sommet.h"
 

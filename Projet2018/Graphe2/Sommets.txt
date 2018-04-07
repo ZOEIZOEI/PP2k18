@@ -3,7 +3,7 @@
 12
 
 Graphe2\Images\antilope.jpg
-186 185 6 100
+177 178 6 100
 
 Graphe2\Images\feuillage.jpg
 410 33 3 100
@@ -15,7 +15,7 @@ Graphe2\Images\mante.jpg
 29 311 10 100
 
 Graphe2\Images\singe.jpg
-301 169 7 100
+301 186 7 100
 
 Graphe2\Images\lion.jpg
 540 171 9 100

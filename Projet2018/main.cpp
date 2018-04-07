@@ -60,6 +60,7 @@ std::cout << "LLZ";
     {
         prev_mouse_b = now_mouse_b;
         now_mouse_b = mouse_b&1;
+
         g[num]->slider();
         g[num]->update(buffer, barre, prev_mouse_b, now_mouse_b);
         g[num]->affichage(buffer, barre, 0, prev_mouse_b, now_mouse_b);

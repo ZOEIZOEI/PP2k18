@@ -20,6 +20,7 @@ class Graphe
 {
     public:
         Graphe(std::string nom_fichier, std::string nom_decor);
+        Graphe(int ordre) { m_ordre = ordre; m_adjacences = new std::list<int>[m_ordre + m_nb_s_sup]; }
         ~Graphe();
 
         std::vector<Sommet*> getSommets() { return m_sommets; } /// POUR TOUT LE VECTEUR
@@ -44,6 +45,7 @@ class Graphe
         void setDecor(BITMAP* val) { m_decor = val; }
         void setTime(int val) { m_time = val; }
 
+        void init();
         void augmentationTime() { m_time++; }
 
         void ajouterBouton(BITMAP* val) { m_boutons.push_back(val); }
@@ -69,6 +71,10 @@ class Graphe
         void recuperation();
         void save();
 
+        void composanteRecursif(int v, bool visited[], int nb_recur, std::vector<std::vector<int>>& m_adjCFC);
+        Graphe getTranspose();
+        void ordreRemplissage(int v, bool visited[], std::list<int> &Stack);
+        void afficherCFC();
         void affichagedesComposantesFortementConnexes(std::vector<std::vector<int> > connexe);
 
         void slider();
@@ -89,6 +95,7 @@ class Graphe
         std::list<int> *m_adjacences;
         bool m_play;
         int m_time;
+        int m_nb_s_sup;
 };
 
 #endif // GRAPHE_H
