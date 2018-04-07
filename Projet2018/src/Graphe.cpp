@@ -662,7 +662,7 @@ void Graphe::slider()
 
                 if(poids < 100) poids +=1;
 
-                if(poids >= 100) poids += 100;
+                else if(poids >= 100) poids += 100;
 
                 if(poids > 500.0) poids = 500.0;
                 getSommets()[i]->setPoids(poids);
@@ -712,7 +712,7 @@ void Graphe::sliderArete()
             if (key[KEY_DOWN])
             {
                 poids--;
-                if( poids < 0) poids = 0;
+                if( poids < 1) poids = 1;
                 getAretes()[i]->setPoids(poids);
                 key[KEY_DOWN] = 0;
             }
