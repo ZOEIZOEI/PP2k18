@@ -2,6 +2,7 @@
 #define SOMMET_H
 #include <allegro.h>
 #include <string>
+#include <vector>
 
 class Sommet
 {
@@ -17,7 +18,7 @@ class Sommet
         std::string getNomImg() { return m_nom_img; }
         BITMAP* getImg() { return m_img; }
         bool getMarque() { return m_marque; }
-        const std::vector<int>& getAdjS() const { return m_adj_s; }
+//        const std::vector<int>& getAdjS() { return m_adj_s; }
 
         void setCd_x(int val) { m_cd_x = val; }
         void setCd_y(int val) { m_cd_y = val; }
@@ -27,7 +28,6 @@ class Sommet
         void setImg(BITMAP* val) { m_img = val; }
         void setMarque(bool val) { m_marque = val; }
 
-        void ajouterAdjS(int i) { m_adj_s.push_back(i); }
 
     private:
         int m_cd_x;
@@ -37,7 +37,7 @@ class Sommet
         std::string m_nom_img;
         BITMAP* m_img;
         bool m_marque;
-        std::vector<int> m_adj_s;
+//        std::vector<int> m_adj_s;
 };
 
 #endif // SOMMET_H

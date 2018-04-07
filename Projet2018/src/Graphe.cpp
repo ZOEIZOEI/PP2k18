@@ -41,6 +41,7 @@ void Graphe::recuperation()
     std::cout << " Chargement de : " << nom_fichier << std::endl;
 
     std::vector<Arete*> tmp;
+//    std::pair<int, int> pair_temp;
 
     Arete* a;
     Sommet* s;
@@ -118,8 +119,15 @@ void Graphe::recuperation()
                     m_adjacences[a->getDepart()->getNum()].push_back(a->getArrive()->getNum());
 
                     /// Ajout des sommets dans les vecteurs d'adjacences des sommets respectifs (simple connexité)
-                    getSommet(a->getDepart()->getNum()).ajouterAdjS(a->getArrive()->getNum());
-                    getSommet(a->getArrive()->getNum()).ajouterAdjS(a->getDepart()->getNum());
+                    m_adj_adj[a->getDepart()->getNum()].push_back(a->getArrive()->getNum());
+                    m_adj_adj[a->getArrive()->getNum()].push_back(a->getDepart()->getNum());
+//                    pair_temp.first = a->getDepart()->getNum();
+//                    pair_temp.second = a->getArrive()->getNum();
+//                    getSommet(a->getDepart()->getNum())->ajouterAdjS(pair_temp);
+//
+//                    pair_temp.first = a->getArrive()->getNum();
+//                    pair_tem.second = a->getDepart()->getNum();
+//                    getSommet(a->getArrive()->getNum())->ajouterAdjS(pair_temp);
                 }
             }
         }
@@ -790,21 +798,40 @@ void Graphe::ordreRemplissage(int v, bool visited[], std::list<int> &Stack)
 void Graphe::K_connexites()
 {
     resetMarques();
-    int compteur = 0;
+    int* compteur = new int;
+    compteur = 0;
+    std::cout << &compteur << std::endl;
     std::cout << "true ordre (vivant) = " << m_ordre << std::endl;
-    for (int i = 0; i < m_ordre; ++i)
+//    for (std::map<int, std::vector<int>>::const_iterator it = m_adj_adj.begin(); it != m_adj_adj.end(); ++it)
+    for (const auto& sommet_ex : m_adj_adj)
     {
-        if(!getSommet(i).getMarque())
+        if(!getSommet(sommet_ex.first)->getMarque())
         {
-            if (i != 0) ++compteur;
-            getSommet(i).setMarque(true);
-            for (unsigned int j = 0; j < getSommet(i).getAdjS().size(); ++j)
+            std::cout << "test " << std::endl;
+//            if (i != 0) ++compteur;
+            getSommet(sommet_ex.first)->setMarque(true);
+            for (const auto& s_adj : sommet_ex.second)
             {
-                if (!getSommet(getSommet(i).getAdjS()[j]).getMarque())
+                if (!getSommet(s_adj)->getMarque())
                 {
-                    getSommet(getSommet(i).getAdjS()[j])
+                    getSommet(s_adj)->setMarque(true);
+                    recursKConnexite(s_adj, compteur);
                 }
             }
+        }
+    }
+    if (compteur == 0) std::cout << "le truc est connexe simplement au moins" << std::endl;
+    else std::cout << " pas connexe" << std::endl;
+}
+
+void Graphe::recursKConnexite(int indice, int* compteur)
+{
+    for (unsigned int i = 0; i < getSommet(i)->getAdjS().size(); ++i)
+    {
+        if (!getSommet(getSommet(indice)->getAdjS()[i])->getMarque())
+        {
+            getSommet(getSommet(indice)->getAdjS()[i])->setMarque(true);
+            recursKConnexite(getSommet(indice)->getAdjS()[i], compteur);
         }
     }
 }

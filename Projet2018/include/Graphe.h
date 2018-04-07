@@ -15,6 +15,7 @@
 #include <ctime>
 #include <stack>
 #include <list>
+#include <map>
 
 class Graphe
 {
@@ -76,6 +77,7 @@ class Graphe
         void choix_sommet_calc_k();
 
         void K_connexites();
+        void recursKConnexite(int indice, int* compteur);
         void resetMarques() { for (const auto& elem : m_sommets) elem->setMarque(false); }
 
     private:
@@ -89,6 +91,7 @@ class Graphe
         std::list<int>* m_adjacences;
         bool m_play;
         int m_nb_s_sup;
+        std::map<int, std::vector<int>> m_adj_adj;
 };
 
 #endif // GRAPHE_H
