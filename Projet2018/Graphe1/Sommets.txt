@@ -18,7 +18,7 @@ Graphe1\Images\poisson2.jpg
 483 133 8 70
 
 Graphe1\Images\oursins.jpg
-226 339 6 100
+226 339 6 200
 
 Graphe1\Images\poisson1.jpg
 133 36 7 65
