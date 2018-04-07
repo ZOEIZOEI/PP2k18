@@ -627,80 +627,6 @@ bool Graphe::is_sommmet(int i)
                &&  mouse_y >= getSommets()[i]->getCd_y() && mouse_y <= getSommets()[i]->getCd_y() + getSommets()[i]->getImg()->h;
 }
 
-void Graphe::CFC()
-{
-    int *disc = new int[m_ordre]; /// DISCOVERY TIME
-    int *low = new int[m_ordre]; /// TRUC MINIMUM
-    bool *stackMember = new bool[m_ordre];
-    std::stack<int> *st = new std::stack<int>();
-
-    /// Initialize disc and low, and stackMember arrays
-    for (int i = 0; i < m_ordre; i++)
-    {
-        disc[i] = -1;
-        low[i] = -1;
-        stackMember[i] = false;
-    }
-
-    // Call the recursive helper function to find strongly
-    // connected components in DFS tree with vertex 'i'
-    for (int i = 0; i < m_ordre; i++)
-        if (disc[i] == -1)
-            composanteRecursif(i, disc, low, st, stackMember);
-}
-
-void Graphe::composanteRecursif(int u, int disc[], int low[], std::stack<int> *st, bool stackMember[])
-{
-    // A static variable is used for simplicity, we can avoid use of static variable by passing a pointer.
-    static int time = 0;
-
-    // Initialize discovery time and low value
-    disc[u] = low[u] = ++time;
-    st->push(u);
-    stackMember[u] = true;
-
-    // Go through all vertices adjacent to this
-    std::list<int>::iterator i;
-    for (i = m_adjacences[u].begin(); i != m_adjacences[u].end(); ++i)
-    {
-        int v = *i;  // v is current adjacent of 'u'
-
-        // If v is not visited yet, then recur for it
-        if (disc[v] == -1)
-        {
-            composanteRecursif(v, disc, low, st, stackMember);
-
-            // Check if the subtree rooted with 'v' has a
-            // connection to one of the ancestors of 'u'
-            // Case 1 (per above discussion on Disc and Low value)
-            low[u] = std::min(low[u], low[v]);
-        }
-
-        // Update low value of 'u' only of 'v' is still in stack
-        // (i.e. it's a back edge, not cross edge).
-        // Case 2 (per above discussion on Disc and Low value)
-        else if (stackMember[v] == true)
-            low[u] = std::min(low[u], disc[v]);
-    }
-
-    // head node found, pop the stack and print an CFC
-    int w = 0;  // To store stack extracted vertices
-    if (low[u] == disc[u])
-    {
-        while (st->top() != u)
-        {
-            w = (int) st->top();
-            std::cout << getSommets()[w]->getNum() << " ";
-            stackMember[w] = false;
-            st->pop();
-        }
-        w = (int) st->top();
-        std::cout << getSommets()[w]->getNum() << "\n";
-        stackMember[w] = false;
-        st->pop();
-    }
-}
-
 void Graphe::slider()
 {
     float poids = 0;
@@ -714,16 +640,22 @@ void Graphe::slider()
             if (key[KEY_UP])
             {
                 std::cout << "On AUGMENTE la population " << getSommets()[i]->getNomImg() << std::endl;
-                poids +=1;
 
-                if(poids > 100.0) poids = 100.0;
+                if(poids < 100) poids +=1;
+
+                if(poids >= 100) poids += 100;
+
+                if(poids > 500.0) poids = 500.0;
                 getSommets()[i]->setPoids(poids);
                 key[KEY_UP] = 0;
             }
             if (key[KEY_DOWN])
             {
                 std::cout << "On DIMINUE la population " << getSommets()[i]->getNomImg() << std::endl;
-                poids -= 1;
+
+                if(poids <= 100) poids -= 1;
+
+                if(poids > 100) poids -=100;
 
                 if (poids < 0.0) poids = 0.0;
                 getSommets()[i]->setPoids(poids);
@@ -790,11 +722,13 @@ float Graphe::Mange(Sommet* s)
 
     for(unsigned int i(0); i < getAretes().size(); ++i)
     {
-        if(s == getAretes()[i]->getDepart())
+        if(s == getAretes()[i]->getDepart() && getAretes()[i]->getDepart()->getPoids() > 0 && getAretes()[i]->getArrive
+           ()->getPoids() > 0 )
         {
-            K = getAretes()[i]->getPoids() * getAretes()[i]->getArrive()->getPoids();
+            K += getAretes()[i]->getPoids()*getAretes()[i]->getDepart()->getPoids();
         }
     }
+    std::cout << "Faim K ===>: " << K << std::endl;
     return K;
 }
 
@@ -804,11 +738,12 @@ float Graphe::Plat(Sommet* s)
 
     for(unsigned int i(0); i < getAretes().size(); ++i)
     {
-        if(s == getAretes()[i]->getArrive() && getAretes()[i]->getDepart()->getPoids() > 0)
+        if(s == getAretes()[i]->getArrive() && getAretes()[i]->getArrive()->getPoids() > 0)
         {
-            K = - getAretes()[i]->getPoids() * getAretes()[i]->getDepart()->getPoids();
+            K += getAretes()[i]->getPoids()*getAretes()[i]->getDepart()->getPoids();
         }
     }
+    std::cout << "Repas K ===>: " << K << std::endl;
     return K;
 }
 
@@ -818,36 +753,41 @@ void Graphe::calc_pop()
 
     float faim;
     float repas;
+    float diff(0);
 
     if(getSommets().size() > 0)
     {
         std::cout << "==================================" << std::endl;
         for(unsigned int i = 0; i < getSommets().size(); i++)
         {
-            valeur[i] = 0;
-
-            if( getSommets()[i]->getPoids() > 0)
-            {
+            //if( getSommets()[i]->getPoids() > 0)
+            //{
                 std::cout << "Sommet " << getSommets()[i]->getNum() << std::endl;
 
                 faim = Mange(getSommets()[i]);
                 repas = Plat(getSommets()[i]);
 
+
+
+                if(getSommets()[i]->getNum() == 4 || getSommets()[i]->getNum() == 6)
+                {
+                    faim = 2;
+                }
+
                 std::cout << "Faim : " << faim << std::endl;
                 std::cout << "Repas : " << repas << std::endl;
 
+                diff = faim - repas;
+                std::cout << "Diff : " << diff << std::endl;
 
-                if(faim > 0 )
-                {
-                    valeur[i] += (getSommets()[i]->getPoids() + 0.0001 * (faim + repas));
-                }
+                valeur[i] = getSommets()[i]->getPoids() + diff;
 
-                if(repas <= 0 && faim <= 0)
-                {
-                    valeur[i] += (getSommets()[i]->getPoids() - 0.0001);
-                        std::cout << "Valeur : " << valeur[i] << std::endl;
-                }
-            }
+                if(faim == 0 && repas == 0)
+                    valeur[i] = getSommets()[i]->getPoids() - 1;
+
+                if(faim == 0)
+                    valeur[i] -= 1;
+
         }
 
         for(unsigned int i = 0; i < getSommets().size(); i++)
@@ -855,8 +795,8 @@ void Graphe::calc_pop()
             if(valeur[i] < 0)
                 valeur[i] = 0;
 
-            if(valeur[i] > 100)
-                valeur[i] = 100;
+            if(valeur[i] > 500)
+                valeur[i] = 500;
 
             getSommets()[i]->setPoids(valeur[i]);
         }

@@ -69,9 +69,6 @@ class Graphe
         void recuperation();
         void save();
 
-        void CFC();
-        void composanteRecursif(int u, int disc[], int low[], std::stack<int> *st, bool stackMember[]);
-
         void affichagedesComposantesFortementConnexes(std::vector<std::vector<int> > connexe);
 
         void slider();
