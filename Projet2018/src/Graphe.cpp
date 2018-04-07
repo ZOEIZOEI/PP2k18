@@ -5,8 +5,6 @@ Graphe::Graphe(std::string nom_fichier, std::string nom_decor)
     setOrdre(0);
     setNomGraphe(nom_fichier);
     BITMAP* bouton;
-    setTime(0);
-    m_play = false;
 
     setDecor(load_bitmap(nom_decor.c_str(), NULL));
     if (!getDecor())
@@ -15,15 +13,16 @@ Graphe::Graphe(std::string nom_fichier, std::string nom_decor)
         exit(EXIT_FAILURE);
     }
 
-    for (int i = 0; i<7; ++i)
+    for (int i = 0; i<8; ++i)
     {
         if (i == 0) bouton = load_bitmap("Graphe1/Images/addA.png", NULL);
         if (i == 1) bouton = load_bitmap("Graphe1/Images/suppS.png", NULL);
         if (i == 2) bouton = load_bitmap("Graphe1/Images/addS.png", NULL);
         if (i == 3) bouton = load_bitmap("Graphe1/Images/suppA.png", NULL);
         if (i == 4) bouton = load_bitmap("Graphe1/Images/CFC.png", NULL);
-        if (i == 5) bouton = load_bitmap("Graphe1/Images/play.png", NULL);
-        if (i == 6) bouton = load_bitmap("Graphe1/Images/pause.png", NULL);
+        if (i == 5) bouton = load_bitmap("Graphe1/Images/calcK.png", NULL);
+        if (i == 6) bouton = load_bitmap("Graphe1/Images/play.png", NULL);
+        if (i == 7) bouton = load_bitmap("Graphe1/Images/pause.png", NULL);
         ajouterBouton(bouton);
     }
 }
@@ -137,8 +136,8 @@ void Graphe::affichage(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, i
         xsArr = getAretes()[i]->getArrive()->getCd_x() + getAretes()[i]->getArrive()->getImg()->w/2;
         ysArr = getAretes()[i]->getArrive()->getCd_y() + getAretes()[i]->getArrive()->getImg()->h/2;
 
-        thick_line(buffer, xsDep, ysDep, xsArr, ysArr, getAretes()[i]->getPoids()/2, makecol(getAretes()[i]->getPoids()*10,255,0));
-        circlefill(buffer, (xsDep + 3*xsArr)/4, (ysDep + 3*ysArr)/4, radius, makecol(255,getAretes()[i]->getPoids()*10,0));
+        line(buffer, xsDep, ysDep, xsArr, ysArr ,makecol(255,0,0));
+        circlefill(buffer, (xsDep + 3*xsArr)/4, (ysDep + 3*ysArr)/4, radius, makecol(255,0,0));
         textprintf_ex(buffer, font, (xsDep + 3*xsArr)/4 - 6, (ysDep + 3*ysArr)/4 - 6, makecol(0,0,0), -1, "%d", getAretes()[i]->getPoids());
     }
 
@@ -213,13 +212,22 @@ void Graphe::outils(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, int 
             {
                 std::cout << "hello CFC" << std::endl;
                 CFC();
-                setTime(0);
             }
         }
 
         if (is_mouse(745, 50, 305, 50))
         {
-            rectfill(buffer, 743, 303, 796, 356, makecol(225,0,0));
+            rectfill(buffer, 743, 303, 796, 356, makecol(18,0,124));
+            if (!prev_mouse_b && now_mouse_b)
+            {
+                std::cout << "hello calcK" << std::endl;
+                choix_sommet_calc_k();
+            }
+        }
+
+        if (is_mouse(745, 50, 365, 50))
+        {
+//            rectfill(buffer, 743, 363, 796, 416, makecol(225,0,0));
             if (!prev_mouse_b && now_mouse_b)
             {
                 inverserPlay();
@@ -245,21 +253,6 @@ void Graphe::outils(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, int 
                 blit(getBouton(i), buffer, 0, 0, 745, 5+(60*i), getBouton(i)->w, getBouton(i)->h);
             else blit(getBouton(i+1), buffer, 0, 0, 745, 5+(60*i), getBouton(i+1)->w, getBouton(i+1)->h);
         }
-    }
-
-    if(getPlay() == true)
-    {
-        if(getTime()%300 == 0)
-            calc_pop();
-    }
-
-    if(getTime()%1000 == 0)
-    {
-        for(unsigned int i(0); i < getSommets().size(); ++i)
-            getSommet(i)->setConnexe(false);
-
-        for(unsigned int i(0); i < getS_Sup().size(); ++i)
-            getS_Sup()[i]->setConnexe(false);
     }
 
 }
@@ -509,12 +502,6 @@ void Graphe::update(BITMAP* buffer, BITMAP* barre, int prev, int now)
 
                     blit(getDecor(), buffer,0,0,0,0,getDecor()->w, getDecor()->h);
 
-                    ///Affichage forte connexité
-                    if(getSommet(i)->getConnexe())
-                    {
-                        rectfill(buffer, getSommets()[i]->getCd_x()-2, getSommets()[i]->getCd_y()-2, getSommets()[i]->getImg()->w + getSommets()[i]->getCd_x()+1, getSommets()[i]->getImg()->h + getSommets()[i]->getCd_y()+1, makecol(182,108,255));
-                    }
-
                     rectfill(buffer, getSommets()[i]->getCd_x()-2, getSommets()[i]->getCd_y()-2, getSommets()[i]->getImg()->w + getSommets()[i]->getCd_x()+1, getSommets()[i]->getImg()->h + getSommets()[i]->getCd_y()+1, makecol(0,255,0));
 
                     getSommets()[i]->setCd_x(mouse_x - getSommets()[i]->getImg()->w/2);
@@ -535,32 +522,6 @@ void Graphe::update(BITMAP* buffer, BITMAP* barre, int prev, int now)
                     affichage(buffer, barre, 1, prev_mouse_b, now_mouse_b);
                 }
             }
-        }
-    }
-}
-
-void Graphe::thick_line(BITMAP *buffer, int xDep, int yDep, int xArr, int yArr, int epaisseur, int col)
-{
-    int dx = xArr - xDep;
-    int dy = yArr - yDep;
-
-    if(epaisseur < 1)
-    {
-        epaisseur = 1;
-    }
-
-    if (abs(dx) > abs(dy))
-    {
-        for (int i = 1 - epaisseur; i < epaisseur; ++i)
-        {
-            line(buffer, xDep, yDep + i, xArr, yArr + i, col);
-        }
-    }
-    else
-    {
-        for (int i = 1 - epaisseur; i < epaisseur; ++i)
-        {
-            line(buffer, xDep + i, yDep, xArr + i, yArr, col);
         }
     }
 }
@@ -627,6 +588,80 @@ bool Graphe::is_sommmet(int i)
                &&  mouse_y >= getSommets()[i]->getCd_y() && mouse_y <= getSommets()[i]->getCd_y() + getSommets()[i]->getImg()->h;
 }
 
+void Graphe::CFC()
+{
+    int *disc = new int[m_ordre]; /// DISCOVERY TIME
+    int *low = new int[m_ordre]; /// TRUC MINIMUM
+    bool *stackMember = new bool[m_ordre];
+    std::stack<int> *st = new std::stack<int>();
+
+    /// Initialize disc and low, and stackMember arrays
+    for (int i = 0; i < m_ordre; i++)
+    {
+        disc[i] = -1;
+        low[i] = -1;
+        stackMember[i] = false;
+    }
+
+    // Call the recursive helper function to find strongly
+    // connected components in DFS tree with vertex 'i'
+    for (int i = 0; i < m_ordre; i++)
+        if (disc[i] == -1)
+            composanteRecursif(i, disc, low, st, stackMember);
+}
+
+void Graphe::composanteRecursif(int u, int disc[], int low[], std::stack<int> *st, bool stackMember[])
+{
+    // A static variable is used for simplicity, we can avoid use of static variable by passing a pointer.
+    static int time = 0;
+
+    // Initialize discovery time and low value
+    disc[u] = low[u] = ++time;
+    st->push(u);
+    stackMember[u] = true;
+
+    // Go through all vertices adjacent to this
+    std::list<int>::iterator i;
+    for (i = m_adjacences[u].begin(); i != m_adjacences[u].end(); ++i)
+    {
+        int v = *i;  // v is current adjacent of 'u'
+        std::cout << "Voisins de " << u << " : " << v << std::endl;
+        // If v is not visited yet, then recur for it
+        if (disc[v] == -1)
+        {
+            composanteRecursif(v, disc, low, st, stackMember);
+
+            // Check if the subtree rooted with 'v' has a
+            // connection to one of the ancestors of 'u'
+            // Case 1 (per above discussion on Disc and Low value)
+            low[u] = std::min(low[u], low[v]);
+        }
+
+        // Update low value of 'u' only of 'v' is still in stack
+        // (i.e. it's a back edge, not cross edge).
+        // Case 2 (per above discussion on Disc and Low value)
+        else if (stackMember[v] == true)
+            low[u] = std::min(low[u], disc[v]);
+    }
+
+    // head node found, pop the stack and print an CFC
+    int w = 0;  // To store stack extracted vertices
+    if (low[u] == disc[u])
+    {
+        while (st->top() != u)
+        {
+            w = (int) st->top();
+            std::cout << getSommets()[w]->getNum() << " ";
+            stackMember[w] = false;
+            st->pop();
+        }
+        w = (int) st->top();
+        std::cout << getSommets()[w]->getNum() << "\n";
+        stackMember[w] = false;
+        st->pop();
+    }
+}
+
 void Graphe::slider()
 {
     float poids = 0;
@@ -640,22 +675,16 @@ void Graphe::slider()
             if (key[KEY_UP])
             {
                 std::cout << "On AUGMENTE la population " << getSommets()[i]->getNomImg() << std::endl;
+                poids +=1;
 
-                if(poids < 100) poids +=1;
-
-                if(poids >= 100) poids += 100;
-
-                if(poids > 500.0) poids = 500.0;
+                if(poids > 100.0) poids = 100.0;
                 getSommets()[i]->setPoids(poids);
                 key[KEY_UP] = 0;
             }
             if (key[KEY_DOWN])
             {
                 std::cout << "On DIMINUE la population " << getSommets()[i]->getNomImg() << std::endl;
-
-                if(poids <= 100) poids -= 1;
-
-                if(poids > 100) poids -=100;
+                poids -= 1;
 
                 if (poids < 0.0) poids = 0.0;
                 getSommets()[i]->setPoids(poids);
@@ -701,6 +730,53 @@ void Graphe::sliderArete()
     }
 }
 
+int Graphe::calcul_K(Sommet* sDep)
+{
+	int calcul_k = 0;
+	for (unsigned int i = 0 ; i<getSommets().size(); ++i)
+	{
+//	    std::cout << "sommet" << i << std::endl;
+		calcul_k += calcul_sommet(sDep, getSommet(i));
+	}
+	return calcul_k;
+}
+
+int Graphe::calcul_sommet(Sommet* sDep, Sommet* sArr)
+{
+	for (unsigned int i = 0; i<getAretes().size(); ++i)
+	{
+	    // Si le sommet de d�part mange le sommet d'arrive
+        if (getAretes()[i]->getDepart() == sDep &&  getAretes()[i]->getArrive() == sArr)
+        {
+            return (getArete(i)->getPoids() * getArete(i)->getArrive()->getPoids());
+        }
+        else if (i == getAretes().size()-1) return 0;
+	}
+}
+
+void Graphe::choix_sommet_calc_k()
+{
+    int coefK = 0;
+    Sommet* s = new Sommet;
+    int prev_mouse_b, now_mouse_b;
+
+    while (s->getNomImg() == "")
+    {
+        prev_mouse_b = now_mouse_b;
+        now_mouse_b = mouse_b&1;
+        for (unsigned int i = 0; i<getSommets().size(); ++i)
+        {
+            if (is_sommmet(i) && !prev_mouse_b && now_mouse_b)
+            {
+                s = getSommets()[i];
+                coefK = calcul_K(getSommets()[i]);
+                std::cout << "K[" << i << "] = " << coefK << std::endl;
+            }
+        }
+    }
+
+}
+
 void Graphe::inverserPlay()
 {
     bool deja_inv = false;
@@ -722,13 +798,11 @@ float Graphe::Mange(Sommet* s)
 
     for(unsigned int i(0); i < getAretes().size(); ++i)
     {
-        if(s == getAretes()[i]->getDepart() && getAretes()[i]->getDepart()->getPoids() > 0 && getAretes()[i]->getArrive
-           ()->getPoids() > 0 )
+        if(s == getAretes()[i]->getDepart())
         {
-            K += getAretes()[i]->getPoids()*getAretes()[i]->getDepart()->getPoids();
+            K = K + getAretes()[i]->getPoids() * getAretes()[i]->getArrive()->getPoids();
         }
     }
-    std::cout << "Faim K ===>: " << K << std::endl;
     return K;
 }
 
@@ -738,12 +812,11 @@ float Graphe::Plat(Sommet* s)
 
     for(unsigned int i(0); i < getAretes().size(); ++i)
     {
-        if(s == getAretes()[i]->getArrive() && getAretes()[i]->getArrive()->getPoids() > 0)
+        if(s == getAretes()[i]->getArrive() && getAretes()[i]->getDepart()->getPoids() > 0)
         {
-            K += getAretes()[i]->getPoids()*getAretes()[i]->getDepart()->getPoids();
+            K = K - (getAretes()[i]->getPoids() * getAretes()[i]->getDepart()->getPoids());
         }
     }
-    std::cout << "Repas K ===>: " << K << std::endl;
     return K;
 }
 
@@ -753,70 +826,54 @@ void Graphe::calc_pop()
 
     float faim;
     float repas;
-    float diff(0);
 
     if(getSommets().size() > 0)
     {
         std::cout << "==================================" << std::endl;
-        for(unsigned int i = 0; i < getSommets().size(); i++)
+        for(int i = 0; i < getSommets().size(); i++)
         {
-            //if( getSommets()[i]->getPoids() > 0)
-            //{
+            valeur[i] = getSommets()[i]->getPoids();
+
+
+
+            if( getSommets()[i]->getPoids() > 0)
+            {
                 std::cout << "Sommet " << getSommets()[i]->getNum() << std::endl;
 
                 faim = Mange(getSommets()[i]);
                 repas = Plat(getSommets()[i]);
 
-
-
-                if(getSommets()[i]->getNum() == 4 || getSommets()[i]->getNum() == 6)
-                {
-                    faim = 2;
-                }
-
                 std::cout << "Faim : " << faim << std::endl;
                 std::cout << "Repas : " << repas << std::endl;
 
-                diff = faim - repas;
-                std::cout << "Diff : " << diff << std::endl;
 
-                valeur[i] = getSommets()[i]->getPoids() + diff;
+                if(faim > 0 )
+                {
+                    valeur[i] += 0.01 * (faim + repas);
+                }
+                else{
+                    valeur[i] += getSommets()[i]->getPoids() - 0.1;
+                }
+                std::cout << "Valeur : " << valeur[i] << std::endl;
+            }
 
-                if(faim == 0 && repas == 0)
-                    valeur[i] = getSommets()[i]->getPoids() - 1;
+            if(getSommets()[i]->getNum() == 4 || getSommets()[i]->getNum() == 6)
+            {
+                valeur[i] += 0.0001;
+            }
 
-                if(faim == 0)
-                    valeur[i] -= 1;
 
         }
 
-        for(unsigned int i = 0; i < getSommets().size(); i++)
+        for(int i = 0; i < getSommets().size(); i++)
         {
             if(valeur[i] < 0)
                 valeur[i] = 0;
 
-            if(valeur[i] > 500)
-                valeur[i] = 500;
+            if(valeur[i] > 100)
+                valeur[i] = 100;
 
             getSommets()[i]->setPoids(valeur[i]);
-        }
-    }
-
-}
-
-void Graphe::affichagedesComposantesFortementConnexes(std::vector<std::vector<int> > connexe)
-{
-    if(connexe.size() > 0)
-    {
-        for(unsigned int i(0); i < connexe.size(); ++i)
-        {
-            if(connexe[i].size() > 1)
-            {
-                for(unsigned int j(0); j < connexe[i].size(); ++j)
-                {
-                    getSommet(connexe[i][j])->setConnexe(true);
-                }
-            }
         }
     }
 
