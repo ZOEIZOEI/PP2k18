@@ -116,15 +116,15 @@ void Graphe::recuperation()
                     std::cout << "[" << a->getDepart()->getNum() << "] -> [" << a->getArrive()->getNum();
                     std::cout << "] POIDS : " << a->getPoids() << std::endl;
                     m_adjacences[a->getDepart()->getNum()].push_back(a->getArrive()->getNum());
+
+                    /// Ajout des sommets dans les vecteurs d'adjacences des sommets respectifs (simple connexité)
+                    getSommet(a->getDepart()->getNum()).ajouterAdjS(a->getArrive()->getNum());
+                    getSommet(a->getArrive()->getNum()).ajouterAdjS(a->getDepart()->getNum());
                 }
             }
         }
     }
     setAretes(tmp);
-//    for (int i = 0; i< m_ordre + m_nb_s_sup; ++i)
-//    {
-//        m_adjCFC.push_back(std::vector<int>());
-//    }
 }
 
 void Graphe::affichage(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, int now_mouse_b)
@@ -224,8 +224,10 @@ void Graphe::outils(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, int 
             rectfill(buffer, 743, 303, 796, 356, makecol(18,0,124));
             if (!prev_mouse_b && now_mouse_b)
             {
-                std::cout << "hello calcK" << std::endl;
-                choix_sommet_calc_k();
+//                std::cout << "hello calcK" << std::endl;
+                std::cout << "hello k-connexite" << std::endl;
+//                choix_sommet_calc_k();
+                K_connexites();
             }
         }
 
@@ -255,7 +257,6 @@ void Graphe::outils(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, int 
             else blit(getBouton(i+1), buffer, 0, 0, 745, 5+(60*i), getBouton(i+1)->w, getBouton(i+1)->h);
         }
     }
-
 }
 
 void Graphe::ajouterArete(BITMAP* buffer)
@@ -589,80 +590,6 @@ bool Graphe::is_sommmet(int i)
                &&  mouse_y >= getSommets()[i]->getCd_y() && mouse_y <= getSommets()[i]->getCd_y() + getSommets()[i]->getImg()->h;
 }
 
-//void Graphe::CFC()
-//{
-//    int *disc = new int[m_ordre]; /// DISCOVERY TIME
-//    int *low = new int[m_ordre]; /// TRUC MINIMUM
-//    bool *stackMember = new bool[m_ordre];
-//    std::stack<int> *st = new std::stack<int>();
-//
-//    /// Initialize disc and low, and stackMember arrays
-//    for (int i = 0; i < m_ordre; i++)
-//    {
-//        disc[i] = -1;
-//        low[i] = -1;
-//        stackMember[i] = false;
-//    }
-//
-//    // Call the recursive helper function to find strongly
-//    // connected components in DFS tree with vertex 'i'
-//    for (int i = 0; i < m_ordre; i++)
-//        if (disc[i] == -1)
-//            composanteRecursif(i, disc, low, st, stackMember);
-//}
-
-//void Graphe::composanteRecursif(int u, int disc[], int low[], std::stack<int> *st, bool stackMember[])
-//{
-//    // A static variable is used for simplicity, we can avoid use of static variable by passing a pointer.
-//    static int time = 0;
-//
-//    // Initialize discovery time and low value
-//    disc[u] = low[u] = ++time;
-//    st->push(u);
-//    stackMember[u] = true;
-//
-//    // Go through all vertices adjacent to this
-//    std::list<int>::iterator i;
-//    for (i = m_adjacences[u].begin(); i != m_adjacences[u].end(); ++i)
-//    {
-//        int v = *i;  // v is current adjacent of 'u'
-//
-//        // If v is not visited yet, then recur for it
-//        if (disc[v] == -1)
-//        {
-//            composanteRecursif(v, disc, low, st, stackMember);
-//
-//            // Check if the subtree rooted with 'v' has a
-//            // connection to one of the ancestors of 'u'
-//            // Case 1 (per above discussion on Disc and Low value)
-//            low[u] = std::min(low[u], low[v]);
-//        }
-//
-//        // Update low value of 'u' only of 'v' is still in stack
-//        // (i.e. it's a back edge, not cross edge).
-//        // Case 2 (per above discussion on Disc and Low value)
-//        else if (stackMember[v] == true)
-//            low[u] = std::min(low[u], disc[v]);
-//    }
-//
-//    // head node found, pop the stack and print an CFC
-//    int w = 0;  // To store stack extracted vertices
-//    if (low[u] == disc[u])
-//    {
-//        while (st->top() != u)
-//        {
-//            w = (int) st->top();
-//            std::cout << getSommets()[w]->getNum() << " ";
-//            stackMember[w] = false;
-//            st->pop();
-//        }
-//        w = (int) st->top();
-//        std::cout << getSommets()[w]->getNum() << "\n";
-//        stackMember[w] = false;
-//        st->pop();
-//    }
-//}
-
 void Graphe::slider()
 {
     float poids = 0;
@@ -774,46 +701,6 @@ void Graphe::choix_sommet_calc_k()
 
 }
 
-/*int* CFC(int s)
-//{
-//    int* c1 = new int[m_ordre];
-//    int* c2 = new int[m_ordre];
-//    int* c;
-//
-//    int* marques;
-//    int x, y;
-//    int ajoute = 1;
-//    for (int i = 0; i < m_ordre; ++i)
-//    {
-//        c1[i] = 0;
-//        c2[i] = 0;
-//    }
-//
-//    c1[s] = 1; c2[s] = 1;
-//
-//    while(ajoute)
-//    {
-//        ajoute = 0;
-//        {
-//            for (x = 0; x < m_ordre; ++x)
-//            {
-//                if (!maques[x] && c1[x])
-//                {
-//                    marques[x] = 1;
-//                    for (y = 0; y < m_ordre; ++y)
-//                    {
-//                        if (m_adjacences[x][y] && !marques[y])
-//                        {
-//                            c1[y] = 1;
-//                            ajoute = 1;
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-//}*/
-
 void Graphe::afficherCFC()
 {
     int nb_recur = 0;
@@ -854,7 +741,6 @@ void Graphe::afficherCFC()
         std::cout << std::endl;
     }
 }
-
 
 void Graphe::composanteRecursif(int v, bool visited[], int nb_recur, std::vector<std::vector<int>>& m_adjCFC)
 {
@@ -901,4 +787,24 @@ void Graphe::ordreRemplissage(int v, bool visited[], std::list<int> &Stack)
     Stack.push_back(v);
 }
 
-
+void Graphe::K_connexites()
+{
+    resetMarques();
+    int compteur = 0;
+    std::cout << "true ordre (vivant) = " << m_ordre << std::endl;
+    for (int i = 0; i < m_ordre; ++i)
+    {
+        if(!getSommet(i).getMarque())
+        {
+            if (i != 0) ++compteur;
+            getSommet(i).setMarque(true);
+            for (unsigned int j = 0; j < getSommet(i).getAdjS().size(); ++j)
+            {
+                if (!getSommet(getSommet(i).getAdjS()[j]).getMarque())
+                {
+                    getSommet(getSommet(i).getAdjS()[j])
+                }
+            }
+        }
+    }
+}

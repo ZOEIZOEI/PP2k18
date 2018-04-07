@@ -75,6 +75,9 @@ class Graphe
         int calcul_K(Sommet* sDep);
         void choix_sommet_calc_k();
 
+        void K_connexites();
+        void resetMarques() { for (const auto& elem : m_sommets) elem->setMarque(false); }
+
     private:
         std::vector<Sommet*> m_sommets;
         std::vector<Sommet*> m_s_sup;
