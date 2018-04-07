@@ -3,42 +3,39 @@
 12
 
 Graphe2\Images\antilope.jpg
-121 53 6 60
-
-Graphe2\Images\cricquet.jpg
-376 190 8 70
-
-Graphe2\Images\elephant.jpg
-298 391 0 30
+177 178 6 100
 
 Graphe2\Images\feuillage.jpg
-164 316 3 45
+410 33 3 100
 
 Graphe2\Images\fruit.png
-38 200 5 55
-
-Graphe2\Images\homme.jpg
-470 400 2 40
-
-Graphe2\Images\leopard.jpg
-599 213 1 35
-
-Graphe2\Images\lion.jpg
-624 388 9 65
+54 177 5 100
 
 Graphe2\Images\mante.jpg
-36 329 10 65
-
-Graphe2\Images\papillon.jpg
-316 55 11 65
-
-Graphe2\Images\plante.jpg
-355 408 12 65
+29 311 10 100
 
 Graphe2\Images\singe.jpg
-591 68 13 65
+301 186 7 100
 
-3
-Graphe2\Images\papillon.jpg Graphe2\Images\feuillage.jpg 0
-Graphe2\Images\leopard.jpg Graphe2\Images\plante.jpg 0
-Graphe2\Images\singe.jpg Graphe2\Images\cricquet.jpg 0
+Graphe2\Images\lion.jpg
+540 171 9 100
+
+Graphe2\Images\leopard.jpg
+173 31 1 100
+
+Graphe2\Images\plante.jpg
+527 26 4 55
+
+Graphe2\Images\homme.jpg
+293 40 2 100
+
+Graphe2\Images\elephant.jpg
+57 35 0 100
+
+Graphe2\Images\papillon.jpg
+177 338 11 100
+
+Graphe2\Images\cricquet.jpg
+410 178 8 56
+
+0

@@ -2,14 +2,29 @@
 
 Graphe::Graphe(std::string nom_fichier, std::string nom_decor)
 {
-    Setordre(0);
-    SetNomGraphe(nom_fichier);
+    setOrdre(0);
+    setNomGraphe(nom_fichier);
+    BITMAP* bouton;
+    setTime(0);
+    m_play = false;
 
-    Setdecor(load_bitmap(nom_decor.c_str(), NULL));
-    if(!Getdecor())
+    setDecor(load_bitmap(nom_decor.c_str(), NULL));
+    if (!getDecor())
     {
         allegro_message("pas pu trouver decor.png");
         exit(EXIT_FAILURE);
+    }
+
+    for (int i = 0; i<7; ++i)
+    {
+        if (i == 0) bouton = load_bitmap("Graphe1/Images/addA.png", NULL);
+        if (i == 1) bouton = load_bitmap("Graphe1/Images/suppS.png", NULL);
+        if (i == 2) bouton = load_bitmap("Graphe1/Images/addS.png", NULL);
+        if (i == 3) bouton = load_bitmap("Graphe1/Images/suppA.png", NULL);
+        if (i == 4) bouton = load_bitmap("Graphe1/Images/CFC.png", NULL);
+        if (i == 5) bouton = load_bitmap("Graphe1/Images/play.png", NULL);
+        if (i == 6) bouton = load_bitmap("Graphe1/Images/pause.png", NULL);
+        ajouterBouton(bouton);
     }
 }
 
@@ -18,17 +33,32 @@ Graphe::~Graphe()
 
 }
 
-void Graphe::Recuperation()
+void Graphe::init()
 {
-    int cd_x, cd_y, num, poids;
-    std::string nom_img;
 
-    std::string nom_fichier(GetNomGraphe());
-    std::cout << nom_fichier << "jijij " << std::endl;
+    std::vector<Sommet*> *tmp(new std::vector<Sommet*>);
+    std::vector<Arete*> *tmp2(new std::vector<Arete*>);
 
-    int ordre;
-    std::string nom_img_d, nom_img_a;
+    setOrdre(0);
+    setTime(0);
+    setSommets(*tmp);
+    tmp = new std::vector<Sommet*>;
+    setS_Sup(*tmp);
+    setAretes(*tmp2);
+
+    recuperation();
+}
+
+void Graphe::recuperation()
+{
+    int cd_x, cd_y, num, poids, nb_aretes;
+    std::string nom_img, nom_img_d, nom_img_a;
+
+    std::string nom_fichier(getNomGraphe());
+    std::cout << " Chargement de : " << nom_fichier << std::endl;
+
     std::vector<Arete*> tmp;
+
     Arete* a;
     Sommet* s;
 
@@ -40,255 +70,321 @@ void Graphe::Recuperation()
     }
     else
     {
-        fichier >> ordre;
-        if(ordre > 0)
+        fichier >> m_nb_s_sup;
+        if (m_nb_s_sup > 0)
         {
-            for (int i(0); i<ordre; ++i)
+            for (int i(0); i<m_nb_s_sup; ++i)
             {
                 fichier >> nom_img;
                 fichier >> cd_x >> cd_y >> num >> poids;
-                if(nom_img != "")
+                if (nom_img != "")
                 {
                     s = new Sommet(cd_x, cd_y, num, poids, nom_img);
-                    m_sall.push_back(s);
-                }
-
+                    m_s_sup.push_back(s);
+       key[KEY_UP] = 0;         }
             }
         }
 
         fichier >> m_ordre;
-        if(m_ordre > 0)
+        m_adjacences = new std::list<int>[m_ordre + m_nb_s_sup];
+        if (m_ordre > 0)
         {
             for (int i(0); i<m_ordre; ++i)
             {
                 fichier >> nom_img;
                 fichier >> cd_x >> cd_y >> num >> poids;
-                std::cout << "Nom : " << nom_img << " x " << cd_x << " poids " << poids << std::endl;
+//                std::cout << "Nom : " << nom_img << " x " << cd_x << " poids " << poids << std::endl;
                 s = new Sommet(cd_x, cd_y, num, poids, nom_img);
-                ajouterSommet(s);
+                m_sommets.push_back(s);
             }
         }
 
-        fichier >> ordre;
-        std::cout << "Ordre : " << ordre << std::endl;
-        if(ordre > 0)
+        fichier >> nb_aretes;
+        std::cout << "Nombre d'aretes du graphe : " << nb_aretes << std::endl << std::endl;
+
+        if (nb_aretes > 0)
         {
-            for (int k(0); k<ordre; ++k)
+            for (int k(0); k < nb_aretes; ++k)
             {
                 fichier >> nom_img_d >> nom_img_a >> poids;
 
-                if(Getsommets().size() > 0 && nom_img_a != "")
+                if (getSommets().size() > 0 && nom_img_a != "")
                 {
                     a = new Arete;
 
-                    for(unsigned int i(0); i < Getsommets().size(); ++i)
+                    for (unsigned int i(0); i < getSommets().size(); ++i)
                     {
-                        if(Getsommets()[i]->getNomImg() == nom_img_d)
+                        if (getSommets()[i]->getNomImg() == nom_img_d)
                         {
                             s = new Sommet;
-                            s = Getsommets()[i];
-                            a->Setdepart(s);
+                            s = getSommets()[i];
+                            a->setDepart(s);
                         }
 
-                        if(Getsommets()[i]->getNomImg() == nom_img_a)
+                        if (getSommets()[i]->getNomImg() == nom_img_a)
                         {
                             s = new Sommet;
-                            s = Getsommets()[i];
-                            a->Setarrive(s);
-                            a->Setpoids(poids);
+                            s = getSommets()[i];
+                            a->setArrive(s);
+                            a->setPoids(poids);
                         }
                     }
                     tmp.push_back(a);
+                    std::cout << "[" << a->getDepart()->getNum() << "] -> [" << a->getArrive()->getNum();
+                    std::cout << "] POIDS : " << a->getPoids() << std::endl;
+                    m_adjacences[a->getDepart()->getNum()].push_back(a->getArrive()->getNum());
                 }
             }
         }
-
     }
-    Setaretes(tmp);
+    setAretes(tmp);
 }
 
-void Graphe::affichage(BITMAP* buffer, BITMAP* barre)
+void Graphe::affichage(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, int now_mouse_b)
 {
-    blit(Getdecor(), buffer, 0,0,0,0,Getdecor()->w, Getdecor()->h);
     int xsDep = 0, ysDep = 0, xsArr = 0, ysArr = 0;
     int radius = 15;
-    for (unsigned int i(0); i <Getaretes().size(); ++i)
-    {
-        xsDep = Getaretes()[i]->Getdepart()->GetCd_x() + Getaretes()[i]->Getdepart()->GetImg()->w/2;
-        ysDep = Getaretes()[i]->Getdepart()->GetCd_y() + Getaretes()[i]->Getdepart()->GetImg()->h/2;
-        xsArr = Getaretes()[i]->Getarrive()->GetCd_x() + Getaretes()[i]->Getarrive()->GetImg()->w/2;
-        ysArr = Getaretes()[i]->Getarrive()->GetCd_y() + Getaretes()[i]->Getarrive()->GetImg()->h/2;
 
-//        line(buffer, Getaretes()[i]->Getdepart()->GetCd_x() + Getaretes()[i]->Getdepart()->GetImg()->w/2, Getaretes()[i]->Getdepart()->GetCd_y() + Getaretes()[i]->Getdepart()->GetImg()->h/2, Getaretes()[i]->Getarrive()->GetCd_x() + Getaretes()[i]->Getarrive()->GetImg()->w/2, Getaretes()[i]->Getarrive()->GetCd_y() + Getaretes()[i]->Getarrive()->GetImg()->h/2, makecol(255,0,0));
-        line(buffer, xsDep, ysDep, xsArr, ysArr, makecol(255,0,0));
-        circlefill(buffer, (xsDep + 3*xsArr)/4, (ysDep + 3*ysArr)/4, radius, makecol(255,0,0));
-        //stretch_sprite(buffer, fleche, Getaretes()[i]->Getdepart()->GetCd_x(), Getaretes()[i]->Getdepart()->GetCd_y(), Getaretes()[i]->Getdepart()->GetImg()->w, Getaretes()[i]->Getdepart()->GetImg()->h/*, Getaretes()[i]->Getarrive()->GetCd_x(), Getaretes()[i]->Getarrive()->GetCd_y(), Getaretes()[i]->Getarrive()->GetImg()->w, Getaretes()[i]->Getarrive()->GetImg()->h*/);
+    sliderArete();
+    for (unsigned int i(0); i <getAretes().size(); ++i)
+    {
+        xsDep = getAretes()[i]->getDepart()->getCd_x() + getAretes()[i]->getDepart()->getImg()->w/2;
+        ysDep = getAretes()[i]->getDepart()->getCd_y() + getAretes()[i]->getDepart()->getImg()->h/2;
+        xsArr = getAretes()[i]->getArrive()->getCd_x() + getAretes()[i]->getArrive()->getImg()->w/2;
+        ysArr = getAretes()[i]->getArrive()->getCd_y() + getAretes()[i]->getArrive()->getImg()->h/2;
+
+        thick_line(buffer, xsDep, ysDep, xsArr, ysArr, getAretes()[i]->getPoids()/2, makecol(getAretes()[i]->getPoids()*10,255,0));
+        circlefill(buffer, (xsDep + 3*xsArr)/4, (ysDep + 3*ysArr)/4, radius, makecol(255,getAretes()[i]->getPoids()*10,0));
+        textprintf_ex(buffer, font, (xsDep + 3*xsArr)/4 - 6, (ysDep + 3*ysArr)/4 - 6, makecol(0,0,0), -1, "%d", getAretes()[i]->getPoids());
     }
 
-    for (unsigned int i(0); i<Getsommets().size(); ++i)
+    for (unsigned int i(0); i<getSommets().size(); ++i)
     {
-        blit(getSommet(i)->GetImg(), buffer, 0, 0, getSommet(i)->GetCd_x(), getSommet(i)->GetCd_y(), getSommet(i)->GetImg()->w, getSommet(i)->GetImg()->h);
-        rectfill(buffer, getSommet(i)->GetCd_x() + getSommet(i)->GetImg()->w - 20, getSommet(i)->GetCd_y() + getSommet(i)->GetImg()->h - 15, getSommet(i)->GetCd_x() + getSommet(i)->GetImg()->w, getSommet(i)->GetCd_y() + getSommet(i)->GetImg()->h, makecol(0,0,0));
-        rect(buffer, getSommet(i)->GetCd_x() + getSommet(i)->GetImg()->w - 20, getSommet(i)->GetCd_y() + getSommet(i)->GetImg()->h - 15, getSommet(i)->GetCd_x() + getSommet(i)->GetImg()->w-2, getSommet(i)->GetCd_y() + getSommet(i)->GetImg()->h-2, makecol(255,255,255));
-        textprintf_ex(buffer, font, getSommet(i)->GetCd_x() + getSommet(i)->GetImg()->w - 16, getSommet(i)->GetCd_y() + getSommet(i)->GetImg()->h - 11, makecol(255,255,255), -1,"%d", getSommet(i)->GetNum());
+        ///Affichage forte connexitÃ©
+        if(getSommet(i)->getConnexe() == true)
+            rectfill(buffer, getSommets()[i]->getCd_x()-4, getSommets()[i]->getCd_y()-4, getSommets()[i]->getImg()->w + getSommets()[i]->getCd_x()+4, getSommets()[i]->getImg()->h + getSommets()[i]->getCd_y()+4, makecol(255, 0, 255));
+
+        ///Image
+        blit(getSommet(i)->getImg(), buffer, 0, 0, getSommet(i)->getCd_x(), getSommet(i)->getCd_y(), getSommet(i)->getImg()->w, getSommet(i)->getImg()->h);
+        ///Numero Image
+        rectfill(buffer, getSommet(i)->getCd_x() + getSommet(i)->getImg()->w - 20, getSommet(i)->getCd_y() + getSommet(i)->getImg()->h - 15, getSommet(i)->getCd_x() + getSommet(i)->getImg()->w, getSommet(i)->getCd_y() + getSommet(i)->getImg()->h, makecol(0,0,0));
+        rect(buffer, getSommet(i)->getCd_x() + getSommet(i)->getImg()->w - 20, getSommet(i)->getCd_y() + getSommet(i)->getImg()->h - 15, getSommet(i)->getCd_x() + getSommet(i)->getImg()->w, getSommet(i)->getCd_y() + getSommet(i)->getImg()->h-2, makecol(255,255,255));
+        textprintf_ex(buffer, font, getSommet(i)->getCd_x() + getSommet(i)->getImg()->w - 16, getSommet(i)->getCd_y() + getSommet(i)->getImg()->h - 11, makecol(255,255,255), -1,"%d", getSommet(i)->getNum());
+        ///Poids Image
+        rectfill(buffer, getSommet(i)->getCd_x(), getSommet(i)->getCd_y() + getSommet(i)->getImg()->h - 14, getSommet(i)->getCd_x() + 26, getSommet(i)->getCd_y() + getSommet(i)->getImg()->h-1, makecol(200,200,200));
+        rect(buffer, getSommet(i)->getCd_x(), getSommet(i)->getCd_y() + getSommet(i)->getImg()->h - 14, getSommet(i)->getCd_x() + 26, getSommet(i)->getCd_y() + getSommet(i)->getImg()->h-1, makecol(255,255,255));
+        textprintf_ex(buffer, font, getSommet(i)->getCd_x() +2, getSommet(i)->getCd_y() + getSommet(i)->getImg()->h - 10, makecol(0,0,0), -1, "%d", getSommet(i)->getPoids());
+
+
 
     }
 
-//    textprintf_ex(buffer, font, 400, 23, makecol(255,255,0), -1,"%d", Getaretes().size());
+//    textprintf_ex(buffer, font, 400, 23, makecol(255,255,0), -1,"%d", getAretes().size());
 //    textprintf_ex(buffer, font, 440, 23, makecol(255,255,0), -1,"%d", mouse_y);
 
-    outils(buffer, barre);
+    outils(buffer, barre, a, prev_mouse_b, now_mouse_b);
+
     draw_sprite(buffer, barre, 0, 600-barre->h);
     blit(buffer, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
     clear_bitmap(buffer);
 }
 
-void Graphe::outils(BITMAP* buffer, BITMAP* barre)
+void Graphe::outils(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, int now_mouse_b)
 {
-    /*int prev_mouse_b = 0;
-    int now_mouse_b = mouse_b&1;
-
-    prev_mouse_b = now_mouse_b;
-    now_mouse_b = mouse_b&1;*/
-
-    ///Pour ajouter Arete
-    rectfill(buffer, 745, 5, 795, 55, makecol(0,250,0));
-
-    ///Pour supprimer Sommet
-    rectfill(buffer, 745, 65, 795, 115, makecol(255, 0, 0));
-
-    ///Pour ajouter Sommet
-    rectfill(buffer, 745, 125, 795, 175, makecol(255,0,255));
-
-    ///Pour supprimer Arete
-    rectfill(buffer, 745, 185, 795, 235, makecol(255, 255, 0));
-
-    if (is_mouse(745, 50, 5, 50))
+    if (a != 1)
     {
-        rectfill(buffer, 743, 3, 797, 57, makecol(0,250,0));
-
-        if(/*!prev_mouse_b && now_mouse_b*/ mouse_b&1)
-            ajouterArete(buffer);
-    }
-
-    if (is_mouse(745, 50, 65, 50))
-    {
-        rectfill(buffer, 743, 63, 797, 117, makecol(255,0,0));
-
-        if(/*!prev_mouse_b && now_mouse_b*/ mouse_b&1)
+        if (is_mouse(745, 50, 5, 50))
         {
-            suppSommet();
+            rectfill(buffer, 743, 3, 796, 56, makecol(76,201,0));
+            if (!prev_mouse_b && now_mouse_b)
+            {
+                ajouterArete(buffer);
+            }
+        }
+
+        if (is_mouse(745, 50, 65, 50))
+        {
+            rectfill(buffer, 743, 63, 796, 116, makecol(255,0,0));
+            if (!prev_mouse_b && now_mouse_b)
+            {
+                supprimerSommet();
+            }
+        }
+
+        if (is_mouse(745, 50, 125, 50))
+        {
+            rectfill(buffer, 743, 123, 796, 176, makecol(6,201,0));
+            if (!prev_mouse_b && now_mouse_b)
+            {
+                ajouterSommet(buffer, barre);
+            }
+        }
+
+        if (is_mouse(745, 50, 185, 50))
+        {
+            rectfill(buffer, 743, 183, 796, 236, makecol(255,0,0));
+            if (!prev_mouse_b && now_mouse_b)
+            {
+                supprimerArete();
+            }
+        }
+
+        if (is_mouse(745, 50, 245, 50))
+        {
+            rectfill(buffer, 743, 243, 796, 296, makecol(127,0,0));
+            if (!prev_mouse_b && now_mouse_b)
+            {
+                std::cout << "hello CFC" << std::endl;
+                save();
+                init();
+                afficherCFC();
+                setTime(0);
+            }
+        }
+
+        if (is_mouse(745, 50, 305, 50))
+        {
+            rectfill(buffer, 743, 303, 796, 356, makecol(225,0,0));
+            if (!prev_mouse_b && now_mouse_b)
+            {
+                inverserPlay();
+                if (getPlay() == true)
+                {
+                    calc_pop();
+                }
+                if (getPlay() == false) std::cout << "hello play" << std::endl;
+            }
         }
     }
 
-    if (is_mouse(745, 50, 125, 50))
+    /// Affichage des boutons
+    for (unsigned int i = 0; i<m_boutons.size()-1; ++i)
     {
-        rectfill(buffer, 743, 123, 797, 177, makecol(255,0,255));
-
-        if(/*!prev_mouse_b && now_mouse_b*/ mouse_b&1)
+        if (i != m_boutons.size()-2)
         {
-            ajouSommet(buffer, barre);
+            blit(getBouton(i), buffer, 0, 0, 745, 5+(60*i), getBouton(i)->w, getBouton(i)->h);
+        }
+        else
+        {
+            if (getPlay() == true)
+                blit(getBouton(i), buffer, 0, 0, 745, 5+(60*i), getBouton(i)->w, getBouton(i)->h);
+            else blit(getBouton(i+1), buffer, 0, 0, 745, 5+(60*i), getBouton(i+1)->w, getBouton(i+1)->h);
         }
     }
 
-    if (is_mouse(745, 50, 185, 50))
+    if(getPlay() == true)
     {
-        rectfill(buffer, 743, 183, 797, 237, makecol(255,255,0));
-        if(/*!prev_mouse_b && now_mouse_b*/ mouse_b&1)
-        {
-            suppArete();
-
-        }
+        if(getTime()%300 == 0)
+            calc_pop();
     }
+
+    if(getTime()%3000 == 2999)
+    {
+        for(unsigned int i(0); i < getSommets().size(); ++i)
+            getSommet(i)->setConnexe(false);
+
+        for(unsigned int i(0); i < getS_Sup().size(); ++i)
+            getS_Sup()[i]->setConnexe(false);
+    }
+
 }
 
 void Graphe::ajouterArete(BITMAP* buffer)
 {
-    Arete* a;
-    Sommet* s;
+    Arete* a = new Arete;
+    Sommet* s = new Sommet;
+    int prev_mouse_b, now_mouse_b;
+    std::vector<Arete*> tmp = getAretes();
+    bool deja_ar = false;
 
-    int prev_mouse_b;
-    int now_mouse_b;
-
-    a= new Arete;
-    s= new Sommet;
-
-    std::vector<Arete*> tmp;
-
-    tmp = Getaretes();
-
-    while(s->getNomImg() == "")
+    while (s->getNomImg() == "")
     {
         prev_mouse_b = now_mouse_b;
         now_mouse_b = mouse_b&1;
-        for (unsigned int i(0); i<Getsommets().size(); ++i)
+        for (unsigned int i(0); i<getSommets().size(); ++i)
         {
-            if(is_sommmet(i))
+            if (is_sommmet(i))
             {
                 if (!prev_mouse_b && now_mouse_b)
                 {
-                    s = Getsommets()[i];
-                    a->Setdepart(s);
+                    s = getSommets()[i];
+                    a->setDepart(s);
                 }
             }
         }
     }
 
-    rect(screen, a->Getdepart()->GetCd_x()-2, a->Getdepart()->GetCd_y()-2, a->Getdepart()->GetImg()->w +a->Getdepart()->GetCd_x()+1,a->Getdepart()->GetImg()->h + a->Getdepart()->GetCd_y()+1, makecol(255,0,0));
+    rect(screen, a->getDepart()->getCd_x()-2, a->getDepart()->getCd_y()-2, a->getDepart()->getImg()->w +a->getDepart()->getCd_x()+1,a->getDepart()->getImg()->h + a->getDepart()->getCd_y()+1, makecol(255,0,0));
 
-    s= new Sommet;
+    s = new Sommet;
 
-    while(s->getNomImg() == "")
+    while (s->getNomImg() == "")
     {
         prev_mouse_b = now_mouse_b;
         now_mouse_b = mouse_b&1;
-        for (unsigned int i(0); i<Getsommets().size(); ++i)
+        for (unsigned int i(0); i<getSommets().size(); ++i)
         {
-            if(is_sommmet(i))
+            if (is_sommmet(i))
             {
                 if (!prev_mouse_b && now_mouse_b)
                 {
-                    s = Getsommets()[i];
-                    a->Setarrive(s);
+                    if (a->getDepart() != getSommets()[i])
+                    {
+                        std::cout << "test";
+                        s = getSommets()[i];
+                        a->setArrive(s);
+                    }
                 }
             }
         }
     }
 
-    tmp.push_back(a);
-
-    Setaretes(tmp);
-    std::cout << "ajou reussi" << std::endl;
+    /// Pour chaque arï¿½te dï¿½jï¿½ existante, on vï¿½rifie si elle est ï¿½quivalente ï¿½ celle que l'on veut ajouter
+    for (unsigned int i = 0; i < getAretes().size(); ++i)
+    {
+        if (a->getArrive() == getAretes()[i]->getArrive() && a->getDepart() == getAretes()[i]->getDepart())
+        {
+            std::cout << "Cette arete existe deja!" << std::endl;
+            deja_ar = true;
+        }
+    }
+    /// Si celle-ci est ï¿½quivalente, on ne l'ajoute pas
+    if (deja_ar == false)
+    {
+        tmp.push_back(a);
+        std::cout << "ajou reussi" << std::endl;
+    }
+    setAretes(tmp);
 }
 
-void Graphe::ajouSommet(BITMAP* buffer, BITMAP* barre)
+void Graphe::ajouterSommet(BITMAP* buffer, BITMAP* barre)
 {
     Sommet* s;
     int prev_mouse_b;
     int now_mouse_b;
 
-    std::vector<Sommet*> som(Getsall());
-    std::vector<Sommet*> som_graph(Getsommets());
+    std::vector<Sommet*> som(getS_Sup());
+    std::vector<Sommet*> som_graph(getSommets());
 
-    if(som.size() > 0)
+    if (som.size() > 0)
     {
-        while(som.size() +1 != Getsall().size())
+        while (som.size() +1 != getS_Sup().size())
         {
             prev_mouse_b = now_mouse_b;
             now_mouse_b = mouse_b&1;
 
-            for(unsigned int i(0); i < som.size(); ++i)
+            for (unsigned int i(0); i < som.size(); ++i)
             {
-                if(som.size() > 0)
+                if (som.size() > 0)
                 {
-                    stretch_blit(som[i]->GetImg(), buffer, 0, 0, som[i]->GetImg()->w, som[i]->GetImg()->h, 680, 60*i+5, som[i]->GetImg()->w/2, som[i]->GetImg()->h/2);
+                    stretch_blit(som[i]->getImg(), buffer, 0, 0, som[i]->getImg()->w, som[i]->getImg()->h, 680, 60*i+5, som[i]->getImg()->w/2, som[i]->getImg()->h/2);
                     blit(buffer, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
                 }
             }
 
-            for(unsigned int i(0); i < som.size(); ++i)
+            for (unsigned int i(0); i < som.size(); ++i)
             {
-                if(is_mouse(680, som[i]->GetImg()->w/2, 60*i+5, som[i]->GetImg()->h/2))
+                if (is_mouse(680, som[i]->getImg()->w/2, 60*i+5, som[i]->getImg()->h/2))
                 {
                     if (!prev_mouse_b && now_mouse_b)
                     {
@@ -302,48 +398,46 @@ void Graphe::ajouSommet(BITMAP* buffer, BITMAP* barre)
         }
     }
 
-    Setsall(som);
-    Setsommets(som_graph);
+    setS_Sup(som);
+    setSommets(som_graph);
 }
 
-void Graphe::suppSommet()
+void Graphe::supprimerSommet()
 {
     int prev_mouse_b;
     int now_mouse_b;
 
-    std::vector<Sommet*> tmp(Getsommets());
-    std::vector<Sommet*> tmp_supp(Getsall());
-    std::vector<Arete*> temp(Getaretes());
+    std::vector<Sommet*> temp(getSommets());
+    std::vector<Sommet*> temp_supp(getS_Sup());
+    std::vector<Arete*> temp_ar(getAretes());
 
     bool stop(false);
 
-    if(tmp.size() > 0)
+    if (temp.size() > 0)
     {
-        while(tmp.size()+1 != Getsommets().size())
+        while (temp.size()+1 != getSommets().size())
         {
             prev_mouse_b = now_mouse_b;
             now_mouse_b = mouse_b&1;
 
-            for(unsigned int i(0); i < tmp.size() ; ++i)
+            for (unsigned int i(0); i < temp.size() ; ++i)
             {
-                if(i == 0)
-                   stop = false;
-
-                if(is_sommmet(i))
+                if (i == 0) stop = false;
+                if (is_sommmet(i))
                 {
                     if (!prev_mouse_b && now_mouse_b && !stop)
                     {
-                        for(unsigned int j(0); j < temp.size(); ++j)
+                        for (unsigned int j(0); j < temp_ar.size(); ++j)
                         {
-                            if(tmp[i] == temp[j]->Getdepart() || tmp[i] == temp[j]->Getarrive())
+                            if (temp[i] == temp_ar[j]->getDepart() || temp[i] == temp_ar[j]->getArrive())
                             {
-                                temp.erase(temp.begin() + j);
+                                temp_ar.erase(temp_ar.begin() + j);
                                 --j;
                             }
                         }
 
-                        tmp_supp.push_back(tmp[i]);
-                        tmp.erase(tmp.begin()+i);
+                        temp_supp.push_back(temp[i]);
+                        temp.erase(temp.begin()+i);
                         stop = true;
                     }
                 }
@@ -351,18 +445,17 @@ void Graphe::suppSommet()
         }
     }
 
-    Setsommets(tmp);
-    Setsall(tmp_supp);
-    Setaretes(temp);
+    setSommets(temp);
+    setS_Sup(temp_supp);
+    setAretes(temp_ar);
 }
 
-void Graphe::suppArete()
+void Graphe::supprimerArete()
 {
     Sommet* s1 = new Sommet;
-    std::vector<Arete*> temp = Getaretes();
+    std::vector<Arete*> temp = getAretes();
     int prev_mouse_b = 0;
     int now_mouse_b = mouse_b&1;
-    unsigned int nb_s1 = 0;
     bool stop(false);
 
     if (temp.size() > 0)
@@ -372,39 +465,38 @@ void Graphe::suppArete()
         {
             prev_mouse_b = now_mouse_b;
             now_mouse_b = mouse_b&1;
-            for (unsigned int i(0); i<Getsommets().size(); ++i)
+            for (unsigned int i(0); i<getSommets().size(); ++i)
             {
                 /// Si on est sur le sommet et que l'on clic gauche
                 if (is_sommmet(i) && !prev_mouse_b && now_mouse_b)
                 {
                     for (unsigned int j(0); j<temp.size(); ++j)
                     {
-                        /// Si le sommet clické i appartient à au moins une arête en tant que sommet de départ
-                        if (temp[j]->Getdepart() == Getsommets()[i])
+                        /// Si le sommet clickï¿½ i appartient ï¿½ au moins une arï¿½te en tant que sommet de dï¿½part
+                        if (temp[j]->getDepart() == getSommets()[i])
                         {
-                            s1 = Getsommets()[i];
-                            nb_s1 = j;
+                            s1 = getSommets()[i];
                         }
                     }
                 }
             }
         }
 
-        rect(screen, s1->GetCd_x()-2, s1->GetCd_y()-2, s1->GetCd_x() + s1->GetImg()->w+1, s1->GetCd_y() + s1->GetImg()->h+1, makecol(255,12,12));
-        rect(screen, s1->GetCd_x()-1, s1->GetCd_y()-1, s1->GetCd_x() + s1->GetImg()->w, s1->GetCd_y() + s1->GetImg()->h, makecol(255,12,12));
+        rect(screen, s1->getCd_x()-2, s1->getCd_y()-2, s1->getCd_x() + s1->getImg()->w+1, s1->getCd_y() + s1->getImg()->h+1, makecol(255,12,12));
+        rect(screen, s1->getCd_x()-1, s1->getCd_y()-1, s1->getCd_x() + s1->getImg()->w, s1->getCd_y() + s1->getImg()->h, makecol(255,12,12));
 
-        while(temp.size() == Getaretes().size())
+        while (temp.size() == getAretes().size())
         {
             prev_mouse_b = now_mouse_b;
             now_mouse_b = mouse_b&1;
-            for (unsigned int i(0); i<Getsommets().size(); ++i)
+            for (unsigned int i(0); i < getSommets().size(); ++i)
             {
                 if (is_sommmet(i) && !prev_mouse_b && now_mouse_b)
                 {
-                    for (unsigned int j(0); j<temp.size(); ++j)
+                    for (unsigned int j(0); j < temp.size(); ++j)
                     {
-                        /// Si le sommet clické i appartient à la même arète que le sommet de départ
-                        if (temp[j]->Getarrive() == Getsommets()[i] && temp[j]->Getdepart() == s1 && !stop)
+                        /// Si le sommet clickï¿½ i appartient ï¿½ la mï¿½me arï¿½te que le sommet de dï¿½part
+                        if (temp[j]->getArrive() == getSommets()[i] && temp[j]->getDepart() == s1 && !stop)
                         {
                             stop = true;
                             temp.erase(temp.begin() + j);
@@ -416,41 +508,86 @@ void Graphe::suppArete()
         }
     }
 
-    Setaretes(temp);
+    setAretes(temp);
 }
 
-void Graphe::update(BITMAP* buffer, BITMAP* barre)
+void Graphe::update(BITMAP* buffer, BITMAP* barre, int prev, int now)
 {
-    for(int i(Getsommets().size()-1); i >= 0 ; --i)
+    int prev_mouse_b = 0;
+    int now_mouse_b = mouse_b&1;
+
+    prev_mouse_b = now_mouse_b;
+    now_mouse_b = mouse_b&1;
+
+    blit(getDecor(), buffer, 0, 0, 0, 0, getDecor()->w, getDecor()->h);
+
+    for (int i(getSommets().size()-1); i >= 0 ; --i)
     {
-        if(is_sommmet(i))
+        if (is_sommmet(i))
         {
-            if(mouse_b&1)
+            if (mouse_b&1)
             {
-                while(mouse_b&1)
+                while (prev_mouse_b && now_mouse_b)
                 {
-                    rectfill(buffer, Getsommets()[i]->GetCd_x()-2, Getsommets()[i]->GetCd_y()-2, Getsommets()[i]->GetImg()->w +Getsommets()[i]->GetCd_x()+1,Getsommets()[i]->GetImg()->h + Getsommets()[i]->GetCd_y()+1, makecol(0,255,0));
+                    prev_mouse_b = now_mouse_b;
+                    now_mouse_b = mouse_b&1;
 
-                    Getsommets()[i]->SetCd_x(mouse_x-Getsommets()[i]->GetImg()->w/2);
-                    Getsommets()[i]->SetCd_y(mouse_y-Getsommets()[i]->GetImg()->h/2);
+                    blit(getDecor(), buffer,0,0,0,0,getDecor()->w, getDecor()->h);
 
-                    if (Getsommets()[i]->GetCd_x() + Getsommets()[i]->GetImg()->w > 740) Getsommets()[i]->SetCd_x(740 - Getsommets()[i]->GetImg()->w);
-                    if (Getsommets()[i]->GetCd_y() + Getsommets()[i]->GetImg()->h > SCREEN_H-barre->h) Getsommets()[i]->SetCd_y(SCREEN_H - barre->h - Getsommets()[i]->GetImg()->h);
-                    if (Getsommets()[i]->GetCd_x() < 0) Getsommets()[i]->SetCd_x(0);
-                    if (Getsommets()[i]->GetCd_y() < 0) Getsommets()[i]->SetCd_y(0);
+                    rectfill(buffer, getSommets()[i]->getCd_x()-2, getSommets()[i]->getCd_y()-2, getSommets()[i]->getImg()->w + getSommets()[i]->getCd_x()+1, getSommets()[i]->getImg()->h + getSommets()[i]->getCd_y()+1, makecol(0,255,0));
 
-                    affichage(buffer, barre);
+                    getSommets()[i]->setCd_x(mouse_x - getSommets()[i]->getImg()->w/2);
+                    getSommets()[i]->setCd_y(mouse_y - getSommets()[i]->getImg()->h/2);
+
+                    if (getSommets()[i]->getCd_x() + getSommets()[i]->getImg()->w > 740)
+                        getSommets()[i]->setCd_x(740 - getSommets()[i]->getImg()->w);
+
+                    if (getSommets()[i]->getCd_y() + getSommets()[i]->getImg()->h > SCREEN_H-barre->h)
+                        getSommets()[i]->setCd_y(SCREEN_H - barre->h - getSommets()[i]->getImg()->h);
+
+                    if (getSommets()[i]->getCd_x() < 0)
+                        getSommets()[i]->setCd_x(0);
+
+                    if (getSommets()[i]->getCd_y() < 0)
+                        getSommets()[i]->setCd_y(0);
+
+                    affichage(buffer, barre, 1, prev_mouse_b, now_mouse_b);
                 }
             }
         }
     }
+}
 
+void Graphe::thick_line(BITMAP *buffer, int xDep, int yDep, int xArr, int yArr, int epaisseur, int col)
+{
+    int dx = xArr - xDep;
+    int dy = yArr - yDep;
+
+    if(epaisseur < 1)
+    {
+        epaisseur = 1;
+    }
+
+    if (abs(dx) > abs(dy))
+    {
+        for (int i = 1 - epaisseur; i < epaisseur; ++i)
+        {
+            line(buffer, xDep, yDep + i, xArr, yArr + i, col);
+        }
+    }
+    else
+    {
+        for (int i = 1 - epaisseur; i < epaisseur; ++i)
+        {
+            line(buffer, xDep + i, yDep, xArr + i, yArr, col);
+        }
+    }
 }
 
 void Graphe::save()
 {
-    int ordre = Getsall().size();
-    std::string nom_fichier(GetNomGraphe());
+    int ordre = getS_Sup().size();
+    std::string nom_fichier(getNomGraphe());
 
     std::ofstream fichier(nom_fichier, std::ios::out);
     if (!fichier)
@@ -461,38 +598,38 @@ void Graphe::save()
     else
     {
         fichier << ordre << std::endl << std::endl;
-        if(ordre > 0)
+        if (ordre > 0)
         {
-           for(int i = 0; i < ordre; i++)
+           for (int i = 0; i < ordre; i++)
             {
-                fichier << Getsall()[i]->getNomImg() << std::endl;
-                fichier << Getsall()[i]->GetCd_x() << " " << Getsall()[i]->GetCd_y() << " " << Getsall()[i]->GetNum() << " " <<Getsall()[i]->GetPoids() << std::endl;
+                fichier << getS_Sup()[i]->getNomImg() << std::endl;
+                fichier << getS_Sup()[i]->getCd_x() << " " << getS_Sup()[i]->getCd_y() << " " << getS_Sup()[i]->getNum() << " " << getS_Sup()[i]->getPoids() << std::endl;
                 fichier << std::endl;
             }
         }
 
 
-        ordre = Getsommets().size();
+        ordre = getSommets().size();
         fichier << ordre << std::endl << std::endl;
-        if(ordre > 0)
+        if (ordre > 0)
         {
-            for(int i = 0; i < ordre; i++)
+            for (int i = 0; i < ordre; i++)
             {
                 fichier << getSommet(i)->getNomImg() << std::endl;
-                fichier << getSommet(i)->GetCd_x() << " " << getSommet(i)->GetCd_y() << " " << getSommet(i)->GetNum() << " " <<getSommet(i)->GetPoids() << std::endl;
+                fichier << getSommet(i)->getCd_x() << " " << getSommet(i)->getCd_y() << " " << getSommet(i)->getNum() << " " <<getSommet(i)->getPoids() << std::endl;
                 fichier << std::endl;
             }
         }
 
-        ordre = Getaretes().size();
+        ordre = getAretes().size();
 
         fichier << ordre << std::endl;
 
-        if(ordre > 0)
+        if (ordre > 0)
         {
-            for(int i = 0; i < ordre; i++)
+            for (int i = 0; i < ordre; i++)
             {
-                fichier << Getaretes()[i]->Getdepart()->getNomImg() << " "<< Getaretes()[i]->Getarrive()->getNomImg() << " "<< Getaretes()[i]->Getpoids() << std::endl;
+                fichier << getAretes()[i]->getDepart()->getNomImg() << " "<< getAretes()[i]->getArrive()->getNomImg() << " " << getAretes()[i]->getPoids() << std::endl;
             }
         }
     }
@@ -505,6 +642,294 @@ bool Graphe::is_mouse(int x, int weight, int y, int height)
 
 bool Graphe::is_sommmet(int i)
 {
-    return     mouse_x >= Getsommets()[i]->GetCd_x() && mouse_x <= Getsommets()[i]->GetCd_x() + Getsommets()[i]->GetImg()->w
-               &&  mouse_y >= Getsommets()[i]->GetCd_y() && mouse_y <= Getsommets()[i]->GetCd_y() + Getsommets()[i]->GetImg()->h;
+    return     mouse_x >= getSommets()[i]->getCd_x() && mouse_x <= getSommets()[i]->getCd_x() + getSommets()[i]->getImg()->w
+               &&  mouse_y >= getSommets()[i]->getCd_y() && mouse_y <= getSommets()[i]->getCd_y() + getSommets()[i]->getImg()->h;
+}
+
+void Graphe::slider()
+{
+    float poids = 0;
+
+    for (unsigned int i = 0; i < getSommets().size(); i++)
+    {
+        if(is_sommmet(i))
+        {
+            poids = getSommets()[i]->getPoids();
+
+            if (key[KEY_UP])
+            {
+                std::cout << "On AUGMENTE la population " << getSommets()[i]->getNomImg() << std::endl;
+
+                if(poids < 100) poids +=1;
+
+                else if(poids >= 100) poids += 100;
+
+                if(poids > 500.0) poids = 500.0;
+                getSommets()[i]->setPoids(poids);
+                key[KEY_UP] = 0;
+            }
+            if (key[KEY_DOWN])
+            {
+                std::cout << "On DIMINUE la population " << getSommets()[i]->getNomImg() << std::endl;
+
+                if(poids <= 100) poids -= 1;
+
+                if(poids > 100) poids -=100;
+
+                if (poids < 0.0) poids = 0.0;
+                getSommets()[i]->setPoids(poids);
+                key[KEY_DOWN] = 0;
+            }
+        }
+    }
+}
+
+void Graphe::sliderArete()
+{
+
+    int xsDep = 0, ysDep = 0, xsArr = 0, ysArr = 0;
+    float poids = 0;
+
+    for (unsigned int i = 0; i < getAretes().size(); i++)
+    {
+
+        xsDep = getAretes()[i]->getDepart()->getCd_x() + getAretes()[i]->getDepart()->getImg()->w/2;
+        ysDep = getAretes()[i]->getDepart()->getCd_y() + getAretes()[i]->getDepart()->getImg()->h/2;
+        xsArr = getAretes()[i]->getArrive()->getCd_x() + getAretes()[i]->getArrive()->getImg()->w/2;
+        ysArr = getAretes()[i]->getArrive()->getCd_y() + getAretes()[i]->getArrive()->getImg()->h/2;
+
+        if (is_mouse((xsDep + 3*xsArr)/4 - 15, 30, (ysDep + 3*ysArr)/4 - 15, 30))
+        {
+           poids = getAretes()[i]->getPoids();
+
+           if (key[KEY_UP])
+            {
+                poids ++;
+                if(poids > 20) poids = 20;
+                getAretes()[i]->setPoids(poids);
+                key[KEY_UP] = 0;
+            }
+            if (key[KEY_DOWN])
+            {
+                poids--;
+                if( poids < 1) poids = 1;
+                getAretes()[i]->setPoids(poids);
+                key[KEY_DOWN] = 0;
+            }
+        }
+    }
+}
+
+void Graphe::inverserPlay()
+{
+    bool deja_inv = false;
+    if (m_play == true)
+    {
+        m_play = false;
+        deja_inv = true;
+    }
+    if (m_play == false && deja_inv == false)
+    {
+        m_play = true;
+        deja_inv = true;
+    }
+}
+
+float Graphe::Mange(Sommet* s)
+{
+    int K(0);
+
+    for(unsigned int i(0); i < getAretes().size(); ++i)
+    {
+        if(s == getAretes()[i]->getDepart() && getAretes()[i]->getDepart()->getPoids() > 0 && getAretes()[i]->getArrive
+           ()->getPoids() > 0 )
+        {
+            K += getAretes()[i]->getPoids()*getAretes()[i]->getDepart()->getPoids();
+        }
+    }
+    std::cout << "Faim K ===>: " << K << std::endl;
+    return K;
+}
+
+float Graphe::Plat(Sommet* s)
+{
+    int K(0);
+
+    for(unsigned int i(0); i < getAretes().size(); ++i)
+    {
+        if(s == getAretes()[i]->getArrive() && getAretes()[i]->getArrive()->getPoids() > 0)
+        {
+            K += getAretes()[i]->getPoids()*getAretes()[i]->getDepart()->getPoids();
+        }
+    }
+    std::cout << "Repas K ===>: " << K << std::endl;
+    return K;
+}
+
+void Graphe::calc_pop()
+{
+    float valeur[getSommets().size()];
+
+    float faim;
+    float repas;
+    float diff(0);
+
+    if(getSommets().size() > 0)
+    {
+        std::cout << "==================================" << std::endl;
+        for(unsigned int i = 0; i < getSommets().size(); i++)
+        {
+            //if( getSommets()[i]->getPoids() > 0)
+            //{
+                std::cout << "Sommet " << getSommets()[i]->getNum() << std::endl;
+
+                faim = Mange(getSommets()[i]);
+                repas = Plat(getSommets()[i]);
+
+
+
+                if(getSommets()[i]->getNum() == 4 || getSommets()[i]->getNum() == 6)
+                {
+                    faim = 2;
+                }
+
+                std::cout << "Faim : " << faim << std::endl;
+                std::cout << "Repas : " << repas << std::endl;
+
+                diff = faim - repas;
+                std::cout << "Diff : " << diff << std::endl;
+
+                valeur[i] = getSommets()[i]->getPoids() + diff;
+
+                if(faim == 0 && repas == 0)
+                    valeur[i] = getSommets()[i]->getPoids() - 1;
+
+                if(faim == 0)
+                    valeur[i] -= 1;
+
+        }
+
+        for(unsigned int i = 0; i < getSommets().size(); i++)
+        {
+            if(valeur[i] < 0)
+                valeur[i] = 0;
+
+            if(valeur[i] > 500)
+                valeur[i] = 500;
+
+            getSommets()[i]->setPoids(valeur[i]);
+        }
+    }
+
+}
+
+void Graphe::afficherCFC()
+{
+    int nb_recur = 0;
+    std::vector<int> lig;
+    std::list<int> Stack;
+    std::vector<std::vector<int>> adjCFC;
+    bool* visited = new bool[m_ordre + m_nb_s_sup];
+
+    for (int i = 0; i < m_ordre + m_nb_s_sup; ++i) visited[i] = false;
+    for (int i = 0; i < m_ordre + m_nb_s_sup; ++i)
+    {
+        adjCFC.push_back(lig);
+        if (visited[i] == false) ordreRemplissage(i, visited, Stack);
+    }
+    Graphe gr = getTranspose();
+
+    for (int i = 0; i < m_ordre + m_nb_s_sup; ++i) visited[i] = false;
+    while (!Stack.empty())
+    {
+
+        int v = Stack.front();
+        Stack.pop_front();
+        if (visited[v] == false)
+        {
+            gr.composanteRecursif(v, visited, nb_recur, adjCFC);
+            std::cout << std::endl;
+            ++nb_recur;
+        }
+    }
+    std::cout << "Affichage du double vecteur de composantes connexes" << std::endl;
+    for (unsigned int i = 0; i< adjCFC.size(); ++i)
+    {
+        std::cout << "Size adjCFC[ " << i << "] : " << adjCFC.at(i).size() << " --- Sommets connexes : ";
+        for (unsigned int j =  0; j < adjCFC.at(i).size(); ++j)
+        {
+            std::cout << adjCFC[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    affichagedesComposantesFortementConnexes(adjCFC);
+}
+
+void Graphe::composanteRecursif(int v, bool visited[], int nb_recur, std::vector<std::vector<int>>& adjCFC)
+{
+    visited[v] = true;
+    std::cout << v << " ";
+    adjCFC[nb_recur].push_back(v);
+
+    std::list<int>::iterator i;
+    for (i = m_adjacences[v].begin(); i != m_adjacences[v].end(); ++i)
+    {
+        if (!visited[*i]) composanteRecursif(*i, visited, nb_recur, adjCFC);
+    }
+}
+
+Graphe Graphe::getTranspose()
+{
+    Graphe g(m_ordre + m_nb_s_sup);
+    std::cout << "true ordre : " << m_ordre + m_nb_s_sup << std::endl;
+    for (int v = 0; v < m_ordre + m_nb_s_sup; ++v)
+    {
+        std::cout << "SOMMET : " << v;
+
+        std::list<int>::iterator i;
+        std::cout << " [g base]        [g transpo]" << std::endl;
+        for (i = m_adjacences[v].begin(); i != m_adjacences[v].end(); ++i)
+        {
+
+            std::cout << "            " << v << " -> " << *i << "          " << *i << " -> " << v;
+            g.m_adjacences[*i].push_back(v);
+            std::cout << " reussi" << std::endl;
+        }
+    }
+    return g;
+}
+
+void Graphe::ordreRemplissage(int v, bool visited[], std::list<int> &Stack)
+{
+    visited[v] = true;
+    std::list<int>::iterator i;
+    for (i = m_adjacences[v].begin(); i != m_adjacences[v].end(); ++i)
+    {
+        if (!visited[*i]) ordreRemplissage(*i, visited, Stack);
+    }
+    Stack.push_back(v);
+}
+
+void Graphe::affichagedesComposantesFortementConnexes(std::vector<std::vector<int> > connexe)
+{
+    if(connexe.size() > 0)
+    {
+        for(unsigned int i(0); i < connexe.size(); ++i)
+        {
+            if(connexe[i].size() >= 2)
+            {
+                for(unsigned int j(0); j < connexe[i].size(); ++j)
+                {
+                    for(int k(0); k < getSommets().size(); ++k)
+                    {
+                        if(getSommet(k)->getNum() ==  connexe[i][j])
+                        {
+                            getSommet(k)->setConnexe(true);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
