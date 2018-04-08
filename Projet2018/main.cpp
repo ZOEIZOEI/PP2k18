@@ -1,6 +1,6 @@
 #include "Graphe.h"
 
-void Menu(BITMAP* buffer, std::vector<BITMAP*> menu, bool* exit, int* num);
+void Menu(BITMAP* buffer, std::vector<BITMAP*> menu, bool* exit, int* num, int* idx);
 
 int main()
 {
@@ -41,31 +41,10 @@ int main()
         exit(EXIT_FAILURE);
     }
 
-    BITMAP* menuOcean = load_bitmap("Menu/menuOcean.png", NULL);
-    if(!menuOcean)
+    BITMAP* aide = load_bitmap("Menu/Aide.png", NULL);
+    if(!aide)
     {
-        allegro_message("pas pu trouver menuOcean.png");
-        exit(EXIT_FAILURE);
-    }
-
-    BITMAP* menuSavane = load_bitmap("Menu/menuSavane.png", NULL);
-    if(!menuSavane)
-    {
-        allegro_message("pas pu trouver menuSavane.png");
-        exit(EXIT_FAILURE);
-    }
-
-    BITMAP* menuHerbe = load_bitmap("Menu/menuHerbe.png", NULL);
-    if(!menuHerbe)
-    {
-        allegro_message("pas pu trouver menuHerbe.png");
-        exit(EXIT_FAILURE);
-    }
-
-    BITMAP* fin = load_bitmap("Menu/exit.png", NULL);
-    if(!fin)
-    {
-        allegro_message("pas pu trouver exit.png");
+        allegro_message("pas pu trouver aide.png");
         exit(EXIT_FAILURE);
     }
 
@@ -73,12 +52,10 @@ int main()
     std::vector<Graphe*> g;
     std::vector<BITMAP*> Image_Menu;
     Image_Menu.push_back(menu);
-    Image_Menu.push_back(menuOcean);
-    Image_Menu.push_back(menuSavane);
-    Image_Menu.push_back(menuHerbe);
-    Image_Menu.push_back(fin);
+    Image_Menu.push_back(aide);
 
     int num(4);
+    int idx(0);
 
     int prev_mouse_b = 0;
     int now_mouse_b = mouse_b&1;
@@ -105,7 +82,7 @@ std::cout << "LLZ";
 
     while(!exit)
     {
-        Menu(buffer, Image_Menu, &exit, &num);
+        Menu(buffer, Image_Menu, &exit, &num, &idx);
 
         if(num < 3)
         {
@@ -144,56 +121,80 @@ std::cout << "LLZ";
 }
 END_OF_MAIN();
 
-void Menu(BITMAP* buffer, std::vector<BITMAP*> Img_Menu, bool* exit, int* num)
+void Menu(BITMAP* buffer, std::vector<BITMAP*> Img_Menu, bool* exit, int* num, int* idx)
 {
 
-    blit(Img_Menu[0], buffer, 0,0,0,0,SCREEN_W, SCREEN_H);
-    blit(Img_Menu[4], buffer,0, 0, 738, 537, Img_Menu[4]->w, Img_Menu[4]->h);
+    blit(Img_Menu[*idx], buffer, 0,0,0,0,SCREEN_W, SCREEN_H);
     textprintf_ex(buffer, font, 400, 23, makecol(255,255,0), -1,"%d", mouse_x);
 
-
-
-    if(mouse_x > 738 && mouse_x < Img_Menu[4]->w+738 && mouse_y > 537 && mouse_y < Img_Menu[4]->h+537)
+    ///Bouton Exit
+    if(mouse_x > 714 && mouse_x < 793 && mouse_y > 540 && mouse_y < 590 && *idx == 0)
     {
+        for(int i(710); i<797;++i )
+        {
+            for(int j(536); j < 594; ++j)
+            {
+                if(getpixel(buffer, i, j) != makecol(255,255,255))
+                {
+                     putpixel(buffer, i, j, makecol(34,177,76));
+                }
+            }
+        }
+
         if(mouse_b&1)
             *exit=true;
     }
 
-    ///Graphe Ocean
-    rectfill(buffer, 27, 328, 30+Img_Menu[1]->w+3, 331+Img_Menu[1]->h+3, makecol(255,255,255));
-    blit(Img_Menu[1], buffer, 0,0, 30,331, Img_Menu[1]->w, Img_Menu[1]->h);
+    ///Bouton Aide
+    if(mouse_x > 20 && mouse_x < 141 && mouse_y > 531 && mouse_y < 587 && *idx == 0)
+    {
+        for(int i(20); i<141;++i )
+        {
+            for(int j(531); j < 587; ++j)
+            {
+                if(getpixel(buffer, i, j) != makecol(255,255,255))
+                {
+                     putpixel(buffer, i, j, makecol(34,177,76));
+                }
+            }
+        }
 
-    if(is_mouse(44, 192 ,330, 162))
+        if(mouse_b&1)
+        {
+            *idx = 1;
+        }
+    }
+
+    ///Bouton Retour
+    if(mouse_x > 355 && mouse_x < 453 && mouse_y > 536 && mouse_y < 593 && *idx == 1)
     {
         if(mouse_b&1)
         {
+            *idx = 0;
+        }
+    }
+
+    ///Bouton Edit
+    if(mouse_x > 219 && mouse_x < 588 && mouse_y > 366 && mouse_y < 478 && *idx == 0)
+    {
+        for(int i(214); i<593;++i )
+        {
+            for(int j(364); j < 482; ++j)
+            {
+                if(getpixel(buffer, i, j) != makecol(255,255,255))
+                {
+                     putpixel(buffer, i, j, makecol(34,177,76));
+                }
+            }
+        }
+
+        if(mouse_b&1)
+        {
+            *idx = 0;
             *num = 0;
         }
     }
 
-    ///Image Savane
-    rectfill(buffer, 288, 327, 291+Img_Menu[2]->w+3, 327+Img_Menu[2]->h+6, makecol(255,255,255));
-    blit(Img_Menu[2], buffer, 0,0, 291,330, Img_Menu[2]->w, Img_Menu[2]->h);
-
-    if(is_mouse(291, 190,330, 162))
-    {
-        if(mouse_b&1)
-        {
-            *num = 1;
-        }
-    }
-
-    ///Image Herbe
-    rectfill(buffer, 557, 327, 560+Img_Menu[3]->w+3, 330+Img_Menu[3]->h+3, makecol(255,255,255));
-    blit(Img_Menu[3], buffer, 0,0, 560 ,330, Img_Menu[3]->w, Img_Menu[3]->h);
-
-    if(is_mouse(560, 190,330, 162))
-    {
-        if(mouse_b&1)
-        {
-            *num = 2;
-        }
-    }
 
     blit(buffer, screen, 0,0,0,0,SCREEN_W, SCREEN_H);
 }

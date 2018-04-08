@@ -7,21 +7,21 @@ Graphe3\Images\Larve.jpg
 178 174 6 35
 
 Graphe3\Images\Pivert.jpg
-410 246 8 65
+83 205 8 65
 
 7
 
 Graphe3\Images\Loup.jpg
-369 414 7 452
+369 414 7 418
 
 Graphe3\Images\lapin.jpg
 49 351 5 0
 
 Graphe3\Images\Buse.jpg
-123 58 1 450
+123 58 1 416
 
 Graphe3\Images\Arbre.jpg
-315 202 0 81
+315 202 0 0
 
 Graphe3\Images\Renard.jpg
 599 310 9 0
@@ -30,7 +30,7 @@ Graphe3\Images\ecureuil.jpg
 531 52 2 0
 
 Graphe3\Images\herbe.jpg
-465 233 4 55
+465 233 4 89
 
 7
 Graphe3\Images\lapin.jpg Graphe3\Images\Arbre.jpg 6

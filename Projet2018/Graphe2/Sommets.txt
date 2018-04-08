@@ -21,13 +21,13 @@ Graphe2\Images\plante.jpg
 6
 
 Graphe2\Images\antilope.jpg
-50 356 6 100
+27 353 6 100
 
 Graphe2\Images\singe.jpg
 572 357 7 100
 
 Graphe2\Images\leopard.jpg
-329 328 1 100
+341 354 1 100
 
 Graphe2\Images\homme.jpg
 320 32 2 100
@@ -36,9 +36,9 @@ Graphe2\Images\elephant.jpg
 98 157 0 100
 
 Graphe2\Images\lion.jpg
-506 102 9 100
+533 136 9 100
 
-8
+9
 Graphe2\Images\elephant.jpg Graphe2\Images\homme.jpg 5
 Graphe2\Images\homme.jpg Graphe2\Images\antilope.jpg 2
 Graphe2\Images\lion.jpg Graphe2\Images\singe.jpg 8
@@ -47,3 +47,4 @@ Graphe2\Images\leopard.jpg Graphe2\Images\elephant.jpg 10
 Graphe2\Images\lion.jpg Graphe2\Images\antilope.jpg 4
 Graphe2\Images\leopard.jpg Graphe2\Images\antilope.jpg 9
 Graphe2\Images\homme.jpg Graphe2\Images\lion.jpg 4
+Graphe2\Images\singe.jpg Graphe2\Images\lion.jpg 6

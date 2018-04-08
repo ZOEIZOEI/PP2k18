@@ -6,9 +6,13 @@ var searchData=
   ['gets_5fsup',['getS_Sup',['../class_graphe.html#a37c9ddbff4caf917bea329ff8776601c',1,'Graphe']]],
   ['gettranspose',['getTranspose',['../class_graphe.html#ad1956d31dce508234b05381878d1eb69',1,'Graphe']]],
 <<<<<<< HEAD
+  ['graphe',['Graphe',['../class_graphe.html',1,'']]]
+=======
+<<<<<<< HEAD
   ['graphe',['Graphe',['../class_graphe.html',1,'']]],
   ['graphe_2eh',['Graphe.h',['../_graphe_8h.html',1,'']]]
 =======
   ['graphe',['Graphe',['../class_graphe.html',1,'']]]
 >>>>>>> e2de8c462caf63eba2a69ed754e62ee67bf900c6
+>>>>>>> origin/commentaires
 ];

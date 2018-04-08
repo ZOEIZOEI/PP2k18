@@ -23,32 +23,12 @@ for the JavaScript code in this file
 */
 var NAVTREE =
 [
-  [ "Projet2018", "index.html", [
-    [ "Classes", "annotated.html", [
-      [ "Class List", "annotated.html", "annotated_dup" ],
-      [ "Class Index", "classes.html", null ],
-      [ "Class Members", "functions.html", [
-        [ "All", "functions.html", null ],
-        [ "Functions", "functions_func.html", null ]
-      ] ]
-    ] ],
-    [ "Files", "files.html", [
-<<<<<<< HEAD
-      [ "File List", "files.html", "files_dup" ],
-      [ "File Members", "globals.html", [
-        [ "All", "globals.html", null ],
-        [ "Functions", "globals_func.html", null ]
-      ] ]
-=======
-      [ "File List", "files.html", "files_dup" ]
->>>>>>> e2de8c462caf63eba2a69ed754e62ee67bf900c6
-    ] ]
-  ] ]
+  [ "Projet2018", "index.html", ]
 ];
 
 var NAVTREEINDEX =
 [
-"_arete_8h_source.html"
+"index.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

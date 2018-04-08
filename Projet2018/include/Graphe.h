@@ -31,7 +31,7 @@ class Graphe
 {
     public:
         Graphe(std::string nom_fichier, std::string nom_decor);
-        Graphe(int ordre) { m_ordre = ordre; m_adjacences = new std::list<int>[m_ordre + m_nb_s_sup]; }
+        Graphe(int ordre) { m_ordre = ordre; m_adjacences = new std::list<int>[m_ordre]; }
         ~Graphe();
 
         std::vector<Sommet*> getSommets() { return m_sommets; } /// POUR TOUT LE VECTEUR
@@ -45,6 +45,7 @@ class Graphe
         BITMAP* getDecor() {return m_decor; }
         BITMAP* getBouton(int val) { return m_boutons[val]; }
         bool getPlay() { return m_play; }
+        bool getReduit() { return m_reduit; }
         int getTime() { return m_time; }
 
         void setSommets(std::vector<Sommet*> val) { m_sommets = val; }
@@ -55,6 +56,7 @@ class Graphe
         void setNomGraphe(std::string val) { m_nom_graphe = val; }
         void setDecor(BITMAP* val) { m_decor = val; }
         void setTime(int val) { m_time = val; }
+
 
         /** \brief initialisation des vecteurs Sommets et Aretes
          *  Cette fonction initialise l'ordre et le temps a 0, creer des vecteurs de sommets et d'aretes vides fait un setArete() et setSommets().
@@ -74,6 +76,7 @@ class Graphe
         void ajouterBouton(BITMAP* val) { m_boutons.push_back(val); }
 
         void inverserPlay();
+        void inverserReduit();
 
         /** \brief Initialisation des sommets selon le fichier de sauvegarde
          *
@@ -140,6 +143,14 @@ class Graphe
          */
         bool is_sommmet(int i);
 
+        /** \brief permet d'annuler une action
+         *
+         * \param stop int*
+         * \return void
+         *
+         */
+        void annuler(int* stop);
+
         /** \brief Ajoute un sommet dans le vecteur de Sommet* pour l'afficher a l'ecran
          *
          * \param buffer BITMAP*
@@ -193,7 +204,7 @@ class Graphe
          *
          */
         Graphe getTranspose();
-        void ordreRemplissage(int v, bool visited[], std::list<int> &Stack);
+        void ordreRemplissage(int v, bool visited[], std::stack<int> &Stack);
         void afficherCFC();
         /** \brief Set toutes les composantes fortements connexes pour les afficher
          *
@@ -237,6 +248,11 @@ class Graphe
          *
          */
         void calc_pop();
+        void K_Connexites();
+        void recursKConnexite(int indice, int& compteur);
+        void resetMarques() { for (const auto& elem : m_sommets) elem->setMarque(false); }
+        void initAdjAdj();
+        void reduit();
 
     private:
         std::vector<Sommet*> m_sommets; /**< Vecteur de sommets du graphe*/
@@ -248,8 +264,10 @@ class Graphe
         std::vector<BITMAP*> m_boutons;
         std::list<int> *m_adjacences; /**< liste d'adjacence */
         bool m_play; /**< lance la dynamique en temps reel */
+        bool m_reduit;
         int m_time; /**< Dynamique en temps reel  */
         int m_nb_s_sup; /**< Ordre des sommets supprimes */
+        std::vector<std::vector<int>> m_adj_adj; /**< Matrice d'ajdacences ne prenant pas en compte l'oriantation des arcs */
 };
 
 #endif // GRAPHE_H
