@@ -24,7 +24,7 @@ Graphe::Graphe(std::string nom_fichier, std::string nom_decor)
         exit(EXIT_FAILURE);
     }
 //Ajout des bitmap de chaque bouton
-    for (int i = 0; i<8; ++i)
+    for (int i = 0; i< 9; ++i)
     {
         if (i == 0) bouton = load_bitmap("Graphe1/Images/addA.png", NULL);
         if (i == 1) bouton = load_bitmap("Graphe1/Images/suppS.png", NULL);
@@ -34,6 +34,7 @@ Graphe::Graphe(std::string nom_fichier, std::string nom_decor)
         if (i == 5) bouton = load_bitmap("Graphe1/Images/cancel.png", NULL);
         if (i == 6) bouton = load_bitmap("Graphe1/Images/play.png", NULL);
         if (i == 7) bouton = load_bitmap("Graphe1/Images/pause.png", NULL);
+        if (i == 8) bouton = load_bitmap("Graphe1/Images/calcK.png", NULL);
 
         ajouterBouton(bouton);
     }
@@ -43,6 +44,7 @@ Graphe::~Graphe()
 {
 
 }
+
 ///Initialisation du graphe
 void Graphe::init()
 {
@@ -59,6 +61,7 @@ void Graphe::init()
 
     recuperation(); //On recupere le fichier de sauvegarde pour remplir les vecteurs
 }
+
 ///Recuperation du fichier de sauvegarde
 void Graphe::recuperation()
 {
@@ -143,13 +146,15 @@ void Graphe::recuperation()
                     tmp.push_back(a);  //On ajoute l'arete cree dans le vecteur d'arete
                     std::cout << "[" << a->getDepart()->getNum() << "] -> [" << a->getArrive()->getNum();
                     std::cout << "] POIDS : " << a->getPoids() << std::endl;
-                    m_adjacences[a->getDepart()->getNum()].push_back(a->getArrive()->getNum()); //On creer la matrice d'adjacence de sommet si on a un "ariver" et un "depart" pour une arete
+                    m_adjacences[a->getDepart()->getNum()].push_back(a->getArrive()->getNum()); // On crée la matrice d'adjacence de sommet si on a un "ariver" et un "depart" pour une arete
                 }
             }
         }
     }
     setAretes(tmp);
+    initAdjAdj();
 }
+
 ///Affichage des
 void Graphe::affichage(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, int now_mouse_b)
 {
@@ -196,6 +201,7 @@ void Graphe::affichage(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, i
     blit(buffer, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
     clear_bitmap(buffer);
 }
+
 ///Action de chaque boutons
 void Graphe::outils(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, int now_mouse_b)
 {
@@ -259,6 +265,17 @@ void Graphe::outils(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, int 
                 {
                     calc_pop();
                 }
+            }
+        }
+
+        if (is_mouse(745, 50, 425, 50))
+        {
+            rectfill(buffer, 743, 423, 796, 476, makecol(18,0,124));
+            if (!prev_mouse_b && now_mouse_b)
+            {
+                save();
+                init();
+                K_Connexites();
             }
         }
     }
@@ -821,7 +838,8 @@ float Graphe::Plat(Sommet* s)
     {
         if(s == getAretes()[i]->getArrive() && getAretes()[i]->getArrive()->getPoids() > 0) /**< Cherche le mangeur et verifie qu'il est en vie */
         {
-            K += getAretes()[i]->getPoids()*getAretes()[i]->getDepart()->getPoids();
+//            K += getAretes()[i]->getPoids()*getAretes()[i]->getDepart()->getPoids();
+            K += getAretes()[i]->getPoids()*getAretes()[i]->getArrive()->getPoids();
         }
     }
     std::cout << "Repas K ===>: " << K << std::endl;
@@ -877,28 +895,26 @@ void Graphe::calc_pop()
 void Graphe::afficherCFC()
 {
     int nb_recur = 0;
-    std::vector<int> lig;
-    std::list<int> Stack;
+    std::stack<int> Stack;
     std::vector<std::vector<int>> adjCFC;
-    bool* visited = new bool[m_ordre + m_nb_s_sup];
+    bool* visited = new bool[m_ordre];
 
-    for (int i = 0; i < m_ordre + m_nb_s_sup; ++i) visited[i] = false;
-    for (int i = 0; i < m_ordre + m_nb_s_sup; ++i)
+    for (int i = 0; i < m_ordre; ++i) visited[i] = false;
+    for (int i = 0; i < m_ordre; ++i)
     {
-        adjCFC.push_back(lig);
+        adjCFC.push_back(std::vector<int>());
         if (visited[i] == false) ordreRemplissage(i, visited, Stack);
     }
-    Graphe gr = getTranspose();
+    Graphe gT = getTranspose();
 
-    for (int i = 0; i < m_ordre + m_nb_s_sup; ++i) visited[i] = false;
+    for (int i = 0; i < m_ordre; ++i) visited[i] = false;
     while (!Stack.empty())
     {
-
-        int v = Stack.front();
-        Stack.pop_front();
+        int v = Stack.top();
+        Stack.pop();
         if (visited[v] == false)
         {
-            gr.composanteRecursif(v, visited, nb_recur, adjCFC);
+            gT.composanteRecursif(v, visited, nb_recur, adjCFC);
             std::cout << std::endl;
             ++nb_recur;
         }
@@ -906,10 +922,10 @@ void Graphe::afficherCFC()
     std::cout << "Affichage du double vecteur de composantes connexes" << std::endl;
     for (unsigned int i = 0; i< adjCFC.size(); ++i)
     {
-        std::cout << "Size adjCFC[ " << i << "] : " << adjCFC.at(i).size() << " --- Sommets connexes : ";
+        std::cout << "Taille adjCFC[" << i << "] : " << adjCFC.at(i).size() << " --- Sommets connexes : ";
         for (unsigned int j =  0; j < adjCFC.at(i).size(); ++j)
         {
-            std::cout << adjCFC[i][j] << " ";
+            std::cout << getSommet(adjCFC[i][j])->getNum() << " ";
         }
         std::cout << std::endl;
     }
@@ -932,9 +948,9 @@ void Graphe::composanteRecursif(int v, bool visited[], int nb_recur, std::vector
 
 Graphe Graphe::getTranspose()
 {
-    Graphe g(m_ordre + m_nb_s_sup);
-    std::cout << "true ordre : " << m_ordre + m_nb_s_sup << std::endl;
-    for (int v = 0; v < m_ordre + m_nb_s_sup; ++v)
+    Graphe g(m_ordre);
+    std::cout << "true ordre : " << m_ordre << std::endl;
+    for (int v = 0; v < m_ordre; ++v)
     {
         std::cout << "SOMMET : " << v;
 
@@ -942,7 +958,6 @@ Graphe Graphe::getTranspose()
         std::cout << " [g base]        [g transpo]" << std::endl;
         for (i = m_adjacences[v].begin(); i != m_adjacences[v].end(); ++i)
         {
-
             std::cout << "            " << v << " -> " << *i << "          " << *i << " -> " << v;
             g.m_adjacences[*i].push_back(v);
             std::cout << " reussi" << std::endl;
@@ -951,7 +966,7 @@ Graphe Graphe::getTranspose()
     return g;
 }
 
-void Graphe::ordreRemplissage(int v, bool visited[], std::list<int> &Stack)
+void Graphe::ordreRemplissage(int v, bool visited[], std::stack<int> &Stack)
 {
     visited[v] = true;
     std::list<int>::iterator i;
@@ -959,7 +974,7 @@ void Graphe::ordreRemplissage(int v, bool visited[], std::list<int> &Stack)
     {
         if (!visited[*i]) ordreRemplissage(*i, visited, Stack);
     }
-    Stack.push_back(v);
+    Stack.push(v);
 }
 
 ///Modifie le booleen qui affiche la connexite
@@ -977,7 +992,7 @@ void Graphe::affichagedesComposantesFortementConnexes(std::vector<std::vector<in
                     {
                         for(unsigned int k(0); k < getSommets().size(); ++k)
                         {
-                            if(getSommet(k)->getNum() ==  connexe[i][j]) /**< Cherche un sommet qui possede le index meme numero que celui du vector de connexite */
+                            if(k == connexe[i][j]) /**< Cherche un sommet qui possede le index meme numero que celui du vector de connexite */
                             {
                                 getSommet(k)->setConnexe(true);
                             }
@@ -987,4 +1002,130 @@ void Graphe::affichagedesComposantesFortementConnexes(std::vector<std::vector<in
             }
         }
     }
+}
+
+void Graphe::K_Connexites()
+{
+    resetMarques();
+    std::vector<int> s_reliants;
+    int compteur = 0, idx_s;
+    idx_s = getSommet(0)->getDegre();
+    for (int i = 0; i < m_ordre; ++i)
+    {
+        if(!getSommet(i)->getMarque())
+        {
+            if (i != 0) ++compteur;
+            getSommet(i)->setMarque(true);
+            for (unsigned int j = 0; j < m_adj_adj[i].size(); ++j)
+            {
+                if (!getSommet(m_adj_adj[i][j])->getMarque())
+                {
+                    getSommet(m_adj_adj[i][j])->setMarque(true);
+                    recursKConnexite(m_adj_adj[i][j], compteur);
+                }
+            }
+        }
+    }
+
+    /// Si le graphe n'est pas connexe
+    if (compteur != 0)
+    {
+        std::cout << "Le graphe n'est pas connexe" << std::endl;
+        std::cout << "Nombre de composantes (simplement) connexes au moins : "  << compteur+1 << std::endl << std::endl;
+    }
+    else
+    {
+        std::cout << "Le graphe est (simplement) connexe au moins" << std::endl << std::endl;
+        /// On cherche le sommet avec le moins d'arêtes allant vers lui mais aussi > 0
+        for (int i = 0; i < m_ordre-1; ++i)
+        {
+            if (idx_s >= getSommet(i+1)->getDegre()) idx_s = i+1;
+        }
+
+        /// On retrouve l'indice du/des sommet(s) reliant le sommet de degré minimal a partir de leur numéro
+        for (unsigned int i = 0; i < getAretes().size(); ++i)
+        {
+            if (getArete(i)->getArrive()->getNum() == getSommet(idx_s)->getNum())
+            {
+                for (int j = 0; j < m_ordre; ++j)
+                {
+                    if (getArete(i)->getDepart()->getNum() == getSommet(j)->getNum())
+                    {
+                        s_reliants.push_back(j);
+                    }
+                }
+            }
+
+            if (getArete(i)->getDepart()->getNum() == getSommet(idx_s)->getNum())
+            {
+                for (int j = 0; j < m_ordre; ++j)
+                {
+                    if (getArete(i)->getArrive()->getNum() == getSommet(j)->getNum())
+                    {
+                        s_reliants.push_back(j);
+                    }
+                }
+            }
+
+        }
+        /// Pour chaque sommet reliant se sommet avec le moins d'arêtes allant vers lui
+        /// K-Connexité sommets
+        std::cout << "K-Connexite Sommets :" << std::endl;
+        for (unsigned int i = 0; i < s_reliants.size(); ++i)
+        {
+            if (i == 0) std::cout << "Si vous supprimez ";
+            std::cout << "le sommet " <<getSommet(s_reliants[i])->getNum() << std::endl;
+            if (i != s_reliants.size()-1) std::cout << "puis ";
+            else std::cout << "alors le graphe ne saura plus connexe" << std::endl << std::endl;
+        }
+        /// K-Connexité arêtes
+        std::cout << "K-Connexite Aretes :" << std::endl;
+        for (unsigned int i = 0; i < s_reliants.size(); ++i)
+        {
+            if (i == 0) std::cout << "Si vous supprimez ";
+            std::cout << "l'arete reliant le sommet " << getSommet(idx_s)->getNum();
+            std::cout << " et " << getSommet(s_reliants[i])->getNum() << std::endl;
+            if (i != s_reliants.size()-1) std::cout << "puis " << std::endl;
+            else std::cout << "alors le graphe ne saura plus connexe" << std::endl;
+        }
+    }
+}
+
+void Graphe::recursKConnexite(int indice, int& compteur)
+{
+    for (unsigned int k = 0; k < m_adj_adj[indice].size(); ++k)
+    {
+        if (!getSommet(m_adj_adj[indice][k])->getMarque())
+        {
+            getSommet(m_adj_adj[indice][k])->setMarque(true);
+            recursKConnexite(m_adj_adj[indice][k], compteur);
+        }
+    }
+}
+
+/// On initialise les valeurs des matrices d'adjacences
+/// L'une d'elles ne prends pas en compte l'orientation des arcs (m_adj_adj)
+void Graphe::initAdjAdj()
+{
+    m_adjacences->clear();
+    m_adj_adj.clear();
+    m_adjacences = new std::list<int>[m_ordre];
+    std::vector<int> v_test;
+    int a, b;
+    for (int i = 0; i < m_ordre; ++i) m_adj_adj.push_back(v_test);
+
+    for (unsigned int i = 0; i < getAretes().size(); ++i)
+    {
+        for (int j = 0; j < m_ordre; ++j)
+        {
+            /// On retrouve l'indice du sommet de départ dans le vecteur m_sommets à partir de son numéro
+            if (getArete(i)->getDepart()->getNum() == getSommet(j)->getNum()) a = j;
+            /// On retrouve l'indice du sommet d'arrivée dans le vecteur m_sommets à partir de son numéro
+            if (getArete(i)->getArrive()->getNum() == getSommet(j)->getNum()) b = j;
+        }
+        m_adj_adj[a].push_back(b);
+        m_adj_adj[b].push_back(a);
+        m_adjacences[a].push_back(b);
+    }
+    for (int i = 0; i < m_ordre; ++i) getSommet(i)->setDegre(m_adj_adj[i].size());
 }

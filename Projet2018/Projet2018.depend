@@ -203,15 +203,24 @@
 	<stack>
 	<list>
 
-1523021704 source:c:\users\nathan\documents\github\pp2k18\projet2018\main.cpp
+1523205043 source:c:\users\nathan\documents\github\pp2k18\projet2018\main.cpp
 	"Graphe.h"
 
-1523022353 c:\users\nathan\documents\github\pp2k18\projet2018\include\graphe.h
+1523211833 c:\users\nathan\documents\github\pp2k18\projet2018\include\graphe.h
 	"Sommet.h"
 	"Arete.h"
 	<vector>
 	<list>
 	<stack>
+	<fstream>
+	<iostream>
+	<allegro.h>
+	<png.h>
+	<loadpng.h>
+	<jpgalleg.h>
+	<ctime>
+	<stack>
+	<list>
 
 1523162944 c:\users\batpi\desktop\proj_piscine\pp2k18\projet2018\include\sommet.h
 	<allegro.h>
@@ -229,17 +238,17 @@
 1523162944 source:c:\users\batpi\desktop\proj_piscine\pp2k18\projet2018\src\sommet.cpp
 	"Sommet.h"
 
-1522958154 c:\users\nathan\documents\github\pp2k18\projet2018\include\sommet.h
+1523211529 c:\users\nathan\documents\github\pp2k18\projet2018\include\sommet.h
 	<allegro.h>
 	<string>
 
-1522958154 c:\users\nathan\documents\github\pp2k18\projet2018\include\arete.h
+1523205043 c:\users\nathan\documents\github\pp2k18\projet2018\include\arete.h
 	"Sommet.h"
 
-1522952430 source:c:\users\nathan\documents\github\pp2k18\projet2018\src\arete.cpp
+1523175279 source:c:\users\nathan\documents\github\pp2k18\projet2018\src\arete.cpp
 	"Arete.h"
 
-1522952377 source:c:\users\nathan\documents\github\pp2k18\projet2018\src\sommet.cpp
+1523205043 source:c:\users\nathan\documents\github\pp2k18\projet2018\src\sommet.cpp
 	"Sommet.h"
 
 1523009220 source:c:\users\nathan\desktop\projet sans github au cas ou\libre service - a modifier\projet2018\main.cpp
@@ -277,7 +286,7 @@
 1522952377 source:c:\users\nathan\desktop\projet sans github au cas ou\libre service - a modifier\projet2018\src\sommet.cpp
 	"Sommet.h"
 
-1523022112 source:c:\users\nathan\documents\github\pp2k18\projet2018\src\graphe.cpp
+1523205043 source:c:\users\nathan\documents\github\pp2k18\projet2018\src\graphe.cpp
 	"Graphe.h"
 
 1523009220 source:c:\users\nathan\desktop\projet sans github au cas ou\projet2018\main.cpp

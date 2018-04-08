@@ -31,7 +31,7 @@ class Graphe
 {
     public:
         Graphe(std::string nom_fichier, std::string nom_decor);
-        Graphe(int ordre) { m_ordre = ordre; m_adjacences = new std::list<int>[m_ordre + m_nb_s_sup]; }
+        Graphe(int ordre) { m_ordre = ordre; m_adjacences = new std::list<int>[m_ordre]; }
         ~Graphe();
 
         std::vector<Sommet*> getSommets() { return m_sommets; } /// POUR TOUT LE VECTEUR
@@ -55,6 +55,7 @@ class Graphe
         void setNomGraphe(std::string val) { m_nom_graphe = val; }
         void setDecor(BITMAP* val) { m_decor = val; }
         void setTime(int val) { m_time = val; }
+
 
         /** \brief initialisation des vecteurs Sommets et Aretes
          *  Cette fonction initialise l'ordre et le temps a 0, creer des vecteurs de sommets et d'aretes vides fait un setArete() et setSommets().
@@ -201,7 +202,7 @@ class Graphe
          *
          */
         Graphe getTranspose();
-        void ordreRemplissage(int v, bool visited[], std::list<int> &Stack);
+        void ordreRemplissage(int v, bool visited[], std::stack<int> &Stack);
         void afficherCFC();
         /** \brief Set toutes les composantes fortements connexes pour les afficher
          *
@@ -245,6 +246,10 @@ class Graphe
          *
          */
         void calc_pop();
+        void K_Connexites();
+        void recursKConnexite(int indice, int& compteur);
+        void resetMarques() { for (const auto& elem : m_sommets) elem->setMarque(false); }
+        void initAdjAdj();
 
     private:
         std::vector<Sommet*> m_sommets; /**< Vecteur de sommets du graphe*/
@@ -258,6 +263,7 @@ class Graphe
         bool m_play; /**< lance la dynamique en temps reel */
         int m_time; /**< Dynamique en temps reel  */
         int m_nb_s_sup; /**< Ordre des sommets supprimes */
+        std::vector<std::vector<int>> m_adj_adj; /**< Matrice d'ajdacences ne prenant pas en compte l'oriantation des arcs */
 };
 
 #endif // GRAPHE_H
