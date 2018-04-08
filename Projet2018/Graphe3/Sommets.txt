@@ -30,7 +30,7 @@ Graphe3\Images\ecureuil.jpg
 531 52 2 0
 
 Graphe3\Images\herbe.jpg
-494 238 4 55
+465 233 4 55
 
 7
 Graphe3\Images\lapin.jpg Graphe3\Images\Arbre.jpg 6
