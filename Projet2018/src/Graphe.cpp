@@ -31,9 +31,10 @@ Graphe::Graphe(std::string nom_fichier, std::string nom_decor)
         if (i == 2) bouton = load_bitmap("Graphe1/Images/addS.png", NULL);
         if (i == 3) bouton = load_bitmap("Graphe1/Images/suppA.png", NULL);
         if (i == 4) bouton = load_bitmap("Graphe1/Images/CFC.png", NULL);
-        if (i == 5) bouton = load_bitmap("Graphe1/Images/play.png", NULL);
-        if (i == 6) bouton = load_bitmap("Graphe1/Images/pause.png", NULL);
-        if (i == 7) bouton = load_bitmap("Graphe1/Images/cancel.png", NULL);
+        if (i == 5) bouton = load_bitmap("Graphe1/Images/cancel.png", NULL);
+        if (i == 6) bouton = load_bitmap("Graphe1/Images/play.png", NULL);
+        if (i == 7) bouton = load_bitmap("Graphe1/Images/pause.png", NULL);
+
         ajouterBouton(bouton);
     }
 }
@@ -248,9 +249,9 @@ void Graphe::outils(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, int 
             }
         }
 
-        if (is_mouse(745, 50, 305, 50))
+        if (is_mouse(745, 50, 365, 50))
         {
-            rectfill(buffer, 743, 303, 796, 356, makecol(225,0,0));
+            rectfill(buffer, 743, 363, 796, 416, makecol(225,0,0));
             if (!prev_mouse_b && now_mouse_b)
             {
                 inverserPlay();
@@ -415,9 +416,8 @@ void Graphe::ajouterSommet(BITMAP* buffer, BITMAP* barre)
                 }
             }
 
-            blit(getBouton(7), buffer, 0, 0, 745, 5+(60*6), getBouton(7)->w, getBouton(7)->h);
+            blit(getBouton(5), buffer, 0, 0, 745, 5+(60*5), getBouton(5)->w, getBouton(5)->h);
             annuler(&stop);
-            std::cout << "Stop = " << stop;
         }
     }
 
@@ -523,32 +523,38 @@ void Graphe::supprimerArete()
             annuler(&cancel);
         }
 
-        rect(screen, s1->getCd_x()-2, s1->getCd_y()-2, s1->getCd_x() + s1->getImg()->w+1, s1->getCd_y() + s1->getImg()->h+1, makecol(255,12,12));
-        rect(screen, s1->getCd_x()-1, s1->getCd_y()-1, s1->getCd_x() + s1->getImg()->w, s1->getCd_y() + s1->getImg()->h, makecol(255,12,12));
 
-        while (temp.size() == getAretes().size() && cancel == 0)
+        if(cancel == 0)
         {
-            prev_mouse_b = now_mouse_b;
-            now_mouse_b = mouse_b&1;
-            for (unsigned int i(0); i < getSommets().size(); ++i)
+
+            rect(screen, s1->getCd_x()-2, s1->getCd_y()-2, s1->getCd_x() + s1->getImg()->w+1, s1->getCd_y() + s1->getImg()->h+1, makecol(255,12,12));
+            rect(screen, s1->getCd_x()-1, s1->getCd_y()-1, s1->getCd_x() + s1->getImg()->w, s1->getCd_y() + s1->getImg()->h, makecol(255,12,12));
+
+            while (temp.size() == getAretes().size() && cancel == 0)
             {
-                if (is_sommmet(i) && !prev_mouse_b && now_mouse_b)
+                prev_mouse_b = now_mouse_b;
+                now_mouse_b = mouse_b&1;
+                for (unsigned int i(0); i < getSommets().size(); ++i)
                 {
-                    for (unsigned int j(0); j < temp.size(); ++j)
+                    if (is_sommmet(i) && !prev_mouse_b && now_mouse_b)
                     {
-                        // Si le sommet clicke i appartient a la meme arete que le sommet de depart
-                        if (temp[j]->getArrive() == getSommets()[i] && temp[j]->getDepart() == s1 && !stop)
+                        for (unsigned int j(0); j < temp.size(); ++j)
                         {
-                            stop = true;
-                            temp.erase(temp.begin() + j); //On supprime l'arete et on arrete le processus de suppression
-                            --j;
+                            // Si le sommet clicke i appartient a la meme arete que le sommet de depart
+                            if (temp[j]->getArrive() == getSommets()[i] && temp[j]->getDepart() == s1 && !stop)
+                            {
+                                stop = true;
+                                temp.erase(temp.begin() + j); //On supprime l'arete et on arrete le processus de suppression
+                                --j;
+                            }
                         }
                     }
                 }
-            }
 
-            annuler(&cancel);
+                annuler(&cancel);
+            }
         }
+
     }
 
     if(cancel == 0 )
@@ -699,14 +705,9 @@ bool Graphe::is_sommmet(int i)
                &&  mouse_y >= getSommets()[i]->getCd_y() && mouse_y <= getSommets()[i]->getCd_y() + getSommets()[i]->getImg()->h;
 }
 
-bool Graphe::is_annule()
-{
-    return mouse_x >= 745 && mouse_x <= 745 + 50  &&  mouse_y >= 360 && mouse_y <= 360 + 50 ;
-}
-
 void Graphe::annuler(int* stop)
 {
-    if(is_annule())
+    if(is_mouse(745, 50, 305, 50))
     {
         if(mouse_b&1)
         {
