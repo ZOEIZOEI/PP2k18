@@ -303,7 +303,7 @@ void Graphe::ajouterArete(BITMAP* buffer)
     std::vector<Arete*> tmp = getAretes();
     bool deja_ar = false;
 
-    int stop = 0;
+    int stop = 0;   //defini la boucle du sous programme
 
     while (s->getNomImg() == "" && stop == 0)
     {
