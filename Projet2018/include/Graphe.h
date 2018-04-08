@@ -140,13 +140,6 @@ class Graphe
          */
         bool is_sommmet(int i);
 
-        /** \brief detecte si l'on est sur le bouton annule
-         *
-         * \return bool
-         *
-         */
-        bool is_annule();
-
         /** \brief permet d'annuler une action
          *
          * \param stop int*

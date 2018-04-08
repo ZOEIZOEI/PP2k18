@@ -124,8 +124,6 @@ END_OF_MAIN();
 void Menu(BITMAP* buffer, std::vector<BITMAP*> Img_Menu, bool* exit, int* num, int* idx)
 {
 
-    BITMAP* tmp;
-
     blit(Img_Menu[*idx], buffer, 0,0,0,0,SCREEN_W, SCREEN_H);
     textprintf_ex(buffer, font, 400, 23, makecol(255,255,0), -1,"%d", mouse_x);
 
