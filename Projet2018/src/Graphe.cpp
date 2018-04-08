@@ -16,6 +16,7 @@ Graphe::Graphe(std::string nom_fichier, std::string nom_decor)
     BITMAP* bouton;
     setTime(0);
     m_play = false; //On ne commence pas encore la dynamique des population
+    m_reduit = false;
 
     setDecor(load_bitmap(nom_decor.c_str(), NULL));
     if (!getDecor())
@@ -24,7 +25,7 @@ Graphe::Graphe(std::string nom_fichier, std::string nom_decor)
         exit(EXIT_FAILURE);
     }
 //Ajout des bitmap de chaque bouton
-    for (int i = 0; i< 9; ++i)
+    for (int i = 0; i < 11; ++i)
     {
         if (i == 0) bouton = load_bitmap("Graphe1/Images/addA.png", NULL);
         if (i == 1) bouton = load_bitmap("Graphe1/Images/suppS.png", NULL);
@@ -32,9 +33,13 @@ Graphe::Graphe(std::string nom_fichier, std::string nom_decor)
         if (i == 3) bouton = load_bitmap("Graphe1/Images/suppA.png", NULL);
         if (i == 4) bouton = load_bitmap("Graphe1/Images/CFC.png", NULL);
         if (i == 5) bouton = load_bitmap("Graphe1/Images/cancel.png", NULL);
-        if (i == 6) bouton = load_bitmap("Graphe1/Images/play.png", NULL);
-        if (i == 7) bouton = load_bitmap("Graphe1/Images/pause.png", NULL);
-        if (i == 8) bouton = load_bitmap("Graphe1/Images/calcK.png", NULL);
+        if (i == 6) bouton = load_bitmap("Graphe1/Images/calcK.png", NULL);
+        if (i == 7) bouton = load_bitmap("Graphe1/Images/play.png", NULL);
+        if (i == 8) bouton = load_bitmap("Graphe1/Images/pause.png", NULL);
+        if (i == 9) bouton = load_bitmap("Graphe1/Images/reduit2.png", NULL);
+        if (i == 10) bouton = load_bitmap("Graphe1/Images/reduit.png", NULL);
+
+
 
         ajouterBouton(bouton);
     }
@@ -207,47 +212,53 @@ void Graphe::affichage(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, i
 ///Action de chaque boutons
 void Graphe::outils(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, int now_mouse_b)
 {
+    int cdx = 745, taille = 50, cdy = 60;
     if (a != 1)
     {
-        if (is_mouse(745, 50, 5, 50)) //Si l'on est sur les coordonnees suivantes ...
+        /// Ajouter une arête
+        if (is_mouse(cdx, taille, 5, taille)) //Si l'on est sur les coordonnees suivantes ...
         {
-            rectfill(buffer, 743, 3, 796, 56, makecol(76,201,0));   //On creer un rectangle autour du bouton pour l'indiquer
+            rectfill(buffer, cdx-2, 3, cdx+taille+1, taille+6, makecol(76,201,0));   //On creer un rectangle autour du bouton pour l'indiquer
             if (!prev_mouse_b && now_mouse_b)
             {
                 ajouterArete(buffer);   //On lance le sous programme (ici ajout d'arete)
             }
         }
 
-        if (is_mouse(745, 50, 65, 50))  //Pareil pour les boutons suivants
+        /// Supprimer un sommet
+        if (is_mouse(cdx, taille, cdy+5, taille))  //Pareil pour les boutons suivants
         {
-            rectfill(buffer, 743, 63, 796, 116, makecol(255,0,0));
+            rectfill(buffer, cdx-2, cdy+3, cdx+taille+1, cdy+taille+6, makecol(255,0,0));
             if (!prev_mouse_b && now_mouse_b)
             {
                 supprimerSommet();
             }
         }
 
-        if (is_mouse(745, 50, 125, 50))
+        /// Ajouter un sommet
+        if (is_mouse(cdx, taille, (2*cdy)+5, taille))
         {
-            rectfill(buffer, 743, 123, 796, 176, makecol(6,201,0));
+            rectfill(buffer, cdx-2, (2*cdy)+3, cdx+taille+1, (2*cdy)+taille+6, makecol(6,201,0));
             if (!prev_mouse_b && now_mouse_b)
             {
                 ajouterSommet(buffer, barre);
             }
         }
 
-        if (is_mouse(745, 50, 185, 50))
+        /// Supprimer une arête
+        if (is_mouse(cdx, taille, (3*cdy)+5, taille))
         {
-            rectfill(buffer, 743, 183, 796, 236, makecol(255,0,0));
+            rectfill(buffer, cdx-2, (3*cdy)+3, cdx+taille+1, (3*cdy)+taille+6, makecol(255,0,0));
             if (!prev_mouse_b && now_mouse_b)
             {
                 supprimerArete();
             }
         }
 
-        if (is_mouse(745, 50, 245, 50))
+        /// Afficher les composantes fortements connexes
+        if (is_mouse(cdx, taille, (4*cdy)+5, taille))
         {
-            rectfill(buffer, 743, 243, 796, 296, makecol(127,0,0));
+            rectfill(buffer, cdx-2, (4*cdy)+3, cdx+taille+1, (4*cdy)+taille+6, makecol(127,0,0));
             if (!prev_mouse_b && now_mouse_b)
             {
                 save();
@@ -257,9 +268,22 @@ void Graphe::outils(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, int 
             }
         }
 
-        if (is_mouse(745, 50, 365, 50))
+        /// Afficher la K-Connexité
+        if (is_mouse(cdx, taille, (6*cdy)+5, taille))
         {
-            rectfill(buffer, 743, 363, 796, 416, makecol(225,0,0));
+            rectfill(buffer, cdx-2, (6*cdy)+3, cdx+taille+1, (6*cdy)+taille+6, makecol(18,0,124));
+            if (!prev_mouse_b && now_mouse_b)
+            {
+                save();
+                init();
+                K_Connexites();
+            }
+        }
+
+        /// Temporalité
+        if (is_mouse(cdx, taille, (7*cdy)+5, taille))
+        {
+            rectfill(buffer, cdx-2, (7*cdy)+3, cdx+taille+1, (7*cdy)+taille+6, makecol(225,0,0));
             if (!prev_mouse_b && now_mouse_b)
             {
                 inverserPlay();
@@ -270,14 +294,19 @@ void Graphe::outils(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, int 
             }
         }
 
-        if (is_mouse(745, 50, 425, 50))
+        /// Afficher le graphe réduit
+        if (is_mouse(cdx, taille, (8*cdy)+5, taille))
         {
-            rectfill(buffer, 743, 423, 796, 476, makecol(18,0,124));
+            rectfill(buffer, cdx-2, (8*cdy)+3, cdx+taille+1, (8*cdy)+taille+6, makecol(0,148,255));
             if (!prev_mouse_b && now_mouse_b)
             {
-                save();
-                init();
-                K_Connexites();
+                inverserReduit();
+                if (getReduit() == true)
+                {
+//                    reduit();
+                    std::cout << "hello truereduit" << std::endl;
+                }
+                else std::cout << "hello falsereduit" << std::endl;
             }
         }
     }
@@ -285,15 +314,19 @@ void Graphe::outils(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, int 
     // Affichage des boutons
     for (unsigned int i = 0; i < m_boutons.size()-1; ++i)
     {
-        if (i != m_boutons.size()-2)
+        if (i < 7)
         {
             blit(getBouton(i), buffer, 0, 0, 745, 5+(60*i), getBouton(i)->w, getBouton(i)->h);
         }
-        else
+        if (i == 7)
         {
-            if (getPlay() == true)
-                blit(getBouton(i), buffer, 0, 0, 745, 5+(60*i), getBouton(i)->w, getBouton(i)->h);
+            if (getPlay() == true) blit(getBouton(i), buffer, 0, 0, 745, 5+(60*i), getBouton(i)->w, getBouton(i)->h);
             else blit(getBouton(i+1), buffer, 0, 0, 745, 5+(60*i), getBouton(i+1)->w, getBouton(i+1)->h);
+        }
+        if (i == 9)
+        {
+            if (getReduit() == true) blit(getBouton(i), buffer, 0, 0, 745, 5+(60*8), getBouton(i)->w, getBouton(i)->h);
+            else blit(getBouton(i+1), buffer, 0, 0, 745, 5+(60*(i-1)), getBouton(i)->w, getBouton(i)->h);
         }
     }
 
@@ -813,6 +846,12 @@ void Graphe::sliderArete()
 void Graphe::inverserPlay()
 {
     m_play = !m_play;
+}
+
+/// Play / Pause pour l'affichage du graphe réduit
+void Graphe::inverserReduit()
+{
+     m_reduit != m_reduit;
 }
 
 ///calcul du nombre de perte chez la population

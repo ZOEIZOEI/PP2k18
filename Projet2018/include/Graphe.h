@@ -45,6 +45,7 @@ class Graphe
         BITMAP* getDecor() {return m_decor; }
         BITMAP* getBouton(int val) { return m_boutons[val]; }
         bool getPlay() { return m_play; }
+        bool getReduit() { return m_reduit; }
         int getTime() { return m_time; }
 
         void setSommets(std::vector<Sommet*> val) { m_sommets = val; }
@@ -75,6 +76,7 @@ class Graphe
         void ajouterBouton(BITMAP* val) { m_boutons.push_back(val); }
 
         void inverserPlay();
+        void inverserReduit();
 
         /** \brief Initialisation des sommets selon le fichier de sauvegarde
          *
@@ -262,6 +264,7 @@ class Graphe
         std::vector<BITMAP*> m_boutons;
         std::list<int> *m_adjacences; /**< liste d'adjacence */
         bool m_play; /**< lance la dynamique en temps reel */
+        bool m_reduit;
         int m_time; /**< Dynamique en temps reel  */
         int m_nb_s_sup; /**< Ordre des sommets supprimes */
         std::vector<std::vector<int>> m_adj_adj; /**< Matrice d'ajdacences ne prenant pas en compte l'oriantation des arcs */
