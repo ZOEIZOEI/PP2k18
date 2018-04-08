@@ -1008,8 +1008,7 @@ void Graphe::K_Connexites()
 {
     resetMarques();
     std::vector<int> s_reliants;
-    int compteur = 0, idx_s;
-    idx_s = getSommet(0)->getDegre();
+    int compteur = 0, idx_s = 0;
     for (int i = 0; i < m_ordre; ++i)
     {
         if(!getSommet(i)->getMarque())
@@ -1039,7 +1038,7 @@ void Graphe::K_Connexites()
         /// On cherche le sommet avec le moins d'arêtes allant vers lui mais aussi > 0
         for (int i = 0; i < m_ordre-1; ++i)
         {
-            if (idx_s >= getSommet(i+1)->getDegre()) idx_s = i+1;
+            if (getSommet(idx_s)->getDegre() >= getSommet(i+1)->getDegre()) idx_s = i+1;
         }
 
         /// On retrouve l'indice du/des sommet(s) reliant le sommet de degré minimal a partir de leur numéro
