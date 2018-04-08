@@ -18,7 +18,7 @@ class Sommet
         std::string getNomImg() { return m_nom_img; }
         BITMAP* getImg() { return m_img; }
         bool getMarque() { return m_marque; }
-//        const std::vector<int>& getAdjS() { return m_adj_s; }
+        int getDegre() { return m_degre; }
 
         void setCd_x(int val) { m_cd_x = val; }
         void setCd_y(int val) { m_cd_y = val; }
@@ -27,7 +27,7 @@ class Sommet
         void setNomImg(std::string val) { m_nom_img = val; }
         void setImg(BITMAP* val) { m_img = val; }
         void setMarque(bool val) { m_marque = val; }
-
+        void setDegre(int val) { m_degre = val; }
 
     private:
         int m_cd_x;
@@ -37,7 +37,9 @@ class Sommet
         std::string m_nom_img;
         BITMAP* m_img;
         bool m_marque;
-//        std::vector<int> m_adj_s;
+        int m_nb_ar_vers;
+        int m_degre;
+
 };
 
 #endif // SOMMET_H

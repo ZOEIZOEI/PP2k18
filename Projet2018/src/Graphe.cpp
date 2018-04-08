@@ -675,6 +675,7 @@ int Graphe::calcul_sommet(Sommet* sDep, Sommet* sArr)
         }
         else if (i == getAretes().size()-1) return 0;
 	}
+	return 0;
 }
 
 void Graphe::choix_sommet_calc_k()
@@ -697,7 +698,6 @@ void Graphe::choix_sommet_calc_k()
             }
         }
     }
-
 }
 
 void Graphe::afficherCFC()
@@ -789,8 +789,9 @@ void Graphe::ordreRemplissage(int v, bool visited[], std::list<int> &Stack)
 void Graphe::K_connexites()
 {
     resetMarques();
-    int compteur = 0;
-    std::cout << "true ordre (vivant) = " << m_ordre << std::endl;
+    std::vector<int> s_reliants;
+    int compteur = 0, idx_s;
+    idx_s = getSommet(0)->getDegre();
     for (int i = 0; i < m_ordre; ++i)
     {
         if(!getSommet(i)->getMarque())
@@ -807,8 +808,69 @@ void Graphe::K_connexites()
             }
         }
     }
-    if (compteur == 0) std::cout << "le graphe est (simplement) connexe  au moins" << std::endl;
-    else std::cout << " pas connexe -- composantes (simplement) connexes = "  << compteur+1 << std::endl;
+
+    /// Si le graphe n'est pas connexe
+    if (compteur != 0)
+    {
+        std::cout << "Le graphe n'est pas connexe" << std::endl;
+        std::cout << "Nombre de composantes (simplement) connexes au moins : "  << compteur+1 << std::endl << std::endl;
+    }
+    else
+    {
+        std::cout << "Le graphe est (simplement) connexe au moins" << std::endl << std::endl;
+        /// on cherche le sommet avec le moins d'arêtes allant vers lui mais aussi > 0
+        for (int i = 0; i < m_ordre-1; ++i)
+        {
+            if (getSommet(i)->getDegre() >= getSommet(i+1)->getDegre()) idx_s = i+1;
+        }
+
+        /// On retrouve l'indice du/des sommet(s) reliant le sommet de degré minimal a partir de leur numéro
+        for (unsigned int i = 0; i < getAretes().size(); ++i)
+        {
+            if (getArete(i)->getArrive()->getNum() == getSommet(idx_s)->getNum())
+            {
+                for (int j = 0; j < m_ordre; ++j)
+                {
+                    if (getArete(i)->getDepart()->getNum() == getSommet(j)->getNum())
+                    {
+                        s_reliants.push_back(j);
+                    }
+                }
+            }
+
+            if (getArete(i)->getDepart()->getNum() == getSommet(idx_s)->getNum())
+            {
+                for (int j = 0; j < m_ordre; ++j)
+                {
+                    if (getArete(i)->getArrive()->getNum() == getSommet(j)->getNum())
+                    {
+                        s_reliants.push_back(j);
+                    }
+                }
+            }
+
+        }
+        /// Pour chaque sommet reliant se sommet avec le moins d'arêtes allant vers lui
+        /// K-Connexité sommets
+        std::cout << "K-Connexite Sommets :" << std::endl;
+        for (unsigned int i = 0; i < s_reliants.size(); ++i)
+        {
+            if (i == 0) std::cout << "Si vous supprimez ";
+            std::cout << "le sommet " <<getSommet(s_reliants[i])->getNum() << std::endl;
+            if (i != s_reliants.size()-1) std::cout << "puis ";
+            else std::cout << "alors le graphe ne saura plus connexe" << std::endl << std::endl;
+        }
+        /// K-Connexité arêtes
+        std::cout << "K-Connexite Aretes :" << std::endl;
+        for (unsigned int i = 0; i < s_reliants.size(); ++i)
+        {
+            if (i == 0) std::cout << "Si vous supprimez ";
+            std::cout << "l'arc reliant le sommet " << getSommet(s_reliants[i])->getNum();
+            std::cout << " et " << getSommet(idx_s)->getNum() << std::endl;
+            if (i != s_reliants.size()-1) std::cout << "puis " << std::endl;
+            else std::cout << "alors le graphe ne saura plus connexe" << std::endl;
+        }
+    }
 }
 
 void Graphe::recursKConnexite(int indice, int& compteur)
@@ -823,30 +885,28 @@ void Graphe::recursKConnexite(int indice, int& compteur)
     }
 }
 
+/// On initialise les valeurs de la matrice d'adjacences
+/// Cette matrice ne prends pas en compte l'orientation des arcs
 void Graphe::initAdjAdj()
 {
     std::vector<int> v_test;
     int a, b;
-    bool pb = false;
     for (int i = 0; i < m_ordre; ++i) m_adj_adj.push_back(v_test);
 
     for (unsigned int i = 0; i < getAretes().size(); ++i)
     {
-        pb = false;
         for (int j = 0; j < m_ordre; ++j)
         {
             /// On retrouve l'indice du sommet de départ dans le vecteur m_sommets à partir de son numéro
-            if (getArete(i)->getDepart()->getNum() == getSommet(j)->getNum())
-            {
-                a = j; std::cout << " a = " << a << std::endl;
-            }
+            if (getArete(i)->getDepart()->getNum() == getSommet(j)->getNum()) a = j;
             /// On retrouve l'indice du sommet d'arrivée dans le vecteur m_sommets à partir de son numéro
-            if (getArete(i)->getArrive()->getNum() == getSommet(j)->getNum())
-            {
-                b = j; std::cout << " b = " << b << std::endl;
-            }
+            if (getArete(i)->getArrive()->getNum() == getSommet(j)->getNum()) b = j;
         }
         m_adj_adj[a].push_back(b);
         m_adj_adj[b].push_back(a);
+    }
+    for (int i = 0; i < m_ordre; ++i)
+    {
+        getSommet(i)->setDegre(m_adj_adj[i].size());
     }
 }

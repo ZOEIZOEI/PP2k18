@@ -6,6 +6,8 @@ Sommet::Sommet()
     m_cd_y = 0;
     m_num = 0;
     m_poids = 0;
+    m_nb_ar_vers = 0;
+
 }
 
 Sommet::Sommet(int cd_x, int cd_y, int num, int poids, std::string nom_img)
