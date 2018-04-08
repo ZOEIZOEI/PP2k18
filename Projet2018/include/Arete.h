@@ -9,18 +9,18 @@ class Arete
         Arete();
         ~Arete();
 
-        int Getpoids() { return m_poids; }
-        Sommet* Getdepart() { return m_depart; }
-        Sommet* Getarrive() { return m_arrive; }
+        int getPoids() { return m_poids; }
+        Sommet* getDepart() { return m_depart; }
+        Sommet* getArrive() { return m_arrive; }
 
-        void Setdepart(Sommet* val) { m_depart = val; }
-        void Setpoids(int val) { m_poids = val; }
-        void Setarrive(Sommet* val) { m_arrive = val; }
+        void setPoids(int val) { m_poids = val; }
+        void setDepart(Sommet* val) { m_depart = val; }
+        void setArrive(Sommet* val) { m_arrive = val; }
 
     private:
-        int m_poids;
-        Sommet* m_depart;
-        Sommet* m_arrive;
+        int m_poids; /**< Poids de l'arete */
+        Sommet* m_depart; /**< Sommet de depart (Mangeur) */
+        Sommet* m_arrive; /**< Sommet d'arrive (Mange) */
 };
 
 #endif // ARETE_H
