@@ -250,6 +250,7 @@ class Graphe
         void recursKConnexite(int indice, int& compteur);
         void resetMarques() { for (const auto& elem : m_sommets) elem->setMarque(false); }
         void initAdjAdj();
+        void reduit();
 
     private:
         std::vector<Sommet*> m_sommets; /**< Vecteur de sommets du graphe*/

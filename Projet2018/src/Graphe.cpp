@@ -173,14 +173,16 @@ void Graphe::affichage(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, i
         thick_line(buffer, xsDep, ysDep, xsArr, ysArr, getAretes()[i]->getPoids()/2, makecol(getAretes()[i]->getPoids()*10,255,0)); //L'epaisseur de l'arete varie selon le poids de celle si, sa couleur egalement
         circlefill(buffer, (xsDep + 3*xsArr)/4, (ysDep + 3*ysArr)/4, radius, makecol(255,getAretes()[i]->getPoids()*10,0)); //Cercle permettant l'oriantation des aretes (au 3/4 de l'arete)
         textprintf_ex(buffer, font, (xsDep + 3*xsArr)/4 - 6, (ysDep + 3*ysArr)/4 - 6, makecol(0,0,0), -1, "%d", getAretes()[i]->getPoids()); //Affichage du poids de l'arete dans le cercle d'orientation
+
     }
 
     for (unsigned int i(0); i<getSommets().size(); ++i) //On parcours le vecteur de sommets...
     {
         //Affichage forte connexité
-        if(getSommet(i)->getConnexe() == true)
-            rectfill(buffer, getSommets()[i]->getCd_x()-4, getSommets()[i]->getCd_y()-4, getSommets()[i]->getImg()->w + getSommets()[i]->getCd_x()+4, getSommets()[i]->getImg()->h + getSommets()[i]->getCd_y()+4, makecol(255, 0, 255));
-
+        if(getSommet(i)->getConnexe() > 0)
+        {
+            rectfill(buffer, getSommets()[i]->getCd_x()-4, getSommets()[i]->getCd_y()-4, getSommets()[i]->getImg()->w + getSommets()[i]->getCd_x()+4, getSommets()[i]->getImg()->h + getSommets()[i]->getCd_y()+4, makecol(100+10*getSommet(i)->getConnexe(), 255-50*getSommet(i)->getConnexe(), 0));
+        }
         //Image d'illustration des sommet
         blit(getSommet(i)->getImg(), buffer, 0, 0, getSommet(i)->getCd_x(), getSommet(i)->getCd_y(), getSommet(i)->getImg()->w, getSommet(i)->getImg()->h);
         //Numero Image
@@ -980,6 +982,7 @@ void Graphe::ordreRemplissage(int v, bool visited[], std::stack<int> &Stack)
 ///Modifie le booleen qui affiche la connexite
 void Graphe::affichagedesComposantesFortementConnexes(std::vector<std::vector<int> > connexe)
 {
+    int conn(1);
     if(connexe.size() > 0) /**< Blindage */
     {
         for(unsigned int i(0); i < connexe.size(); ++i)
@@ -994,11 +997,13 @@ void Graphe::affichagedesComposantesFortementConnexes(std::vector<std::vector<in
                         {
                             if(k == connexe[i][j]) /**< Cherche un sommet qui possede le index meme numero que celui du vector de connexite */
                             {
-                                getSommet(k)->setConnexe(true);
+                                getSommet(k)->setConnexe(conn);
+                                std::cout << "conn : " << conn << std::endl;
                             }
                         }
                     }
                 }
+                conn++;
             }
         }
     }
@@ -1127,4 +1132,59 @@ void Graphe::initAdjAdj()
         m_adjacences[a].push_back(b);
     }
     for (int i = 0; i < m_ordre; ++i) getSommet(i)->setDegre(m_adj_adj[i].size());
+}
+
+void Graphe::reduit()
+{
+    std::vector<Sommet*> som(getS_Sup()); //Vecteur de sommets supprimes du graphe (mais existant)
+    std::vector<Sommet*> som_graph(getSommets()); //Vecteur de ssommets presents dans le graphe
+    std::vector<Arete*> aret(getAretes());
+
+    for(unsigned int i(0); i < som_graph.size(); ++i)
+    {
+        for(unsigned int j(0); j < som_graph.size(); ++j)
+        {
+            if(som_graph[i]->getConnexe() == som_graph[j]->getConnexe())
+            {
+                if( som_graph[j]->getConnexe() > 0 && som_graph[i] != som_graph[j])
+                {
+                    std::cout << "Sommet i : " << som_graph[i]->getNum() << "  Sommet j : " << som_graph[j]->getNum() << std::endl;
+                    for(unsigned int k(0); k < getAretes().size(); ++k)
+                    {
+                        if(som_graph[j] == getArete(k)->getDepart())
+                        {
+                            getArete(k)->setDepart(som_graph[i]);
+                        }
+
+                        if(som_graph[j] == getArete(k)->getArrive())
+                        {
+                            getArete(k)->setArrive(som_graph[i]);
+                        }
+                    }
+
+                    som.push_back(som_graph[j]);
+                    som_graph.erase(som_graph.begin()+j);
+                    j=0;
+                }
+
+            }
+        }
+    }
+
+    setS_Sup(som);
+    setSommets(som_graph);
+
+    for(unsigned int i(0); i < som.size(); ++i)
+    {
+        for(unsigned int k(0); k < aret.size(); ++k)
+        {
+            if(aret[k]->getArrive() == aret[k]->getDepart() || som[i] == aret[k]->getDepart() || som[i] == aret[k]->getArrive())
+            {
+                aret.erase(aret.begin()+k);
+                k=0;
+            }
+        }
+    }
+
+    setAretes(aret);
 }
