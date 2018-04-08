@@ -933,26 +933,26 @@ void Graphe::calc_pop()
 void Graphe::afficherCFC()
 {
     int nb_recur = 0;
-    std::stack<int> Stack;
+    std::stack<int> pile;
     std::vector<std::vector<int>> adjCFC;
-    bool* visited = new bool[m_ordre];
+    bool* marques = new bool[m_ordre];
 
-    for (int i = 0; i < m_ordre; ++i) visited[i] = false;
     for (int i = 0; i < m_ordre; ++i)
     {
+        marques[i] = false;
         adjCFC.push_back(std::vector<int>());
-        if (visited[i] == false) ordreRemplissage(i, visited, Stack);
+        if (marques[i] == false) ordreRemplissage(i, marques, pile);
     }
-    Graphe gT = getTranspose();
+    Graphe gT = kosarajusTranspose();
 
-    for (int i = 0; i < m_ordre; ++i) visited[i] = false;
-    while (!Stack.empty())
+    for (int i = 0; i < m_ordre; ++i) marques[i] = false;
+    while (!pile.empty())
     {
-        int v = Stack.top();
-        Stack.pop();
-        if (visited[v] == false)
+        int sommet = pile.top();
+        pile.pop();
+        if (marques[sommet] == false)
         {
-            gT.composanteRecursif(v, visited, nb_recur, adjCFC);
+            gT.composanteRecursif(sommet, marques, nb_recur, adjCFC);
             std::cout << std::endl;
             ++nb_recur;
         }
@@ -971,48 +971,46 @@ void Graphe::afficherCFC()
     affichagedesComposantesFortementConnexes(adjCFC);
 }
 
-void Graphe::composanteRecursif(int v, bool visited[], int nb_recur, std::vector<std::vector<int>>& adjCFC)
+void Graphe::composanteRecursif(int sommet, bool marques[], int nb_recur, std::vector<std::vector<int>>& adjCFC)
 {
-    visited[v] = true;
-    std::cout << v << " ";
-    adjCFC[nb_recur].push_back(v);
+    marques[sommet] = true;
+    std::cout << sommet << " ";
+    adjCFC[nb_recur].push_back(sommet);
 
-    std::list<int>::iterator i;
-    for (i = m_adjacences[v].begin(); i != m_adjacences[v].end(); ++i)
+    std::list<int>::iterator it;
+    for (it = m_adjacences[sommet].begin(); it != m_adjacences[sommet].end(); ++it)
     {
-        if (!visited[*i]) composanteRecursif(*i, visited, nb_recur, adjCFC);
+        if (!marques[*it]) composanteRecursif(*it, marques, nb_recur, adjCFC);
     }
 }
 
-Graphe Graphe::getTranspose()
+Graphe Graphe::kosarajusTranspose()
 {
-    Graphe g(m_ordre);
-    std::cout << "true ordre : " << m_ordre << std::endl;
-    for (int v = 0; v < m_ordre; ++v)
+    Graphe kosaraju(m_ordre);
+    for (int i = 0; i < m_ordre; ++i)
     {
-        std::cout << "SOMMET : " << v;
-
-        std::list<int>::iterator i;
+        std::cout << "SOMMET : " << i;
+        std::list<int>::iterator it;
         std::cout << " [g base]        [g transpo]" << std::endl;
-        for (i = m_adjacences[v].begin(); i != m_adjacences[v].end(); ++i)
+        for (it = m_adjacences[i].begin(); it != m_adjacences[i].end(); ++it)
         {
-            std::cout << "            " << v << " -> " << *i << "          " << *i << " -> " << v;
-            g.m_adjacences[*i].push_back(v);
+            std::cout << "            " << i << " -> " << *it << "          " << *it << " -> " << i;
+            kosaraju.m_adjacences[*it].push_back(i);
             std::cout << " reussi" << std::endl;
         }
     }
-    return g;
+    return kosaraju;
 }
 
-void Graphe::ordreRemplissage(int v, bool visited[], std::stack<int> &Stack)
+void Graphe::ordreRemplissage(int sommet, bool marques[], std::stack<int> &pile)
 {
-    visited[v] = true;
-    std::list<int>::iterator i;
-    for (i = m_adjacences[v].begin(); i != m_adjacences[v].end(); ++i)
+    marques[sommet] = true;
+    std::list<int>::iterator it;
+    for (it = m_adjacences[sommet].begin(); it != m_adjacences[sommet].end(); ++it)
     {
-        if (!visited[*i]) ordreRemplissage(*i, visited, Stack);
+        if (!marques[*it]) ordreRemplissage(*it, marques, pile);
     }
-    Stack.push(v);
+    pile.push(sommet);
 }
 
 ///Modifie le booleen qui affiche la connexite
@@ -1031,11 +1029,7 @@ void Graphe::affichagedesComposantesFortementConnexes(std::vector<std::vector<in
                     {
                         for(unsigned int k(0); k < getSommets().size(); ++k)
                         {
-                            if(k == connexe[i][j]) /**< Cherche un sommet qui possede le index meme numero que celui du vector de connexite */
-                            {
-                                getSommet(k)->setConnexe(conn);
-                                std::cout << "conn : " << conn << std::endl;
-                            }
+                            if(k == connexe[i][j]) getSommet(k)->setConnexe(conn); /**< Cherche un sommet qui possede le index meme numero que celui du vector de connexite */
                         }
                     }
                 }

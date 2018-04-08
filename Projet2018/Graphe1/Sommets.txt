@@ -18,16 +18,16 @@ Graphe1\Images\poisson1.jpg
 4
 
 Graphe1\Images\homosapiens.jpg
-506 157 3 188
+510 91 3 188
 
 Graphe1\Images\loutre_de_mer.jpg
-251 85 5 0
+116 87 5 0
 
 Graphe1\Images\phoque.jpg
-144 322 0 0
+144 352 0 0
 
 Graphe1\Images\laminaire.jpg
-492 336 4 0
+499 340 4 0
 
 6
 Graphe1\Images\homosapiens.jpg Graphe1\Images\loutre_de_mer.jpg 4
