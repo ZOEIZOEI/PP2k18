@@ -26,16 +26,22 @@ class Sommet
         void setImg(BITMAP* val) { m_img = val; }
         void setConnexe(bool val) { m_connexe = val; }
 
+        /** \brief Permet d'augmenter/reduire le poids du Sommet
+         *
+         * \param val int : valeur du poids à ajouter
+         * \return void
+         *
+         */
         void ajouterpoids(int val) { m_poids += val; }
 
     private:
-        int m_cd_x;
-        int m_cd_y;
-        int m_num;
-        int m_poids;
-        std::string m_nom_img;
-        BITMAP* m_img;
-        bool m_connexe;
+        int m_cd_x; /**< Position en x */
+        int m_cd_y; /**< Position en y*/
+        int m_num; /**< Numero de l'image */
+        int m_poids; /**< Poids du Sommet */
+        std::string m_nom_img; /**< Adresse de l'image du Sommet */
+        BITMAP* m_img; /**< Image du Sommet */
+        bool m_connexe; /**< Permet de savoir si le sommet est fortement connexe */
 };
 
 #endif // SOMMET_H

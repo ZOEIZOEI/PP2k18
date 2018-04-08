@@ -18,9 +18,9 @@ class Arete
         void setArrive(Sommet* val) { m_arrive = val; }
 
     private:
-        int m_poids;
-        Sommet* m_depart;
-        Sommet* m_arrive;
+        int m_poids; /**< Poids de l'arete */
+        Sommet* m_depart; /**< Sommet de depart (Mangeur) */
+        Sommet* m_arrive; /**< Sommet d'arrive (Mange) */
 };
 
 #endif // ARETE_H

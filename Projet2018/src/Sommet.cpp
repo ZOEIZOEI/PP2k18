@@ -15,6 +15,7 @@ Sommet::Sommet(int cd_x, int cd_y, int num, int poids, std::string nom_img)
     m_cd_y = cd_y;
     m_num = num;
     m_poids = poids;
+    m_connexe = false;
     m_nom_img = nom_img;
     m_img = load_bitmap(m_nom_img.c_str(), NULL);
     if(!m_img)
@@ -26,6 +27,6 @@ Sommet::Sommet(int cd_x, int cd_y, int num, int poids, std::string nom_img)
 
 Sommet::~Sommet()
 {
-
+    //dtor
 }
 
