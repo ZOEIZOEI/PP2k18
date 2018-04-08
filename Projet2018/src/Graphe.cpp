@@ -202,7 +202,6 @@ void Graphe::affichage(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, i
 
 
     }
-
     outils(buffer, barre, a, prev_mouse_b, now_mouse_b);
     draw_sprite(buffer, barre, 0, 600-barre->h);
     blit(buffer, screen, 0, 0, 0, 0, SCREEN_W, SCREEN_H);
@@ -303,7 +302,7 @@ void Graphe::outils(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, int 
                 inverserReduit();
                 if (getReduit() == true)
                 {
-//                    reduit();
+                    reduit();
                     std::cout << "hello truereduit" << std::endl;
                 }
                 else std::cout << "hello falsereduit" << std::endl;
@@ -851,7 +850,7 @@ void Graphe::inverserPlay()
 /// Play / Pause pour l'affichage du graphe réduit
 void Graphe::inverserReduit()
 {
-     m_reduit != m_reduit;
+     m_reduit = !m_reduit;
 }
 
 ///calcul du nombre de perte chez la population
