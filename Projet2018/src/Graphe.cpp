@@ -476,7 +476,6 @@ void Graphe::supprimerArete()
             }
         }
     }
-
     setAretes(temp);
 }
 
@@ -865,8 +864,8 @@ void Graphe::K_connexites()
         for (unsigned int i = 0; i < s_reliants.size(); ++i)
         {
             if (i == 0) std::cout << "Si vous supprimez ";
-            std::cout << "l'arc reliant le sommet " << getSommet(s_reliants[i])->getNum();
-            std::cout << " et " << getSommet(idx_s)->getNum() << std::endl;
+            std::cout << "l'arete reliant le sommet " << getSommet(idx_s)->getNum();
+            std::cout << " et " << getSommet(s_reliants[i])->getNum() << std::endl;
             if (i != s_reliants.size()-1) std::cout << "puis " << std::endl;
             else std::cout << "alors le graphe ne saura plus connexe" << std::endl;
         }
