@@ -7,5 +7,5 @@ Arete::Arete()
 
 Arete::~Arete()
 {
-    //dtor
+
 }

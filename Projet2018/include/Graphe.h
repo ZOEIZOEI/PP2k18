@@ -80,7 +80,7 @@ class Graphe
 
         /** \brief Initialisation des sommets selon le fichier de sauvegarde
          *
-         * \param nom_fichier std::string : image associée au sommet a recuperer
+         * \param nom_fichier std::string : image associï¿½e au sommet a recuperer
          * \return void
          *
          */
@@ -196,19 +196,19 @@ class Graphe
          */
         void save();
 
-        void composanteRecursif(int v, bool visited[], int nb_recur, std::vector<std::vector<int>>& m_adjCFC);
+        void composanteRecursif(int sommet, bool marques[], int nb_recur, std::vector<std::vector<int>>& adjCFC);
 
-        /** \brief Renvoi un graphe transposé pour la forte connexite
+        /** \brief Renvoi un graphe transposï¿½ pour la forte connexite
          *
          * \return Graphe
          *
          */
-        Graphe getTranspose();
-        void ordreRemplissage(int v, bool visited[], std::stack<int> &Stack);
+        Graphe kosarajusTranspose();
+        void ordreRemplissage(int v, bool marques[], std::stack<int> &pile);
         void afficherCFC();
         /** \brief Set toutes les composantes fortements connexes pour les afficher
          *
-         * \param connexe std::vector<std::vector<int> > : Matrice de forte connexité
+         * \param connexe std::vector<std::vector<int> > : Matrice de forte connexitï¿½
          * \return void
          *
          */
@@ -256,18 +256,18 @@ class Graphe
 
     private:
         std::vector<Sommet*> m_sommets; /**< Vecteur de sommets du graphe*/
-        std::vector<Sommet*> m_s_sup; /**< Vecteur de sommets pouvant etre ajoutés au graphe (ayant ete supprimes) */
-        int m_ordre; /**< Nombre de sommet du graphe */
         std::vector<Arete*> m_aretes; /**< Vecteur d'arete du grahe */
-        std::string m_nom_graphe; /**< pour acceder au document de sauvegarde */
-        BITMAP* m_decor; /**< Bitmap de fond */
+        std::vector<Sommet*> m_s_sup; /**< Vecteur de sommets pouvant etre ajoutï¿½s au graphe (ayant ete supprimes) */
         std::vector<BITMAP*> m_boutons;
-        std::list<int> *m_adjacences; /**< liste d'adjacence */
-        bool m_play; /**< lance la dynamique en temps reel */
-        bool m_reduit;
-        int m_time; /**< Dynamique en temps reel  */
-        int m_nb_s_sup; /**< Ordre des sommets supprimes */
         std::vector<std::vector<int>> m_adj_adj; /**< Matrice d'ajdacences ne prenant pas en compte l'oriantation des arcs */
+        std::string m_nom_graphe; /**< pour acceder au document de sauvegarde */
+        std::list<int> *m_adjacences; /**< liste d'adjacence */
+        int m_ordre; /**< Nombre de sommet du graphe */
+        int m_time; /**< Dynamique en temps reel  */
+        int m_nb_s_sup; /**< Ordre des sommets supprimï¿½s */
+        bool m_play; /**< Lance la dynamique en temps rï¿½el */
+        bool m_reduit; /**< Indique s'il faut afficher le graphe rï¿½duit */
+        BITMAP* m_decor; /**< Bitmap de fond */
 };
 
 #endif // GRAPHE_H
