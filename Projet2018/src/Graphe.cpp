@@ -302,10 +302,10 @@ void Graphe::outils(BITMAP* buffer, BITMAP* barre, int a, int prev_mouse_b, int 
                 inverserReduit();
                 if (getReduit() == true)
                 {
+                    save();
                     reduit();
-                    std::cout << "hello truereduit" << std::endl;
                 }
-                else std::cout << "hello falsereduit" << std::endl;
+                else init();
             }
         }
     }
@@ -534,7 +534,6 @@ void Graphe::supprimerSommet()
         setS_Sup(temp_supp);
         setAretes(temp_ar);
     }
-
 }
 
 ///Supprime une arete en selectionnant ses deux sommets
@@ -601,7 +600,6 @@ void Graphe::supprimerArete()
                         }
                     }
                 }
-
                 annuler(&cancel);
             }
         }
@@ -1223,6 +1221,5 @@ void Graphe::reduit()
             }
         }
     }
-
     setAretes(aret);
 }
